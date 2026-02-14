@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Package, ShoppingCart, LogOut, Plus, Trash2, TrendingUp, RefreshCw } from "lucide-react";
+import { Package, ShoppingCart, LogOut, Plus, Trash2, TrendingUp, RefreshCw, Edit, X } from "lucide-react";
 import { products as staticProducts } from "@/data/products";
 
 export default function AdminDashboard() {
@@ -15,11 +15,21 @@ export default function AdminDashboard() {
   const [isSyncing, setIsSyncing] = useState(false);
   const [sortBy, setSortBy] = useState<'quantity' | 'price' | 'platform' | 'type' | 'none'>('none');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [editingPack, setEditingPack] = useState<any>(null);
+  const [showEditModal, setShowEditModal] = useState(false);
   
   // New pack form
   const [newPack, setNewPack] = useState({
     platform: "Instagram",
     type: "followers",
+    quantity: "",
+    price: "",
+  });
+
+  // Edit pack form
+  const [editPackForm, setEditPackForm] = useState({
+    platform: "",
+    type: "",
     quantity: "",
     price: "",
   });
@@ -156,6 +166,55 @@ export default function AdminDashboard() {
     } catch (error) {
       console.error("Failed to delete pack:", error);
     }
+  };
+
+  const handleEditPack = (pack: any) => {
+    setEditingPack(pack);
+    setEditPackForm({
+      platform: pack.platform,
+      type: pack.type,
+      quantity: pack.quantity.toString(),
+      price: pack.price.toString(),
+    });
+    setShowEditModal(true);
+  };
+
+  const handleUpdatePack = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!editingPack) return;
+    
+    try {
+      const response = await fetch(`/api/admin/packs?id=${editingPack.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          platform: editPackForm.platform,
+          type: editPackForm.type,
+          quantity: parseInt(editPackForm.quantity),
+          price: parseFloat(editPackForm.price),
+        }),
+      });
+
+      if (response.ok) {
+        setShowEditModal(false);
+        setEditingPack(null);
+        fetchData();
+      }
+    } catch (error) {
+      console.error("Failed to update pack:", error);
+    }
+  };
+
+  const closeEditModal = () => {
+    setShowEditModal(false);
+    setEditingPack(null);
+    setEditPackForm({
+      platform: "",
+      type: "",
+      quantity: "",
+      price: "",
+    });
   };
 
   return (
@@ -445,14 +504,24 @@ export default function AdminDashboard() {
                                       </div>
                                       <p className="text-sm text-gray-300">{pack.type}</p>
                                     </div>
-                                    {!pack.isStatic && (
-                                      <button
-                                        onClick={() => handleDeletePack(pack.id)}
-                                        className="text-red-400 hover:text-red-300 transition-colors"
-                                      >
-                                        <Trash2 className="w-4 h-4" />
-                                      </button>
-                                    )}
+                                    <div className="flex gap-2">
+                                      {!pack.isStatic && (
+                                        <>
+                                          <button
+                                            onClick={() => handleEditPack(pack)}
+                                            className="text-blue-400 hover:text-blue-300 transition-colors"
+                                          >
+                                            <Edit className="w-4 h-4" />
+                                          </button>
+                                          <button
+                                            onClick={() => handleDeletePack(pack.id)}
+                                            className="text-red-400 hover:text-red-300 transition-colors"
+                                          >
+                                            <Trash2 className="w-4 h-4" />
+                                          </button>
+                                        </>
+                                      )}
+                                    </div>
                                   </div>
                                   <p className="text-2xl font-black text-white mb-1">
                                     {pack.quantity?.toLocaleString()}
@@ -470,6 +539,93 @@ export default function AdminDashboard() {
           )}
         </div>
       </div>
+
+      {/* Edit Modal */}
+      {showEditModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl p-6 max-w-md w-full">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-black text-gray-900">Edit Pack</h3>
+              <button
+                onClick={closeEditModal}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleUpdatePack} className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Platform</label>
+                <select
+                  value={editPackForm.platform}
+                  onChange={(e) => setEditPackForm({ ...editPackForm, platform: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  required
+                >
+                  <option value="Instagram">Instagram</option>
+                  <option value="TikTok">TikTok</option>
+                  <option value="YouTube">YouTube</option>
+                  <option value="Facebook">Facebook</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Type</label>
+                <select
+                  value={editPackForm.type}
+                  onChange={(e) => setEditPackForm({ ...editPackForm, type: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  required
+                >
+                  <option value="followers">Followers</option>
+                  <option value="likes">Likes</option>
+                  <option value="views">Views</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Quantity</label>
+                <input
+                  type="number"
+                  value={editPackForm.quantity}
+                  onChange={(e) => setEditPackForm({ ...editPackForm, quantity: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Price (€)</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={editPackForm.price}
+                  onChange={(e) => setEditPackForm({ ...editPackForm, price: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  required
+                />
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={closeEditModal}
+                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-semibold"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all font-semibold"
+                >
+                  Update Pack
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
