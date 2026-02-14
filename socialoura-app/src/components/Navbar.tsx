@@ -2,7 +2,8 @@
 
 import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
-import { ShoppingCart, Menu, X, Sparkles, ChevronDown } from "lucide-react";
+import { ShoppingBag, Menu, X, Sparkles, ChevronDown } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
 
 const platformMenus = {
   instagram: [
@@ -30,7 +31,10 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [cartBounce, setCartBounce] = useState(false);
   const closeDropdownTimeoutRef = useRef<number | null>(null);
+  const { itemCount, toggleCart } = useCart();
+  const prevItemCountRef = useRef(itemCount);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,6 +43,16 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Trigger bounce animation when item count changes
+  useEffect(() => {
+    if (itemCount > prevItemCountRef.current) {
+      setCartBounce(true);
+      const timer = setTimeout(() => setCartBounce(false), 600);
+      return () => clearTimeout(timer);
+    }
+    prevItemCountRef.current = itemCount;
+  }, [itemCount]);
 
   const clearCloseTimeout = () => {
     if (closeDropdownTimeoutRef.current) {
@@ -257,11 +271,18 @@ export default function Navbar() {
 
             {/* Premium Cart + mobile toggle */}
             <div className="flex items-center gap-3">
-              <button className="relative group p-2.5 hover:bg-orange-50 rounded-xl transition-all duration-300 btn-interactive">
-                <ShoppingCart className="w-5 h-5 text-slate-700 group-hover:text-orange-600 transition-colors" />
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-orange-gradient text-white text-xs rounded-full flex items-center justify-center font-bold shadow-lg animate-pulse-glow">
-                  0
-                </span>
+              <button 
+                onClick={toggleCart}
+                className={`relative group p-2.5 hover:bg-orange-50 rounded-xl transition-all duration-300 btn-interactive ${
+                  cartBounce ? 'animate-bounce' : ''
+                }`}
+              >
+                <ShoppingBag className="w-5 h-5 text-slate-700 group-hover:text-orange-600 transition-colors" />
+                {itemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1.5 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs rounded-full flex items-center justify-center font-bold shadow-lg animate-pulse">
+                    {itemCount}
+                  </span>
+                )}
               </button>
               <button
                 className="lg:hidden p-2.5 text-slate-700 hover:bg-orange-50 rounded-xl transition-all duration-300 btn-interactive"

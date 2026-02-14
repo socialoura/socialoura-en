@@ -6,8 +6,10 @@ import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "@/components/CheckoutForm";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Loader2, ShoppingCart, ArrowLeft } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
+import { Loader2, ShoppingCart, ArrowLeft, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 // Load Stripe publishable key
 const stripePromise = loadStripe(
@@ -15,21 +17,27 @@ const stripePromise = loadStripe(
 );
 
 export default function CheckoutPage() {
+  const { items, totalPrice, clearCart } = useCart();
+  const router = useRouter();
   const [clientSecret, setClientSecret] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>("");
 
-  // Mock order data - Replace with real data from cart/session
-  const orderData = {
-    amount: 2999, // 29.99 EUR in cents
-    currency: "eur",
-    product: "Instagram Followers - Pack 1000",
-    quantity: 1000,
-  };
+  // Calculate total amount in cents from cart
+  const totalAmount = Math.round(totalPrice * 100);
+
+  // Redirect to cart if empty
+  useEffect(() => {
+    if (items.length === 0) {
+      router.push("/");
+    }
+  }, [items.length, router]);
 
   useEffect(() => {
-    // Create PaymentIntent on component mount
+    // Create PaymentIntent only if cart has items
     const createPaymentIntent = async () => {
+      if (items.length === 0) return;
+      
       try {
         const response = await fetch("/api/create-payment-intent", {
           method: "POST",
@@ -37,11 +45,11 @@ export default function CheckoutPage() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            amount: orderData.amount,
-            currency: orderData.currency,
+            amount: totalAmount,
+            currency: "eur",
             metadata: {
-              product: orderData.product,
-              quantity: orderData.quantity,
+              items: JSON.stringify(items),
+              itemCount: items.length,
             },
           }),
         });
@@ -61,12 +69,12 @@ export default function CheckoutPage() {
     };
 
     createPaymentIntent();
-  }, []);
+  }, [items, totalAmount]);
 
   const handlePaymentSuccess = () => {
-    // Redirect to success page or show success message
-    console.log("Payment successful!");
-    // window.location.href = "/payment-success";
+    // Clear cart and redirect to success page
+    clearCart();
+    window.location.href = "/payment-success";
   };
 
   const handlePaymentError = (errorMsg: string) => {
@@ -133,33 +141,53 @@ export default function CheckoutPage() {
           {/* Order Summary */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-2xl border-2 border-gray-200 p-6 shadow-sm sticky top-6">
-              <h2 className="text-lg font-black text-gray-900 mb-4">
-                Récapitulatif
-              </h2>
-              <div className="space-y-3 mb-4 pb-4 border-b border-gray-200">
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600 font-medium">
-                    Produit
-                  </span>
-                  <span className="text-sm font-bold text-gray-900">
-                    {orderData.product}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600 font-medium">
-                    Quantité
-                  </span>
-                  <span className="text-sm font-bold text-gray-900">
-                    {orderData.quantity.toLocaleString()}
-                  </span>
-                </div>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-black text-gray-900">
+                  Récapitulatif
+                </h2>
+                <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full font-bold">
+                  {items.length} {items.length > 1 ? "articles" : "article"}
+                </span>
               </div>
+              
+              <div className="space-y-3 mb-4 pb-4 border-b border-gray-200 max-h-64 overflow-y-auto">
+                {items.map((item) => (
+                  <div key={item.id} className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-3 border border-gray-200">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-1.5 mb-1">
+                          <span className="text-xs font-black text-white bg-gradient-to-r from-purple-600 to-pink-600 px-2 py-0.5 rounded-full">
+                            {item.platform}
+                          </span>
+                        </div>
+                        <h3 className="font-black text-gray-900 text-sm mb-1">
+                          {item.productName}
+                        </h3>
+                        <div className="flex items-center gap-2 text-xs text-gray-600 font-semibold">
+                          <span className="bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded">
+                            {item.quantity.toLocaleString()}
+                          </span>
+                          {item.username && (
+                            <span className="text-gray-500">@{item.username}</span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-lg font-black bg-gradient-to-r from-purple-600 via-pink-600 to-orange-600 bg-clip-text text-transparent">
+                          {item.price.toFixed(2)}€
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
               <div className="flex justify-between items-center">
                 <span className="text-base font-black text-gray-900">
                   Total
                 </span>
                 <span className="text-2xl font-black bg-gradient-to-r from-purple-600 via-pink-600 to-orange-600 bg-clip-text text-transparent">
-                  {(orderData.amount / 100).toFixed(2)} €
+                  {totalPrice.toFixed(2)} €
                 </span>
               </div>
             </div>
@@ -201,7 +229,7 @@ export default function CheckoutPage() {
                 }}
               >
                 <CheckoutForm
-                  amount={orderData.amount}
+                  amount={totalAmount}
                   onSuccess={handlePaymentSuccess}
                   onError={handlePaymentError}
                 />

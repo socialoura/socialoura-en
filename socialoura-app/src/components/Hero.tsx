@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronRight, Zap, Shield, Star, Check, CreditCard, Users, Globe, Sparkles, TrendingUp } from "lucide-react";
@@ -7,7 +8,7 @@ import { ChevronRight, Zap, Shield, Star, Check, CreditCard, Users, Globe, Spark
 const socialIcons = [
   {
     name: "Instagram",
-    image: "/icon_social/instagram.webp",
+    image: "/icon_social/instagram.png",
   },
   {
     name: "TikTok",
@@ -23,11 +24,27 @@ const socialIcons = [
   },
 ];
 
-const serviceLinks = [
-  { icon: <Users className="w-5 h-5" />, label: "Abonnés Instagram", color: "text-[#E1306C]", href: "/products/instagram-followers" },
-  { icon: <svg viewBox="0 0 24 24" className="w-5 h-5 fill-[#E1306C]"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>, label: "Likes Instagram", color: "text-[#E1306C]", href: "/products/instagram-likes" },
-  { icon: <svg viewBox="0 0 24 24" className="w-5 h-5 fill-[#FF0000]"><path d="M8 5v14l11-7z"/></svg>, label: "Vues Instagram", color: "text-[#FF0000]", href: "/products/instagram-views" },
-];
+const platformServices = {
+  Instagram: [
+    { icon: <Users className="w-5 h-5" />, label: "Abonnés Instagram", color: "text-[#E1306C]", href: "/products/instagram-followers" },
+    { icon: <svg viewBox="0 0 24 24" className="w-5 h-5 fill-[#E1306C]"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>, label: "Likes Instagram", color: "text-[#E1306C]", href: "/products/instagram-likes" },
+    { icon: <svg viewBox="0 0 24 24" className="w-5 h-5 fill-[#FF0000]"><path d="M8 5v14l11-7z"/></svg>, label: "Vues Instagram", color: "text-[#FF0000]", href: "/products/instagram-views" },
+  ],
+  TikTok: [
+    { icon: <Users className="w-5 h-5" />, label: "Abonnés TikTok", color: "text-[#000000]", href: "/products/tiktok-followers" },
+    { icon: <svg viewBox="0 0 24 24" className="w-5 h-5 fill-[#FF0050]"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>, label: "Likes TikTok", color: "text-[#FF0050]", href: "/products/tiktok-likes" },
+    { icon: <svg viewBox="0 0 24 24" className="w-5 h-5 fill-[#00F2EA]"><path d="M8 5v14l11-7z"/></svg>, label: "Vues TikTok", color: "text-[#00F2EA]", href: "/products/tiktok-views" },
+  ],
+  YouTube: [
+    { icon: <Users className="w-5 h-5" />, label: "Abonnés YouTube", color: "text-[#FF0000]", href: "/products/youtube-subscribers" },
+    { icon: <svg viewBox="0 0 24 24" className="w-5 h-5 fill-[#FF0000]"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>, label: "Likes YouTube", color: "text-[#FF0000]", href: "/products/youtube-likes" },
+    { icon: <svg viewBox="0 0 24 24" className="w-5 h-5 fill-[#FF0000]"><path d="M8 5v14l11-7z"/></svg>, label: "Vues YouTube", color: "text-[#FF0000]", href: "/products/youtube-views" },
+  ],
+  Facebook: [
+    { icon: <Users className="w-5 h-5" />, label: "Abonnés Facebook", color: "text-[#1877F2]", href: "/products/facebook-followers" },
+    { icon: <svg viewBox="0 0 24 24" className="w-5 h-5 fill-[#1877F2]"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>, label: "Likes Facebook", color: "text-[#1877F2]", href: "/products/facebook-likes" },
+  ],
+};
 
 const features = [
   { icon: <Zap className="w-4 h-4" />, text: "Livraison instantanée" },
@@ -40,6 +57,9 @@ const features = [
 ];
 
 export default function Hero() {
+  const [selectedPlatform, setSelectedPlatform] = useState<"Instagram" | "TikTok" | "YouTube" | "Facebook">("Instagram");
+  const serviceLinks = platformServices[selectedPlatform];
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-orange-50/50 via-white to-purple-50/30">
       {/* Premium animated background */}
@@ -52,11 +72,11 @@ export default function Hero() {
       {/* Grid pattern overlay */}
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMTAgNjAgTSAwIDEwIEwgNjAgMTAgTSAyMCAwIEwgMjAgNjAgTSAwIDIwIEwgNjAgMjAgTSAzMCAwIEwgMzAgNjAgTSAwIDMwIEwgNjAgMzAgTSA0MCAwIEwgNDAgNjAgTSAwIDQwIEwgNjAgNDAgTSA1MCAwIEwgNTAgNjAgTSAwIDUwIEwgNjAgNTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLW9wYWNpdHk9IjAuMDIiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-40" />
 
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 md:pt-24 pb-20 md:pb-28 text-center">
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 md:pt-20 pb-16 md:pb-20 text-center">
         {/* Premium badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-md rounded-full border border-orange-200/50 shadow-lg mb-6 animate-scale-in">
-          <Sparkles className="w-4 h-4 text-orange-500" />
-          <span className="text-sm font-bold bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-xl rounded-full border-2 border-orange-200 shadow-xl mb-6 animate-scale-in hover:scale-105 transition-transform duration-300">
+          <Sparkles className="w-4 h-4 text-orange-500 animate-pulse" />
+          <span className="text-sm font-black bg-gradient-to-r from-orange-600 via-orange-500 to-orange-600 bg-clip-text text-transparent">
             #1 Plateforme en France
           </span>
           <TrendingUp className="w-4 h-4 text-green-500" />
@@ -66,52 +86,49 @@ export default function Hero() {
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-slate-900 leading-[1.1] mb-6 animate-fade-in-up tracking-tight">
           Obtenez des{" "}
           <span className="relative inline-block">
-            <span className="gradient-text">followers</span>
-            <svg className="absolute -bottom-2 left-0 w-full" height="8" viewBox="0 0 200 8" fill="none">
-              <path d="M0 4C50 4 50 4 100 4C150 4 150 4 200 4" stroke="url(#gradient)" strokeWidth="6" strokeLinecap="round"/>
-              <defs>
-                <linearGradient id="gradient" x1="0" y1="0" x2="200" y2="0">
-                  <stop offset="0%" stopColor="#ff6b35"/>
-                  <stop offset="100%" stopColor="#ff8c42"/>
-                </linearGradient>
-              </defs>
-            </svg>
+            <span className="bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 bg-clip-text text-transparent">followers</span>
+            <div className="absolute -bottom-2 left-0 right-0 h-1.5 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 rounded-full opacity-30 blur-sm" />
           </span>
-          <br className="hidden sm:block" />
+          <br />
           en quelques{" "}
-          <span className="text-orange-600">secondes</span>
+          <span className="bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">secondes</span>
         </h1>
         
-        <p className="text-slate-600 text-lg sm:text-xl mb-10 max-w-2xl mx-auto font-medium leading-relaxed">
+        <p className="text-slate-600 text-lg sm:text-xl mb-10 max-w-3xl mx-auto font-semibold leading-relaxed">
           La meilleure qualité sur le marché français.
           <br className="hidden sm:block" />
-          <span className="text-orange-600 font-bold">Boostez votre algorithme</span> dès maintenant.
+          <span className="bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent font-black">Boostez votre algorithme</span> dès maintenant.
         </p>
 
         {/* Premium social media icons */}
         <div className="flex items-center justify-center gap-3 sm:gap-5 mb-12">
           {socialIcons.map((social, idx) => (
-            <div
+            <button
               key={social.name}
+              onClick={() => setSelectedPlatform(social.name as "Instagram" | "TikTok" | "YouTube" | "Facebook")}
               className="group relative"
               style={{ animationDelay: `${idx * 100}ms` }}
             >
-              <div className="absolute inset-0 bg-orange-gradient rounded-2xl blur-lg opacity-0 group-hover:opacity-60 transition-opacity duration-300" />
-              <div className="relative w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer bg-white flex items-center justify-center transform hover:-translate-y-2 hover:scale-110 btn-interactive">
+              <div className={`absolute inset-0 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl blur-lg transition-all duration-300 ${
+                selectedPlatform === social.name ? 'opacity-70 scale-110' : 'opacity-0 group-hover:opacity-50'
+              }`} />
+              <div className={`relative w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-300 cursor-pointer bg-white flex items-center justify-center transform hover:-translate-y-2 hover:scale-110 ${
+                selectedPlatform === social.name ? 'ring-4 ring-orange-500 ring-offset-2 scale-110 -translate-y-2 shadow-3xl' : ''
+              }`}>
                 <Image
                   src={social.image}
                   alt={social.name}
-                  width={72}
-                  height={72}
-                  className="object-cover"
+                  width={80}
+                  height={80}
+                  className="object-cover p-1.5"
                 />
               </div>
-            </div>
+            </button>
           ))}
         </div>
 
         {/* Premium service cards - Mobile optimized */}
-        <div className="max-w-lg mx-auto mb-12">
+        <div className="max-w-2xl mx-auto mb-12">
           <div className="grid grid-cols-1 gap-3 sm:gap-4">
             {serviceLinks.map((service, idx) => (
               <Link
@@ -120,23 +137,26 @@ export default function Hero() {
                 className="group relative overflow-hidden"
                 style={{ animationDelay: `${idx * 100}ms` }}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 via-pink-600/10 to-orange-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="relative glass-effect rounded-xl p-5 sm:p-6 border border-white/50 shadow-lg shadow-purple-500/10 hover:shadow-xl hover:shadow-purple-500/25 transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] active:scale-[0.98]">
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 via-orange-600/5 to-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative bg-white/90 backdrop-blur-xl rounded-2xl p-5 sm:p-6 border-2 border-gray-200 hover:border-orange-300 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] active:scale-[0.98]">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-orange-50 to-orange-100 flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
-                        <span className={`${service.color} transform group-hover:rotate-12 transition-transform`}>{service.icon}</span>
+                      <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
+                        <span className="text-white transform group-hover:rotate-12 transition-transform">{service.icon}</span>
                       </div>
                       <div className="text-left">
-                        <span className="font-bold text-slate-900 text-base sm:text-lg block">
+                        <span className="font-black text-slate-900 text-base sm:text-lg block mb-1">
                           {service.label}
                         </span>
-                        <span className="text-xs sm:text-sm text-slate-500 font-medium">Livraison instantanée</span>
+                        <div className="flex items-center gap-2">
+                          <Zap className="w-3.5 h-3.5 text-orange-500" />
+                          <span className="text-xs sm:text-sm text-slate-600 font-bold">Livraison instantanée</span>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="hidden sm:inline text-sm font-semibold text-orange-600">Voir</span>
-                      <ChevronRight className="w-5 h-5 text-orange-500 group-hover:translate-x-1 transition-transform duration-300" />
+                    <div className="flex items-center gap-2 bg-orange-50 px-3 py-2 rounded-xl group-hover:bg-orange-100 transition-colors">
+                      <span className="text-sm font-black text-orange-600">Voir</span>
+                      <ChevronRight className="w-5 h-5 text-orange-600 group-hover:translate-x-1 transition-transform duration-300" />
                     </div>
                   </div>
                 </div>
