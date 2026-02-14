@@ -13,6 +13,8 @@ export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [showAddPack, setShowAddPack] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
+  const [sortBy, setSortBy] = useState<'quantity' | 'price' | 'platform' | 'type' | 'none'>('none');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   
   // New pack form
   const [newPack, setNewPack] = useState({
@@ -84,6 +86,32 @@ export default function AdminDashboard() {
 
   // Combine static and dynamic packs
   const allPacks = [...allStaticPacks, ...packs];
+
+  // Sort packs based on selected criteria
+  const sortedPacks = [...allPacks].sort((a: any, b: any) => {
+    if (sortBy === 'none') return 0;
+    
+    let comparison = 0;
+    
+    switch (sortBy) {
+      case 'quantity':
+        comparison = a.quantity - b.quantity;
+        break;
+      case 'price':
+        comparison = a.price - b.price;
+        break;
+      case 'platform':
+        comparison = a.platform.localeCompare(b.platform);
+        break;
+      case 'type':
+        comparison = a.type.localeCompare(b.type);
+        break;
+      default:
+        return 0;
+    }
+    
+    return sortOrder === 'asc' ? comparison : -comparison;
+  });
 
   const handleLogout = async () => {
     await fetch("/api/admin/logout", { method: "POST" });
@@ -248,6 +276,27 @@ export default function AdminDashboard() {
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-black text-white">Manage Packs</h2>
                 <div className="flex gap-3">
+                  <div className="flex items-center gap-2">
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value as any)}
+                      className="bg-white/10 border border-white/20 text-white px-3 py-2 rounded-lg text-sm font-medium"
+                    >
+                      <option value="none">Trier par...</option>
+                      <option value="quantity">Quantité</option>
+                      <option value="price">Prix</option>
+                      <option value="platform">Plateforme</option>
+                      <option value="type">Type</option>
+                    </select>
+                    {sortBy !== 'none' && (
+                      <button
+                        onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                        className="bg-white/10 border border-white/20 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/20 transition-colors"
+                      >
+                        {sortOrder === 'asc' ? '↑' : '↓'}
+                      </button>
+                    )}
+                  </div>
                   <button
                     onClick={handleSyncPacks}
                     disabled={isSyncing}
@@ -336,49 +385,85 @@ export default function AdminDashboard() {
                       📦 Affichage de {allStaticPacks.length} packs statiques (codés en dur) + {packs.length} packs dynamiques
                     </p>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {allPacks.map((pack) => (
-                      <div
-                        key={pack.id}
-                        className={`rounded-xl p-4 border ${
-                          pack.isStatic
-                            ? 'bg-blue-500/10 border-blue-500/30'
-                            : 'bg-white/5 border-white/10'
-                        }`}
-                      >
-                        <div className="flex items-start justify-between mb-3">
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <p className="font-bold text-white">{pack.platform}</p>
-                              {pack.isStatic && (
-                                <span className="text-xs bg-blue-500 text-white px-2 py-0.5 rounded-full font-bold">
-                                  Static
-                                </span>
-                              )}
-                              {pack.popular && (
-                                <span className="text-xs bg-yellow-500 text-white px-2 py-0.5 rounded-full font-bold">
-                                  Popular
-                                </span>
-                              )}
+                  
+                  {/* Group packs by product */}
+                  {Object.entries(
+                    sortedPacks.reduce((groups: Record<string, any[]>, pack: any) => {
+                      const productKey = `${pack.platform}-${pack.type}`;
+                      if (!groups[productKey]) {
+                        groups[productKey] = [];
+                      }
+                      groups[productKey].push(pack);
+                      return groups;
+                    }, {})
+                  )
+                    .sort(([a], [b]) => a.localeCompare(b))
+                    .map(([productKey, productPacks]: [string, any[]]) => {
+                      const [platform, type] = productKey.split('-');
+                      const [platformName, typeName] = [platform, type];
+                      
+                      return (
+                        <div key={productKey} className="mb-6">
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-3">
+                              <h3 className="text-lg font-black text-white">
+                                {platformName} {typeName === 'followers' ? 'Abonnés' : typeName === 'likes' ? 'Likes' : 'Vues'}
+                              </h3>
+                              <span className="text-sm bg-white/10 px-3 py-1 rounded-full text-white font-bold">
+                                {productPacks.length} packs
+                              </span>
                             </div>
-                            <p className="text-sm text-gray-300">{pack.type}</p>
+                            <div className="text-sm text-gray-400">
+                              {productPacks.reduce((sum: number, pack: any) => sum + pack.price, 0).toFixed(2)}€ total
+                            </div>
                           </div>
-                          {!pack.isStatic && (
-                            <button
-                              onClick={() => handleDeletePack(pack.id)}
-                              className="text-red-400 hover:text-red-300 transition-colors"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          )}
+                          
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {productPacks.map((pack: any) => (
+                                <div
+                                  key={pack.id}
+                                  className={`rounded-xl p-4 border ${
+                                    pack.isStatic
+                                      ? 'bg-blue-500/10 border-blue-500/30'
+                                      : 'bg-white/5 border-white/10'
+                                  }`}
+                                >
+                                  <div className="flex items-start justify-between mb-3">
+                                    <div>
+                                      <div className="flex items-center gap-2">
+                                        <p className="font-bold text-white">{pack.platform}</p>
+                                        {pack.isStatic && (
+                                          <span className="text-xs bg-blue-500 text-white px-2 py-0.5 rounded-full font-bold">
+                                            Static
+                                          </span>
+                                        )}
+                                        {pack.popular && (
+                                          <span className="text-xs bg-yellow-500 text-white px-2 py-0.5 rounded-full font-bold">
+                                            Popular
+                                          </span>
+                                        )}
+                                      </div>
+                                      <p className="text-sm text-gray-300">{pack.type}</p>
+                                    </div>
+                                    {!pack.isStatic && (
+                                      <button
+                                        onClick={() => handleDeletePack(pack.id)}
+                                        className="text-red-400 hover:text-red-300 transition-colors"
+                                      >
+                                        <Trash2 className="w-4 h-4" />
+                                      </button>
+                                    )}
+                                  </div>
+                                  <p className="text-2xl font-black text-white mb-1">
+                                    {pack.quantity?.toLocaleString()}
+                                  </p>
+                                  <p className="text-lg font-bold text-green-400">{pack.price?.toFixed(2)}€</p>
+                                </div>
+                              ))}
+                          </div>
                         </div>
-                        <p className="text-2xl font-black text-white mb-1">
-                          {pack.quantity?.toLocaleString()}
-                        </p>
-                        <p className="text-lg font-bold text-green-400">{pack.price?.toFixed(2)}€</p>
-                      </div>
-                    ))}
-                  </div>
+                      );
+                    })}
                 </>
               )}
             </div>
