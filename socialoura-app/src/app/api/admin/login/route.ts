@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { adminStorage } from "@/lib/admin-storage";
-import { createToken, encodeToken } from "@/lib/admin-auth";
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,7 +11,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const isValid = adminStorage.validateCredentials(username, password);
+    // Check against environment variables
+    const adminUsername = process.env.ADMIN_USERNAME;
+    const adminPassword = process.env.ADMIN_PASSWORD;
+
+    if (!adminUsername || !adminPassword) {
+      return NextResponse.json(
+        { error: "Admin credentials not configured" },
+        { status: 500 }
+      );
+    }
+
+    const isValid = username === adminUsername && password === adminPassword;
 
     if (!isValid) {
       return NextResponse.json(
@@ -22,14 +31,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const token = createToken(username);
-    const encodedToken = encodeToken(token);
-
-    return NextResponse.json({
+    // Create response with auth cookie
+    const response = NextResponse.json({
       success: true,
-      token: encodedToken,
-      username: token.username,
+      username: username,
     });
+
+    // Set secure HTTP-only cookie
+    response.cookies.set('admin-auth', 'authenticated', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24, // 24 hours
+      path: '/',
+    });
+
+    return response;
   } catch (error) {
     return NextResponse.json(
       { error: "Internal server error" },
