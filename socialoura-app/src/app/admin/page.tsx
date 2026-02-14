@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Package, ShoppingCart, LogOut, Plus, Trash2, TrendingUp } from "lucide-react";
+import { Package, ShoppingCart, LogOut, Plus, Trash2, TrendingUp, RefreshCw } from "lucide-react";
+import { products as staticProducts } from "@/data/products";
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -11,6 +12,7 @@ export default function AdminDashboard() {
   const [packs, setPacks] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showAddPack, setShowAddPack] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
   
   // New pack form
   const [newPack, setNewPack] = useState({
@@ -46,6 +48,42 @@ export default function AdminDashboard() {
       setIsLoading(false);
     }
   };
+
+  const handleSyncPacks = async () => {
+    setIsSyncing(true);
+    try {
+      const response = await fetch("/api/admin/packs/sync", {
+        method: "POST",
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert(`Synchronisé ${data.synced} packs depuis les produits statiques`);
+        fetchData();
+      }
+    } catch (error) {
+      console.error("Failed to sync packs:", error);
+      alert("Erreur lors de la synchronisation");
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  // Get all static products as packs for display
+  const allStaticPacks = staticProducts.flatMap((product) =>
+    product.pricingTiers.map((tier) => ({
+      id: `static-${product.id}-${tier.quantity}`,
+      platform: product.platform.charAt(0).toUpperCase() + product.platform.slice(1),
+      type: product.type,
+      quantity: tier.quantity,
+      price: tier.price,
+      isStatic: true,
+      popular: tier.popular,
+    }))
+  );
+
+  // Combine static and dynamic packs
+  const allPacks = [...allStaticPacks, ...packs];
 
   const handleLogout = async () => {
     await fetch("/api/admin/logout", { method: "POST" });
@@ -209,13 +247,23 @@ export default function AdminDashboard() {
             <div>
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-black text-white">Manage Packs</h2>
-                <button
-                  onClick={() => setShowAddPack(!showAddPack)}
-                  className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-xl font-bold hover:shadow-xl transition-all"
-                >
-                  <Plus className="w-4 h-4" />
-                  Add Pack
-                </button>
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleSyncPacks}
+                    disabled={isSyncing}
+                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl font-bold transition-all disabled:opacity-50"
+                  >
+                    <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+                    {isSyncing ? 'Syncing...' : 'Sync Static'}
+                  </button>
+                  <button
+                    onClick={() => setShowAddPack(!showAddPack)}
+                    className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-xl font-bold hover:shadow-xl transition-all"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Add Pack
+                  </button>
+                </div>
               </div>
 
               {showAddPack && (
@@ -279,34 +327,59 @@ export default function AdminDashboard() {
 
               {isLoading ? (
                 <p className="text-gray-300">Loading...</p>
-              ) : packs.length === 0 ? (
+              ) : allPacks.length === 0 ? (
                 <p className="text-gray-300">No packs yet</p>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {packs.map((pack) => (
-                    <div
-                      key={pack.id}
-                      className="bg-white/5 rounded-xl p-4 border border-white/10"
-                    >
-                      <div className="flex items-start justify-between mb-3">
-                        <div>
-                          <p className="font-bold text-white">{pack.platform}</p>
-                          <p className="text-sm text-gray-300">{pack.type}</p>
+                <>
+                  <div className="mb-4 p-3 bg-blue-500/20 border border-blue-500/50 rounded-xl">
+                    <p className="text-sm text-blue-200 font-semibold">
+                      📦 Affichage de {allStaticPacks.length} packs statiques (codés en dur) + {packs.length} packs dynamiques
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {allPacks.map((pack) => (
+                      <div
+                        key={pack.id}
+                        className={`rounded-xl p-4 border ${
+                          pack.isStatic
+                            ? 'bg-blue-500/10 border-blue-500/30'
+                            : 'bg-white/5 border-white/10'
+                        }`}
+                      >
+                        <div className="flex items-start justify-between mb-3">
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <p className="font-bold text-white">{pack.platform}</p>
+                              {pack.isStatic && (
+                                <span className="text-xs bg-blue-500 text-white px-2 py-0.5 rounded-full font-bold">
+                                  Static
+                                </span>
+                              )}
+                              {pack.popular && (
+                                <span className="text-xs bg-yellow-500 text-white px-2 py-0.5 rounded-full font-bold">
+                                  Popular
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-sm text-gray-300">{pack.type}</p>
+                          </div>
+                          {!pack.isStatic && (
+                            <button
+                              onClick={() => handleDeletePack(pack.id)}
+                              className="text-red-400 hover:text-red-300 transition-colors"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          )}
                         </div>
-                        <button
-                          onClick={() => handleDeletePack(pack.id)}
-                          className="text-red-400 hover:text-red-300 transition-colors"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                        <p className="text-2xl font-black text-white mb-1">
+                          {pack.quantity?.toLocaleString()}
+                        </p>
+                        <p className="text-lg font-bold text-green-400">{pack.price?.toFixed(2)}€</p>
                       </div>
-                      <p className="text-2xl font-black text-white mb-1">
-                        {pack.quantity?.toLocaleString()}
-                      </p>
-                      <p className="text-lg font-bold text-green-400">{pack.price?.toFixed(2)}€</p>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                </>
               )}
             </div>
           )}
