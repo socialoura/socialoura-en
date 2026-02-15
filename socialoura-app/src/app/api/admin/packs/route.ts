@@ -44,8 +44,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, pack: newPack });
   } catch (error) {
+    console.error("Error adding pack:", error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: "Internal server error", details: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
   }
