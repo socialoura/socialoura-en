@@ -34,24 +34,41 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
   const reviews = useMemo(() => getRandomReviews(4, product.id), [product.id]);
   const avgRating = useMemo(() => getAverageRating(), []);
 
-  // Fetch dynamic packs from API
+  // Fetch dynamic packs from pricing API (JSONB)
   useEffect(() => {
     async function fetchPacks() {
       try {
-        const response = await fetch(
-          `/api/packs?platform=${product.platform}&type=${product.type}`
-        );
+        const response = await fetch("/api/admin/pricing");
         const data = await response.json();
-        
-        if (data.pricingTiers && data.pricingTiers.length > 0) {
-          setProduct(prev => ({
-            ...prev,
-            pricingTiers: data.pricingTiers,
-          }));
-          
-          // Update selected tier if needed
-          const popularTier = data.pricingTiers.find((t: any) => t.popular);
-          setSelectedTier(popularTier || data.pricingTiers[0]);
+
+        const goals =
+          product.platform === "instagram"
+            ? Array.isArray(data.instagram)
+              ? data.instagram
+              : []
+            : product.platform === "tiktok"
+              ? Array.isArray(data.tiktok)
+                ? data.tiktok
+                : []
+              : [];
+
+        const tiers = goals
+          .map((g: any) => {
+            const quantity = Number(String(g.followers).replace(/\s/g, ""));
+            const price = Number(String(g.price).replace(",", "."));
+            if (!Number.isFinite(quantity) || !Number.isFinite(price) || quantity <= 0) return null;
+            return {
+              quantity,
+              price,
+              pricePerUnit: price / quantity,
+            };
+          })
+          .filter(Boolean)
+          .sort((a: any, b: any) => a.quantity - b.quantity);
+
+        if (tiers.length > 0) {
+          setProduct((prev) => ({ ...prev, pricingTiers: tiers }));
+          setSelectedTier(tiers[0]);
         }
       } catch (error) {
         console.error('Error fetching packs:', error);
@@ -59,7 +76,7 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
     }
     
     fetchPacks();
-  }, [product.platform, product.type]);
+  }, [product.platform]);
 
   const platformTheme = useMemo(() => {
     const platform = product.platform.toLowerCase();

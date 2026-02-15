@@ -1,36 +1,33 @@
 import { NextResponse } from "next/server";
-import { readPacks } from "@/lib/packs-storage";
+import { getPricing, type Goal } from "@/lib/db";
 
 // Public API to get packs for product pages
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const platform = searchParams.get('platform');
-    const type = searchParams.get('type');
 
-    const packs = await readPacks();
+    const pricing = await getPricing();
+    const instagram = pricing?.instagram ?? [];
+    const tiktok = pricing?.tiktok ?? [];
 
-    // Filter by platform and type if provided
-    let filteredPacks = packs;
-    
-    if (platform) {
-      filteredPacks = filteredPacks.filter(
-        pack => pack.platform.toLowerCase() === platform.toLowerCase()
-      );
-    }
-    
-    if (type) {
-      filteredPacks = filteredPacks.filter(
-        pack => pack.type.toLowerCase() === type.toLowerCase()
-      );
-    }
+    const goals: Goal[] =
+      platform?.toLowerCase() === "instagram" ? instagram :
+      platform?.toLowerCase() === "tiktok" ? tiktok :
+      [];
 
-    // Convert to pricing tier format
-    const pricingTiers = filteredPacks.map(pack => ({
-      quantity: pack.quantity,
-      price: pack.price,
-      pricePerUnit: pack.price / pack.quantity,
-    }));
+    const pricingTiers = goals
+      .map((g) => {
+        const quantity = Number(String(g.followers).replace(/\s/g, ""));
+        const price = Number(String(g.price).replace(",", "."));
+        if (!Number.isFinite(quantity) || !Number.isFinite(price) || quantity <= 0) return null;
+        return {
+          quantity,
+          price,
+          pricePerUnit: price / quantity,
+        };
+      })
+      .filter((x): x is { quantity: number; price: number; pricePerUnit: number } => x !== null);
 
     // Sort by quantity
     pricingTiers.sort((a, b) => a.quantity - b.quantity);

@@ -2,184 +2,18 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Package, ShoppingCart, LogOut, Plus, Trash2, TrendingUp, Edit, X } from "lucide-react";
+import { Package, ShoppingCart, LogOut, TrendingUp } from "lucide-react";
+import OrdersTab from "@/components/admin/OrdersTab";
+import PricingTab from "@/components/admin/PricingTab";
 
 export default function AdminDashboard() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<"orders" | "packs">("orders");
-  const [orders, setOrders] = useState<any[]>([]);
-  const [packs, setPacks] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [showAddPack, setShowAddPack] = useState(false);
-  const [sortBy, setSortBy] = useState<'quantity' | 'price' | 'platform' | 'type' | 'none'>('none');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-  const [editingPack, setEditingPack] = useState<any>(null);
-  const [showEditModal, setShowEditModal] = useState(false);
-  
-  // New pack form
-  const [newPack, setNewPack] = useState({
-    platform: "Instagram",
-    type: "followers",
-    quantity: "",
-    price: "",
-  });
+  const [activeTab, setActiveTab] = useState<"orders" | "pricing">("orders");
 
-  // Edit pack form
-  const [editPackForm, setEditPackForm] = useState({
-    platform: "",
-    type: "",
-    quantity: "",
-    price: "",
-  });
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    try {
-      const [ordersRes, packsRes] = await Promise.all([
-        fetch("/api/admin/orders"),
-        fetch("/api/admin/packs"),
-      ]);
-
-      if (ordersRes.ok) {
-        const ordersData = await ordersRes.json();
-        setOrders(ordersData.orders || []);
-      }
-
-      if (packsRes.ok) {
-        const packsData = await packsRes.json();
-        setPacks(packsData.packs || []);
-      }
-    } catch (error) {
-      console.error("Failed to fetch data:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // All packs are now dynamic (from database)
-  const allPacks = packs;
-
-  // Sort packs based on selected criteria
-  const sortedPacks = [...allPacks].sort((a: any, b: any) => {
-    if (sortBy === 'none') return 0;
-    
-    let comparison = 0;
-    
-    switch (sortBy) {
-      case 'quantity':
-        comparison = a.quantity - b.quantity;
-        break;
-      case 'price':
-        comparison = a.price - b.price;
-        break;
-      case 'platform':
-        comparison = a.platform.localeCompare(b.platform);
-        break;
-      case 'type':
-        comparison = a.type.localeCompare(b.type);
-        break;
-      default:
-        return 0;
-    }
-    
-    return sortOrder === 'asc' ? comparison : -comparison;
-  });
-
+  useEffect(() => {}, []);
   const handleLogout = async () => {
     await fetch("/api/admin/logout", { method: "POST" });
     router.push("/admin/login");
-  };
-
-  const handleAddPack = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    try {
-      const response = await fetch("/api/admin/packs", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...newPack,
-          quantity: parseInt(newPack.quantity),
-          price: parseFloat(newPack.price),
-        }),
-      });
-
-      if (response.ok) {
-        setShowAddPack(false);
-        setNewPack({ platform: "Instagram", type: "followers", quantity: "", price: "" });
-        fetchData();
-      }
-    } catch (error) {
-      console.error("Failed to add pack:", error);
-    }
-  };
-
-  const handleDeletePack = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this pack?")) return;
-    
-    try {
-      const response = await fetch(`/api/admin/packs?id=${id}`, {
-        method: "DELETE",
-      });
-
-      if (response.ok) {
-        fetchData();
-      }
-    } catch (error) {
-      console.error("Failed to delete pack:", error);
-    }
-  };
-
-  const handleEditPack = (pack: any) => {
-    setEditingPack(pack);
-    setEditPackForm({
-      platform: pack.platform,
-      type: pack.type,
-      quantity: pack.quantity.toString(),
-      price: pack.price.toString(),
-    });
-    setShowEditModal(true);
-  };
-
-  const handleUpdatePack = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!editingPack) return;
-    
-    try {
-      const response = await fetch(`/api/admin/packs?id=${editingPack.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          platform: editPackForm.platform,
-          type: editPackForm.type,
-          quantity: parseInt(editPackForm.quantity),
-          price: parseFloat(editPackForm.price),
-        }),
-      });
-
-      if (response.ok) {
-        setShowEditModal(false);
-        setEditingPack(null);
-        fetchData();
-      }
-    } catch (error) {
-      console.error("Failed to update pack:", error);
-    }
-  };
-
-  const closeEditModal = () => {
-    setShowEditModal(false);
-    setEditingPack(null);
-    setEditPackForm({
-      platform: "",
-      type: "",
-      quantity: "",
-      price: "",
-    });
   };
 
   return (
@@ -210,7 +44,7 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-300 font-semibold">Total Orders</p>
-                <p className="text-3xl font-black text-white mt-2">{orders.length}</p>
+                <p className="text-3xl font-black text-white mt-2">0</p>
               </div>
               <ShoppingCart className="w-12 h-12 text-purple-400" />
             </div>
@@ -220,7 +54,7 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-300 font-semibold">Total Packs</p>
-                <p className="text-3xl font-black text-white mt-2">{packs.length}</p>
+                <p className="text-3xl font-black text-white mt-2">0</p>
               </div>
               <Package className="w-12 h-12 text-pink-400" />
             </div>
@@ -230,9 +64,7 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-300 font-semibold">Revenue</p>
-                <p className="text-3xl font-black text-white mt-2">
-                  {orders.reduce((sum, order) => sum + (order.amount || 0), 0).toFixed(2)}€
-                </p>
+                <p className="text-3xl font-black text-white mt-2">0€</p>
               </div>
               <TrendingUp className="w-12 h-12 text-green-400" />
             </div>
@@ -252,314 +84,22 @@ export default function AdminDashboard() {
             Orders
           </button>
           <button
-            onClick={() => setActiveTab("packs")}
+            onClick={() => setActiveTab("pricing")}
             className={`px-6 py-3 rounded-xl font-black transition-all ${
-              activeTab === "packs"
+              activeTab === "pricing"
                 ? "bg-white text-purple-900"
                 : "bg-white/10 text-white hover:bg-white/20"
             }`}
           >
-            Packs
+            Pricing
           </button>
         </div>
 
         {/* Content */}
         <div className="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 p-6">
-          {activeTab === "orders" ? (
-            <div>
-              <h2 className="text-xl font-black text-white mb-4">Recent Orders</h2>
-              {isLoading ? (
-                <p className="text-gray-300">Loading...</p>
-              ) : orders.length === 0 ? (
-                <p className="text-gray-300">No orders yet</p>
-              ) : (
-                <div className="space-y-3">
-                  {orders.map((order) => (
-                    <div
-                      key={order.id}
-                      className="bg-white/5 rounded-xl p-4 border border-white/10"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="font-bold text-white">{order.product || "Order"}</p>
-                          <p className="text-sm text-gray-300">
-                            {new Date(order.createdAt).toLocaleDateString()}
-                          </p>
-                        </div>
-                        <p className="text-lg font-black text-green-400">
-                          {order.amount?.toFixed(2)}€
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          ) : (
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-black text-white">Manage Packs</h2>
-                <div className="flex gap-3">
-                  <div className="flex items-center gap-2">
-                    <select
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value as any)}
-                      className="bg-white/10 border border-white/20 text-white px-3 py-2 rounded-lg text-sm font-medium"
-                    >
-                      <option value="none">Trier par...</option>
-                      <option value="quantity">Quantité</option>
-                      <option value="price">Prix</option>
-                      <option value="platform">Plateforme</option>
-                      <option value="type">Type</option>
-                    </select>
-                    {sortBy !== 'none' && (
-                      <button
-                        onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-                        className="bg-white/10 border border-white/20 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/20 transition-colors"
-                      >
-                        {sortOrder === 'asc' ? '↑' : '↓'}
-                      </button>
-                    )}
-                  </div>
-                  <button
-                    onClick={() => setShowAddPack(!showAddPack)}
-                    className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-xl font-bold hover:shadow-xl transition-all"
-                  >
-                    <Plus className="w-4 h-4" />
-                    Add Pack
-                  </button>
-                </div>
-              </div>
-
-              {showAddPack && (
-                <form onSubmit={handleAddPack} className="bg-white/5 rounded-xl p-4 border border-white/10 mb-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-bold text-white mb-2">Platform</label>
-                      <select
-                        value={newPack.platform}
-                        onChange={(e) => setNewPack({ ...newPack, platform: e.target.value })}
-                        className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white"
-                      >
-                        <option value="Instagram">Instagram</option>
-                        <option value="TikTok">TikTok</option>
-                        <option value="YouTube">YouTube</option>
-                        <option value="Facebook">Facebook</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-bold text-white mb-2">Type</label>
-                      <select
-                        value={newPack.type}
-                        onChange={(e) => setNewPack({ ...newPack, type: e.target.value })}
-                        className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white"
-                      >
-                        <option value="followers">Followers</option>
-                        <option value="likes">Likes</option>
-                        <option value="views">Views</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-bold text-white mb-2">Quantity</label>
-                      <input
-                        type="number"
-                        value={newPack.quantity}
-                        onChange={(e) => setNewPack({ ...newPack, quantity: e.target.value })}
-                        className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-bold text-white mb-2">Price (€)</label>
-                      <input
-                        type="number"
-                        step="0.01"
-                        value={newPack.price}
-                        onChange={(e) => setNewPack({ ...newPack, price: e.target.value })}
-                        className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <button
-                    type="submit"
-                    className="mt-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-xl font-bold hover:shadow-xl transition-all"
-                  >
-                    Add Pack
-                  </button>
-                </form>
-              )}
-
-              {isLoading ? (
-                <p className="text-gray-300">Loading...</p>
-              ) : allPacks.length === 0 ? (
-                <p className="text-gray-300">No packs yet. Click "Add Pack" to create your first pack.</p>
-              ) : (
-                <>
-                  
-                  {/* Group packs by product */}
-                  {Object.entries(
-                    sortedPacks.reduce((groups: Record<string, any[]>, pack: any) => {
-                      const productKey = `${pack.platform}-${pack.type}`;
-                      if (!groups[productKey]) {
-                        groups[productKey] = [];
-                      }
-                      groups[productKey].push(pack);
-                      return groups;
-                    }, {})
-                  )
-                    .sort(([a], [b]) => a.localeCompare(b))
-                    .map(([productKey, productPacks]: [string, any[]]) => {
-                      const [platform, type] = productKey.split('-');
-                      const [platformName, typeName] = [platform, type];
-                      
-                      return (
-                        <div key={productKey} className="mb-6">
-                          <div className="flex items-center justify-between mb-3">
-                            <div className="flex items-center gap-3">
-                              <h3 className="text-lg font-black text-white">
-                                {platformName} {typeName === 'followers' ? 'Abonnés' : typeName === 'likes' ? 'Likes' : 'Vues'}
-                              </h3>
-                              <span className="text-sm bg-white/10 px-3 py-1 rounded-full text-white font-bold">
-                                {productPacks.length} packs
-                              </span>
-                            </div>
-                            <div className="text-sm text-gray-400">
-                              {productPacks.reduce((sum: number, pack: any) => sum + pack.price, 0).toFixed(2)}€ total
-                            </div>
-                          </div>
-                          
-                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {productPacks.map((pack: any) => (
-                                <div
-                                  key={pack.id}
-                                  className="rounded-xl p-4 border bg-white/5 border-white/10"
-                                >
-                                  <div className="flex items-start justify-between mb-3">
-                                    <div>
-                                      <div className="flex items-center gap-2">
-                                        <p className="font-bold text-white">{pack.platform}</p>
-                                      </div>
-                                      <p className="text-sm text-gray-300">{pack.type}</p>
-                                    </div>
-                                    <div className="flex gap-2">
-                                      <button
-                                        onClick={() => handleEditPack(pack)}
-                                        className="text-blue-400 hover:text-blue-300 transition-colors"
-                                      >
-                                        <Edit className="w-4 h-4" />
-                                      </button>
-                                      <button
-                                        onClick={() => handleDeletePack(pack.id)}
-                                        className="text-red-400 hover:text-red-300 transition-colors"
-                                      >
-                                        <Trash2 className="w-4 h-4" />
-                                      </button>
-                                    </div>
-                                  </div>
-                                  <p className="text-2xl font-black text-white mb-1">
-                                    {pack.quantity?.toLocaleString()}
-                                  </p>
-                                  <p className="text-lg font-bold text-green-400">{pack.price?.toFixed(2)}€</p>
-                                </div>
-                              ))}
-                          </div>
-                        </div>
-                      );
-                    })}
-                </>
-              )}
-            </div>
-          )}
+          {activeTab === "orders" ? <OrdersTab /> : <PricingTab />}
         </div>
       </div>
-
-      {/* Edit Modal */}
-      {showEditModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl p-6 max-w-md w-full">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-black text-gray-900">Edit Pack</h3>
-              <button
-                onClick={closeEditModal}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <form onSubmit={handleUpdatePack} className="space-y-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Platform</label>
-                <select
-                  value={editPackForm.platform}
-                  onChange={(e) => setEditPackForm({ ...editPackForm, platform: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  required
-                >
-                  <option value="Instagram">Instagram</option>
-                  <option value="TikTok">TikTok</option>
-                  <option value="YouTube">YouTube</option>
-                  <option value="Facebook">Facebook</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Type</label>
-                <select
-                  value={editPackForm.type}
-                  onChange={(e) => setEditPackForm({ ...editPackForm, type: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  required
-                >
-                  <option value="followers">Followers</option>
-                  <option value="likes">Likes</option>
-                  <option value="views">Views</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Quantity</label>
-                <input
-                  type="number"
-                  value={editPackForm.quantity}
-                  onChange={(e) => setEditPackForm({ ...editPackForm, quantity: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Price (€)</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  value={editPackForm.price}
-                  onChange={(e) => setEditPackForm({ ...editPackForm, price: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  required
-                />
-              </div>
-
-              <div className="flex gap-3 pt-4">
-                <button
-                  type="button"
-                  onClick={closeEditModal}
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-semibold"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all font-semibold"
-                >
-                  Update Pack
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

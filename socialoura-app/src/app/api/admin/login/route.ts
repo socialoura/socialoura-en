@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createToken, encodeToken } from "@/lib/admin-auth";
 
 export async function POST(request: NextRequest) {
   try {
@@ -35,6 +36,7 @@ export async function POST(request: NextRequest) {
     const response = NextResponse.json({
       success: true,
       username: username,
+      token: encodeToken(createToken(username)),
     });
 
     // Set secure HTTP-only cookie

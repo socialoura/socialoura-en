@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Lock, User, AlertCircle } from "lucide-react";
+import { decodeToken, saveToken } from "@/lib/admin-auth";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -34,6 +35,12 @@ export default function AdminLoginPage() {
       }
 
       // Redirect to admin dashboard
+      if (data?.token) {
+        const decoded = decodeToken(data.token);
+        if (decoded) {
+          saveToken(decoded);
+        }
+      }
       router.push("/admin");
     } catch (err) {
       setError("An error occurred. Please try again.");
