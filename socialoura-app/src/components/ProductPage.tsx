@@ -21,9 +21,13 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
   const { addItem, openCart } = useCart();
   const [product, setProduct] = useState(initialProduct);
   const [step, setStep] = useState<1 | 2>(1);
-  const [selectedTier, setSelectedTier] = useState(
-    product.pricingTiers.find((t) => t.popular) || product.pricingTiers[0]
-  );
+  
+  // Default tier with safe fallback
+  const defaultTier = product.pricingTiers.length > 0
+    ? (product.pricingTiers.find((t) => t.popular) || product.pricingTiers[0])
+    : { quantity: 100, price: 0, pricePerUnit: 0 };
+  
+  const [selectedTier, setSelectedTier] = useState(defaultTier);
   const [username, setUsername] = useState("");
   const [customQuantity, setCustomQuantity] = useState<string>("");
   const [isCustomSelected, setIsCustomSelected] = useState(false);
@@ -126,12 +130,13 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
     
     if (isCustomSelected && customQuantity && parseInt(customQuantity) >= 100) {
       // Calculate custom price
+      if (product.pricingTiers.length === 0) return "0.00";
       const quantity = parseInt(customQuantity);
       const pricePerUnit = product.pricingTiers[product.pricingTiers.length - 1].pricePerUnit;
       price = quantity * pricePerUnit;
     } else {
       // Use selected tier price
-      price = selectedTier.price;
+      price = selectedTier?.price || 0;
     }
     
     return new Intl.NumberFormat("fr-FR", {
@@ -156,10 +161,18 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
       if (isCustomSelected && customQuantity && parseInt(customQuantity) >= 100) {
         // Custom quantity selected
         quantity = parseInt(customQuantity);
+        if (product.pricingTiers.length === 0) {
+          alert("Aucun pack disponible pour le moment");
+          return;
+        }
         pricePerUnit = product.pricingTiers[product.pricingTiers.length - 1].pricePerUnit;
         price = quantity * pricePerUnit;
       } else {
         // Standard tier selected
+        if (!selectedTier || !selectedTier.quantity) {
+          alert("Veuillez sélectionner un pack");
+          return;
+        }
         quantity = selectedTier.quantity;
         price = selectedTier.price;
         pricePerUnit = selectedTier.pricePerUnit;
@@ -235,8 +248,10 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
                   {product.pricingTiers.map((tier, index) => {
                     const isSelected = !isCustomSelected && selectedTier.quantity === tier.quantity;
                     // Calculate savings percentage compared to smallest pack
-                    const basePricePerUnit = product.pricingTiers[0].pricePerUnit;
-                    const savingsPercent = Math.round(((basePricePerUnit - tier.pricePerUnit) / basePricePerUnit) * 100);
+                    const bestUnitPrice = product.pricingTiers.length > 0
+        ? Math.min(...product.pricingTiers.map((t) => t.pricePerUnit))
+        : 0;
+                    const savingsPercent = Math.round(((bestUnitPrice - tier.pricePerUnit) / bestUnitPrice) * 100);
                     
                     return (
                       <button
