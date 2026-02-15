@@ -3,15 +3,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Plus, Trash2, Save, X } from "lucide-react";
 import { encodeToken, getToken } from "@/lib/admin-auth";
-
-type PlatformKey = "instagram" | "tiktok";
-type Goal = { followers: string; price: string };
-type PricingState = Record<PlatformKey, Goal[]>;
+import { getDefaultPricing, type Goal, type PlatformKey, type PricingData, type ProductType } from "@/lib/pricing";
 
 export default function PricingTab() {
-  const [pricing, setPricing] = useState<PricingState>({ instagram: [], tiktok: [] });
+  const [pricing, setPricing] = useState<PricingData>(getDefaultPricing());
   const [loading, setLoading] = useState(true);
-  const [deleteConfirm, setDeleteConfirm] = useState<{ platform: PlatformKey; index: number } | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<{ platform: PlatformKey; type: ProductType; index: number } | null>(null);
   const [saving, setSaving] = useState(false);
 
   const hasToken = useMemo(() => {
@@ -24,10 +21,7 @@ export default function PricingTab() {
       try {
         const response = await fetch("/api/admin/pricing");
         const data = await response.json();
-        setPricing({
-          instagram: Array.isArray(data.instagram) ? data.instagram : [],
-          tiktok: Array.isArray(data.tiktok) ? data.tiktok : [],
-        });
+        setPricing(data);
       } catch (error) {
         console.error("Failed to fetch pricing:", error);
       } finally {
@@ -37,31 +31,41 @@ export default function PricingTab() {
     fetchPricing();
   }, []);
 
-  const handleAddGoal = (platform: PlatformKey) => {
+  const handleAddGoal = (platform: PlatformKey, type: ProductType) => {
     setPricing((prev) => ({
       ...prev,
-      [platform]: [...prev[platform], { followers: "", price: "" }],
+      [platform]: {
+        ...prev[platform],
+        [type]: [...(prev[platform]?.[type] ?? []), { followers: "", price: "" }],
+      },
     }));
   };
 
   const handleUpdateGoal = (
     platform: PlatformKey,
+    type: ProductType,
     index: number,
     field: keyof Goal,
     value: string
   ) => {
     setPricing((prev) => ({
       ...prev,
-      [platform]: prev[platform].map((g, i) => (i === index ? { ...g, [field]: value } : g)),
+      [platform]: {
+        ...prev[platform],
+        [type]: (prev[platform]?.[type] ?? []).map((g, i) => (i === index ? { ...g, [field]: value } : g)),
+      },
     }));
   };
 
   const confirmDelete = () => {
     if (!deleteConfirm) return;
-    const { platform, index } = deleteConfirm;
+    const { platform, type, index } = deleteConfirm;
     setPricing((prev) => ({
       ...prev,
-      [platform]: prev[platform].filter((_, i) => i !== index),
+      [platform]: {
+        ...prev[platform],
+        [type]: (prev[platform]?.[type] ?? []).filter((_, i) => i !== index),
+      },
     }));
     setDeleteConfirm(null);
   };
@@ -125,61 +129,110 @@ export default function PricingTab() {
         </button>
       </div>
 
-      {(["instagram", "tiktok"] as PlatformKey[]).map((platform) => (
-        <div key={platform} className="bg-white/5 border border-white/10 rounded-2xl p-4">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-black text-white capitalize">{platform}</h3>
-            <button
-              onClick={() => handleAddGoal(platform)}
-              className="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white px-3 py-2 rounded-xl font-bold transition-all"
-            >
-              <Plus className="w-4 h-4" />
-              Add Goal
-            </button>
-          </div>
+      {([
+        {
+          platform: "instagram" as const,
+          label: "Instagram",
+          types: [
+            { type: "followers" as const, label: "Followers" },
+            { type: "likes" as const, label: "Likes" },
+            { type: "views" as const, label: "Vues" },
+          ],
+        },
+        {
+          platform: "tiktok" as const,
+          label: "TikTok",
+          types: [
+            { type: "followers" as const, label: "Followers" },
+            { type: "likes" as const, label: "Likes" },
+            { type: "views" as const, label: "Vues" },
+          ],
+        },
+        {
+          platform: "youtube" as const,
+          label: "YouTube",
+          types: [
+            { type: "followers" as const, label: "Abonnés" },
+            { type: "likes" as const, label: "Likes" },
+            { type: "views" as const, label: "Vues" },
+          ],
+        },
+        {
+          platform: "facebook" as const,
+          label: "Facebook",
+          types: [
+            { type: "followers" as const, label: "Followers" },
+            { type: "likes" as const, label: "Likes" },
+          ],
+        },
+      ] as const).map((section) => (
+        <div key={section.platform} className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-4">
+          <h3 className="text-lg font-black text-white">{section.label}</h3>
 
-          {pricing[platform].length === 0 ? (
-            <p className="text-gray-300 text-sm">Aucun pack. Clique sur "Add Goal".</p>
-          ) : (
-            <div className="space-y-3">
-              {pricing[platform].map((goal, index) => (
-                <div
-                  key={`${platform}-${index}`}
-                  className="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-3 items-center bg-white/5 border border-white/10 rounded-xl p-3"
-                >
-                  <div>
-                    <label className="block text-xs font-bold text-gray-300 mb-1">Followers</label>
-                    <input
-                      value={goal.followers}
-                      onChange={(e) => handleUpdateGoal(platform, index, "followers", e.target.value)}
-                      className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500"
-                      placeholder="1000"
-                      inputMode="numeric"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-gray-300 mb-1">Price (€)</label>
-                    <input
-                      value={goal.price}
-                      onChange={(e) => handleUpdateGoal(platform, index, "price", e.target.value)}
-                      className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500"
-                      placeholder="9.99"
-                      inputMode="decimal"
-                    />
-                  </div>
-                  <div className="flex md:justify-end">
-                    <button
-                      onClick={() => setDeleteConfirm({ platform, index })}
-                      className="text-red-400 hover:text-red-300 transition-colors px-2 py-2"
-                      aria-label="Delete"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
+          {section.types.map((t) => {
+            const goals = pricing?.[section.platform]?.[t.type] ?? [];
+            return (
+              <div key={`${section.platform}-${t.type}`} className="bg-white/5 border border-white/10 rounded-2xl p-4">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="text-base font-black text-white">{t.label}</h4>
+                  <button
+                    onClick={() => handleAddGoal(section.platform, t.type)}
+                    className="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white px-3 py-2 rounded-xl font-bold transition-all"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Add Goal
+                  </button>
                 </div>
-              ))}
-            </div>
-          )}
+
+                {goals.length === 0 ? (
+                  <p className="text-gray-300 text-sm">Aucun pack. Clique sur "Add Goal".</p>
+                ) : (
+                  <div className="space-y-3">
+                    {goals.map((goal, index) => (
+                      <div
+                        key={`${section.platform}-${t.type}-${index}`}
+                        className="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-3 items-center bg-white/5 border border-white/10 rounded-xl p-3"
+                      >
+                        <div>
+                          <label className="block text-xs font-bold text-gray-300 mb-1">Quantité</label>
+                          <input
+                            value={goal.followers}
+                            onChange={(e) =>
+                              handleUpdateGoal(section.platform, t.type, index, "followers", e.target.value)
+                            }
+                            className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500"
+                            placeholder="1000"
+                            inputMode="numeric"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-gray-300 mb-1">Prix (€)</label>
+                          <input
+                            value={goal.price}
+                            onChange={(e) =>
+                              handleUpdateGoal(section.platform, t.type, index, "price", e.target.value)
+                            }
+                            className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500"
+                            placeholder="9.99"
+                            inputMode="decimal"
+                          />
+                        </div>
+                        <div className="flex md:justify-end">
+                          <button
+                            onClick={() => setDeleteConfirm({ platform: section.platform, type: t.type, index })}
+                            className="text-red-400 hover:text-red-300 transition-colors px-2 py-2"
+                            aria-label="Delete"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       ))}
 

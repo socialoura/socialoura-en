@@ -42,15 +42,11 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
         const data = await response.json();
 
         const goals =
-          product.platform === "instagram"
-            ? Array.isArray(data.instagram)
-              ? data.instagram
+          data && typeof data === "object" && data[product.platform]
+            ? Array.isArray(data[product.platform]?.[product.type])
+              ? data[product.platform][product.type]
               : []
-            : product.platform === "tiktok"
-              ? Array.isArray(data.tiktok)
-                ? data.tiktok
-                : []
-              : [];
+            : [];
 
         const tiers = goals
           .map((g: any) => {
@@ -76,7 +72,7 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
     }
     
     fetchPacks();
-  }, [product.platform]);
+  }, [product.platform, product.type]);
 
   const platformTheme = useMemo(() => {
     const platform = product.platform.toLowerCase();

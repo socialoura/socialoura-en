@@ -1,20 +1,22 @@
 import { NextResponse } from "next/server";
-import { getPricing, type Goal } from "@/lib/db";
+import { getPricing } from "@/lib/db";
+import { type Goal, type PlatformKey, type ProductType } from "@/lib/pricing";
 
 // Public API to get packs for product pages
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const platform = searchParams.get('platform');
+    const platform = searchParams.get("platform");
+    const type = searchParams.get("type");
 
     const pricing = await getPricing();
-    const instagram = pricing?.instagram ?? [];
-    const tiktok = pricing?.tiktok ?? [];
+    const p = platform?.toLowerCase() as PlatformKey | undefined;
+    const t = type?.toLowerCase() as ProductType | undefined;
 
     const goals: Goal[] =
-      platform?.toLowerCase() === "instagram" ? instagram :
-      platform?.toLowerCase() === "tiktok" ? tiktok :
-      [];
+      pricing && p && t && Array.isArray(pricing[p]?.[t])
+        ? (pricing[p]?.[t] as Goal[])
+        : [];
 
     const pricingTiers = goals
       .map((g) => {

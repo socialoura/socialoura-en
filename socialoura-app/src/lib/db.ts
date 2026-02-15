@@ -1,7 +1,13 @@
-import { Pool } from "pg";
+import "server-only";
 
-export type Goal = { followers: string; price: string };
-export type PricingData = { instagram: Goal[]; tiktok: Goal[] };
+import { Pool } from "pg";
+import {
+  getDefaultPricing,
+  normalizePricing,
+  type PricingData,
+} from "@/lib/pricing";
+
+export type { PricingData };
 
 const PRICING_ROW_ID = "pricing-data";
 
@@ -42,7 +48,7 @@ export async function initDatabase(): Promise<void> {
 
 export async function getPricing(): Promise<PricingData | null> {
   if (!isDBConfigured()) {
-    return memoryStore;
+    return memoryStore ? normalizePricing(memoryStore) : null;
   }
 
   await initDatabase();
@@ -54,7 +60,7 @@ export async function getPricing(): Promise<PricingData | null> {
       [PRICING_ROW_ID]
     );
     if (res.rowCount === 0) return null;
-    return res.rows[0].data as PricingData;
+    return normalizePricing(res.rows[0].data);
   } finally {
     client.release();
   }
@@ -62,7 +68,7 @@ export async function getPricing(): Promise<PricingData | null> {
 
 export async function setPricing(data: PricingData): Promise<void> {
   if (!isDBConfigured()) {
-    memoryStore = data;
+    memoryStore = normalizePricing(data);
     return;
   }
 
