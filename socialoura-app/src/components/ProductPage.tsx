@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Product } from "@/types/product";
 import { Star, Check, Shield, Zap, Clock, ShoppingCart, Lock, Sparkles } from "lucide-react";
@@ -16,9 +16,10 @@ interface ProductPageProps {
   product: Product;
 }
 
-export default function ProductPage({ product }: ProductPageProps) {
+export default function ProductPage({ product: initialProduct }: ProductPageProps) {
   const router = useRouter();
   const { addItem, openCart } = useCart();
+  const [product, setProduct] = useState(initialProduct);
   const [step, setStep] = useState<1 | 2>(1);
   const [selectedTier, setSelectedTier] = useState(
     product.pricingTiers.find((t) => t.popular) || product.pricingTiers[0]
@@ -28,6 +29,33 @@ export default function ProductPage({ product }: ProductPageProps) {
   const [isCustomSelected, setIsCustomSelected] = useState(false);
   const reviews = useMemo(() => getRandomReviews(4, product.id), [product.id]);
   const avgRating = useMemo(() => getAverageRating(), []);
+
+  // Fetch dynamic packs from API
+  useEffect(() => {
+    async function fetchPacks() {
+      try {
+        const response = await fetch(
+          `/api/packs?platform=${product.platform}&type=${product.type}`
+        );
+        const data = await response.json();
+        
+        if (data.pricingTiers && data.pricingTiers.length > 0) {
+          setProduct(prev => ({
+            ...prev,
+            pricingTiers: data.pricingTiers,
+          }));
+          
+          // Update selected tier if needed
+          const popularTier = data.pricingTiers.find((t: any) => t.popular);
+          setSelectedTier(popularTier || data.pricingTiers[0]);
+        }
+      } catch (error) {
+        console.error('Error fetching packs:', error);
+      }
+    }
+    
+    fetchPacks();
+  }, [product.platform, product.type]);
 
   const platformTheme = useMemo(() => {
     const platform = product.platform.toLowerCase();
