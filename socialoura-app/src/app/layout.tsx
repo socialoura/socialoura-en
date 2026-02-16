@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   title: "SocialOura - Boost Your Social Media Presence",
   description:
     "Get real and active followers on Instagram, TikTok, YouTube, and Facebook. Best quality in France. Instant delivery.",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({

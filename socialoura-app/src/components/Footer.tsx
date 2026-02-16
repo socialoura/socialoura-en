@@ -4,101 +4,60 @@ import { Lock } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="relative bg-white text-gray-700 overflow-hidden">
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-purple-600/3 via-pink-600/3 to-orange-500/3 pointer-events-none" />
-      
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-          {/* Brand */}
-          <div>
-            <Link href="/" className="group flex items-center gap-2.5 mb-4">
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 rounded-xl blur-md opacity-50 group-hover:opacity-75 transition-opacity" />
-                <div className="relative w-10 h-10 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
-                  <span className="text-white font-black text-base">S</span>
-                </div>
+    <footer className="bg-[#FFF7FA] border-t border-[#F1E4EA]">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+        {/* Payment methods — prominent */}
+        <div className="mb-12">
+          <h4 className="text-xs font-bold text-[#111827]/40 uppercase tracking-wider mb-4 text-center">Moyens de paiement acceptés</h4>
+          <div className="flex items-center justify-center gap-3 flex-wrap">
+            {[
+              { src: "/payment_methods/visa.svg", alt: "Visa", w: 50, h: 32 },
+              { src: "/payment_methods/mastercard.svg", alt: "Mastercard", w: 50, h: 32 },
+              { src: "/payment_methods/apple-pay.svg", alt: "Apple Pay", w: 50, h: 32 },
+              { src: "/payment_methods/google-pay.svg", alt: "Google Pay", w: 60, h: 32 },
+            ].map((pm) => (
+              <div key={pm.alt} className="bg-white px-4 py-3 rounded-xl border border-[#F1E4EA] shadow-sm">
+                <Image src={pm.src} alt={pm.alt} width={pm.w} height={pm.h} />
               </div>
-              <span className="text-xl font-black text-gray-900 tracking-tight">
-                Social<span className="bg-gradient-to-r from-purple-600 via-pink-600 to-orange-600 bg-clip-text text-transparent">Oura</span>
-              </span>
+            ))}
+          </div>
+          <div className="flex items-center justify-center gap-3 mt-4">
+            <Image src="/payment_methods/norton.svg" alt="Norton Secured" width={70} height={35} className="opacity-70" />
+            <Image src="/payment_methods/verified.svg" alt="Verified" width={70} height={35} className="opacity-70" />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10">
+          {/* Brand */}
+          <div className="lg:col-span-2">
+            <Link href="/" className="group inline-block mb-4">
+              <Image
+                src="/logo.png"
+                alt="SocialOura"
+                width={130}
+                height={52}
+                className="object-contain"
+                priority
+              />
             </Link>
-            <p className="text-gray-600 text-sm leading-relaxed mb-5 font-medium">
+            <p className="text-[#111827]/50 text-sm leading-relaxed mb-4 font-medium max-w-xs">
               Outil en ligne instantané pour augmenter la popularité sur les réseaux sociaux.
             </p>
-            <div className="flex items-center gap-2 text-gray-500 text-xs mb-5">
+            <div className="flex items-center gap-2 text-[#111827]/30 text-xs">
               <Lock className="w-3.5 h-3.5" />
-              <span className="font-semibold">Avis de nos clients indépendants</span>
-            </div>
-            {/* Payment methods - Horizontal row */}
-            <div className="space-y-3">
-              <h4 className="text-xs font-bold text-gray-600 uppercase tracking-wider">Moyens de paiement</h4>
-              <div className="flex items-center gap-2">
-                <div className="bg-white/95 backdrop-blur-sm px-3 py-2 rounded-lg hover:bg-white transition-all duration-300 hover:-translate-y-0.5 shadow-sm">
-                  <Image
-                    src="/payment_methods/visa.svg"
-                    alt="Visa"
-                    width={40}
-                    height={25}
-                  />
-                </div>
-                <div className="bg-white/95 backdrop-blur-sm px-3 py-2 rounded-lg hover:bg-white transition-all duration-300 hover:-translate-y-0.5 shadow-sm">
-                  <Image
-                    src="/payment_methods/mastercard.svg"
-                    alt="Mastercard"
-                    width={40}
-                    height={25}
-                  />
-                </div>
-                <div className="bg-white/95 backdrop-blur-sm px-3 py-2 rounded-lg hover:bg-white transition-all duration-300 hover:-translate-y-0.5 shadow-sm">
-                  <Image
-                    src="/payment_methods/apple-pay.svg"
-                    alt="Apple Pay"
-                    width={40}
-                    height={25}
-                  />
-                </div>
-                <div className="bg-white/95 backdrop-blur-sm px-3 py-2 rounded-lg hover:bg-white transition-all duration-300 hover:-translate-y-0.5 shadow-sm">
-                  <Image
-                    src="/payment_methods/google-pay.svg"
-                    alt="Google Pay"
-                    width={50}
-                    height={25}
-                  />
-                </div>
-              </div>
-              {/* Trust badges */}
-              <div className="flex items-center gap-2 pt-2">
-                <Image
-                  src="/payment_methods/norton.svg"
-                  alt="Norton Secured"
-                  width={60}
-                  height={30}
-                  className="opacity-80 hover:opacity-100 transition-opacity"
-                />
-                <Image
-                  src="/payment_methods/verified.svg"
-                  alt="Verified"
-                  width={60}
-                  height={30}
-                  className="opacity-80 hover:opacity-100 transition-opacity"
-                />
-              </div>
+              <span className="font-semibold">Paiement 100% sécurisé</span>
             </div>
           </div>
 
           {/* Services */}
           <div>
-            <h3 className="text-gray-900 font-black text-sm uppercase tracking-wider mb-4">
-              Nos services
+            <h3 className="text-[#111827] font-bold text-sm uppercase tracking-wider mb-4">
+              Services
             </h3>
             <ul className="space-y-2.5">
               {["Instagram", "TikTok", "YouTube", "Facebook"].map((item) => (
                 <li key={item}>
-                  <Link
-                    href="#"
-                    className="text-gray-600 hover:text-transparent hover:bg-gradient-to-r hover:from-purple-600 hover:via-pink-600 hover:to-orange-600 hover:bg-clip-text text-sm transition-all duration-300 font-medium"
-                  >
+                  <Link href="#" className="text-[#111827]/50 hover:text-[#FF4B6A] text-sm transition-colors duration-200 font-medium">
                     {item}
                   </Link>
                 </li>
@@ -106,77 +65,63 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Useful links */}
+          {/* Liens utiles */}
           <div>
-            <h3 className="text-gray-900 font-black text-sm uppercase tracking-wider mb-4">
+            <h3 className="text-[#111827] font-bold text-sm uppercase tracking-wider mb-4">
               Liens utiles
             </h3>
             <ul className="space-y-2.5">
-              <li>
-                <Link
-                  href="/faq"
-                  className="text-gray-600 hover:text-transparent hover:bg-gradient-to-r hover:from-purple-600 hover:via-pink-600 hover:to-orange-600 hover:bg-clip-text text-sm transition-all duration-300 font-medium"
-                >
-                  FAQ
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-transparent hover:bg-gradient-to-r hover:from-purple-600 hover:via-pink-600 hover:to-orange-600 hover:bg-clip-text text-sm transition-all duration-300 font-medium"
-                >
-                  Avis
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-transparent hover:bg-gradient-to-r hover:from-purple-600 hover:via-pink-600 hover:to-orange-600 hover:bg-clip-text text-sm transition-all duration-300 font-medium"
-                >
-                  Conditions générales de vente
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-transparent hover:bg-gradient-to-r hover:from-purple-600 hover:via-pink-600 hover:to-orange-600 hover:bg-clip-text text-sm transition-all duration-300 font-medium"
-                >
-                  Politique de confidentialité
-                </Link>
-              </li>
+              {[
+                { label: "FAQ", href: "/faq" },
+                { label: "Avis", href: "/avis" },
+                { label: "Contact", href: "/contact" },
+              ].map((item) => (
+                <li key={item.label}>
+                  <Link href={item.href} className="text-[#111827]/50 hover:text-[#FF4B6A] text-sm transition-colors duration-200 font-medium">
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Legal — dedicated column */}
           <div>
-            <h3 className="text-gray-900 font-black text-sm uppercase tracking-wider mb-4">
-              Contactez-nous
+            <h3 className="text-[#111827] font-bold text-sm uppercase tracking-wider mb-4">
+              Légal
             </h3>
             <ul className="space-y-2.5">
-              <li>
-                <Link
-                  href="/contact"
-                  className="text-gray-600 hover:text-transparent hover:bg-gradient-to-r hover:from-purple-600 hover:via-pink-600 hover:to-orange-600 hover:bg-clip-text text-sm transition-all duration-300 font-medium"
-                >
-                  Contact
-                </Link>
-              </li>
+              {[
+                { label: "Mentions légales", href: "#" },
+                { label: "CGV", href: "#" },
+                { label: "Politique de confidentialité", href: "#" },
+              ].map((item) => (
+                <li key={item.label}>
+                  <Link href={item.href} className="text-[#111827]/50 hover:text-[#FF4B6A] text-sm transition-colors duration-200 font-medium">
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-gray-200 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-gray-500 text-xs font-semibold">
+        <div className="border-t border-[#F1E4EA] mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-[#111827]/30 text-xs font-medium">
             &copy; 2025 SocialOura &middot; Tous droits réservés
           </p>
-          <div className="flex items-center gap-4 text-xs text-gray-500">
-            <Link href="#" className="hover:text-transparent hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-600 hover:bg-clip-text transition-all duration-300 font-medium">
-              Conditions générales de vente
+          <div className="flex items-center gap-4 text-xs text-[#111827]/30">
+            <Link href="#" className="hover:text-[#FF4B6A] transition-colors duration-200 font-medium">
+              CGV
             </Link>
             <span>&middot;</span>
-            <Link href="#" className="hover:text-transparent hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-600 hover:bg-clip-text transition-all duration-300 font-medium">
-              Politique de confidentialité
+            <Link href="#" className="hover:text-[#FF4B6A] transition-colors duration-200 font-medium">
+              Confidentialité
+            </Link>
+            <span>&middot;</span>
+            <Link href="#" className="hover:text-[#FF4B6A] transition-colors duration-200 font-medium">
+              Mentions légales
             </Link>
           </div>
         </div>

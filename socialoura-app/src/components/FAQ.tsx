@@ -6,21 +6,25 @@ import { ChevronDown } from "lucide-react";
 const faqs = [
   {
     question: "Les profils que vous recevez sont-ils réels et actifs ?",
+    preview: "Oui, 100% réels et actifs — aucun bot.",
     answer:
       "Oui, tous nos profils sont 100% réels et actifs. Nous ne fournissons jamais de bots ou de faux comptes. Chaque profil est vérifié pour garantir la meilleure qualité possible.",
   },
   {
     question: "Pourquoi choisir une qualité française ?",
+    preview: "Optimisé pour l'algorithme et le marché FR.",
     answer:
       "Nos services sont optimisés pour le marché français. Nous comprenons les spécificités de l'algorithme et proposons des profils francophones qui interagissent naturellement avec votre contenu.",
   },
   {
     question: "Y a-t-il un risque à passer commande sur votre site ?",
+    preview: "Aucun risque — 100% sûr et conforme.",
     answer:
       "Absolument aucun risque. Nos méthodes sont 100% sûres et conformes aux conditions d'utilisation des réseaux sociaux. Votre compte ne sera jamais mis en danger.",
   },
   {
     question: "Est-ce qu'il y a un abonnement après la commande ?",
+    preview: "Non, aucun abonnement caché.",
     answer:
       "Non, il n'y a aucun abonnement caché. Vous payez uniquement pour le service commandé. Pas de frais récurrents ni de surprises.",
   },
@@ -34,14 +38,14 @@ export default function FAQ() {
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <div className="text-center mb-12">
-          <span className="inline-block px-4 py-1.5 bg-orange-100 text-orange-600 text-xs font-bold uppercase tracking-wider rounded-full mb-4">
+          <span className="inline-block px-4 py-1.5 bg-[#FFE4EC] text-[#FF4B6A] text-xs font-bold uppercase tracking-wider rounded-full mb-4">
             FAQ
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#111827]">
             Questions fréquentes
           </h2>
-          <p className="text-gray-500 mt-3 text-sm sm:text-base">
-            Nous avons rassemblé pour vous les réponses aux questions les plus fréquentes.
+          <p className="text-[#111827]/40 mt-3 text-sm sm:text-base font-medium">
+            Les réponses aux questions les plus posées par nos clients.
           </p>
         </div>
 
@@ -50,18 +54,27 @@ export default function FAQ() {
           {faqs.map((faq, idx) => (
             <div
               key={idx}
-              className="faq-item border border-gray-200 rounded-xl overflow-hidden bg-white"
+              className={`rounded-2xl overflow-hidden border transition-all duration-300 ${
+                openIndex === idx
+                  ? "bg-white border-[#FF4B6A]/20 shadow-md"
+                  : "bg-[#FFF7FA] border-[#F1E4EA] md:hover:border-[#FF4B6A]/20 md:hover:shadow-sm"
+              }`}
             >
               <button
                 onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
-                className="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-gray-50 transition-colors"
+                className="w-full flex items-center justify-between px-6 py-4 text-left"
               >
-                <span className="font-semibold text-gray-800 text-sm sm:text-base pr-4">
-                  {faq.question}
-                </span>
+                <div className="pr-4">
+                  <span className="font-semibold text-[#111827] text-sm sm:text-base block">
+                    {faq.question}
+                  </span>
+                  {openIndex !== idx && (
+                    <span className="text-[#111827]/35 text-xs mt-1 block">{faq.preview}</span>
+                  )}
+                </div>
                 <ChevronDown
-                  className={`w-5 h-5 text-gray-400 flex-shrink-0 transition-transform duration-300 ${
-                    openIndex === idx ? "rotate-180 text-orange-500" : ""
+                  className={`w-5 h-5 flex-shrink-0 transition-all duration-300 ${
+                    openIndex === idx ? "rotate-180 text-[#FF4B6A]" : "text-[#111827]/30"
                   }`}
                 />
               </button>
@@ -70,7 +83,7 @@ export default function FAQ() {
                   openIndex === idx ? "max-h-60 opacity-100" : "max-h-0 opacity-0"
                 }`}
               >
-                <div className="px-6 pb-4 text-gray-600 text-sm leading-relaxed">
+                <div className="px-6 pb-5 text-[#111827]/50 text-sm leading-relaxed">
                   {faq.answer}
                 </div>
               </div>
