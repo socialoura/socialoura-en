@@ -10,9 +10,9 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "SocialOura - Boost Your Social Media Presence",
+  title: "SocialNovaly — Social Media Growth & Promotion Services",
   description:
-    "Get real and active followers on Instagram, TikTok, YouTube, and Facebook. Best quality in France. Instant delivery.",
+    "Grow your audience on Instagram, TikTok, YouTube & Facebook with safe, organic-style promotion services. Fast delivery, 24/7 support.",
   icons: {
     icon: "/favicon.png",
   },
@@ -24,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr">
+    <html lang="en">
       <body className={`${spaceGrotesk.variable} font-sans antialiased`}>
         <CartProvider>
           {children}

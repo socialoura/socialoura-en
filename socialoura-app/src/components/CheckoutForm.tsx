@@ -52,7 +52,7 @@ export default function CheckoutForm({
       if (error) {
         // Payment failed
         setPaymentStatus("error");
-        setErrorMessage(error.message || "Une erreur est survenue");
+        setErrorMessage(error.message || "An error occurred");
         onError?.(error.message || "Payment failed");
       } else if (paymentIntent && paymentIntent.status === "succeeded") {
         // Payment succeeded
@@ -61,7 +61,7 @@ export default function CheckoutForm({
       }
     } catch (err: any) {
       setPaymentStatus("error");
-      setErrorMessage(err.message || "Une erreur inattendue est survenue");
+      setErrorMessage(err.message || "An unexpected error occurred");
       onError?.(err.message);
     } finally {
       setIsProcessing(false);
@@ -74,11 +74,11 @@ export default function CheckoutForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Payment Element Container */}
-      <div className="bg-white rounded-2xl border-2 border-gray-200 p-6 shadow-sm">
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm">
         <div className="flex items-center gap-2 mb-4">
-          <Lock className="w-5 h-5 text-purple-600" />
-          <h3 className="text-lg font-black text-gray-900">
-            Paiement sécurisé
+          <Lock className="w-5 h-5 text-[#FF4B6A]" />
+          <h3 className="text-lg font-bold text-[#111827]">
+            Secure Payment
           </h3>
         </div>
 
@@ -99,7 +99,7 @@ export default function CheckoutForm({
           <div className="flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
             <div>
-              <h4 className="font-bold text-red-900 mb-1">Erreur de paiement</h4>
+              <h4 className="font-bold text-red-900 mb-1">Payment Error</h4>
               <p className="text-sm text-red-700">{errorMessage}</p>
             </div>
           </div>
@@ -112,9 +112,9 @@ export default function CheckoutForm({
           <div className="flex items-start gap-3">
             <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
             <div>
-              <h4 className="font-bold text-green-900 mb-1">Paiement réussi !</h4>
+              <h4 className="font-bold text-green-900 mb-1">Payment Successful!</h4>
               <p className="text-sm text-green-700">
-                Votre commande a été confirmée
+                Your order has been confirmed
               </p>
             </div>
           </div>
@@ -125,34 +125,34 @@ export default function CheckoutForm({
       <button
         type="submit"
         disabled={!stripe || isProcessing || paymentStatus === "success"}
-        className="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 hover:from-purple-500 hover:via-pink-500 hover:to-purple-500 disabled:from-gray-400 disabled:via-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed text-white font-bold px-6 py-4 rounded-xl shadow-lg shadow-purple-500/25 hover:shadow-xl hover:shadow-purple-500/40 hover:scale-[1.02] disabled:hover:scale-100 disabled:shadow-none transition-all duration-300 flex items-center justify-center gap-3 uppercase tracking-wide"
+        className="w-full bg-[#FF4B6A] hover:bg-[#E8435F] disabled:bg-[#E5E7EB] disabled:text-[#4B5563] disabled:cursor-not-allowed text-white font-bold px-6 py-4 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center gap-3 uppercase tracking-wide"
       >
         {isProcessing ? (
           <>
             <Loader2 className="w-5 h-5 animate-spin" />
-            Traitement en cours...
+            Processing...
           </>
         ) : paymentStatus === "success" ? (
           <>
             <CheckCircle className="w-5 h-5" />
-            Paiement confirmé
+            Payment Confirmed
           </>
         ) : (
           <>
             <Lock className="w-5 h-5" />
-            Payer {formattedAmount} €
+            Pay ${formattedAmount}
           </>
         )}
       </button>
 
       {/* Security Badges */}
       <div className="flex items-center justify-center gap-4 pt-2">
-        <div className="flex items-center gap-2 text-xs text-gray-500">
+        <div className="flex items-center gap-2 text-xs text-[#4B5563]">
           <Lock className="w-3.5 h-3.5" />
-          <span className="font-semibold">Paiement sécurisé SSL</span>
+          <span className="font-semibold">SSL Secure Payment</span>
         </div>
-        <div className="w-1 h-1 bg-gray-300 rounded-full" />
-        <div className="flex items-center gap-2 text-xs text-gray-500">
+        <div className="w-1 h-1 bg-[#E5E7EB] rounded-full" />
+        <div className="flex items-center gap-2 text-xs text-[#4B5563]">
           <CheckCircle className="w-3.5 h-3.5" />
           <span className="font-semibold">Powered by Stripe</span>
         </div>

@@ -1,9 +1,11 @@
 "use client";
 
 import { useCart } from "@/contexts/CartContext";
-import { X, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
+import { X, Trash2, ShoppingBag, ArrowRight, Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+
+const formatUSD = (amount: number) =>
+  new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(amount);
 
 export default function CartDrawer() {
   const { items, itemCount, totalPrice, isCartOpen, removeItem, closeCart } = useCart();
@@ -20,30 +22,25 @@ export default function CartDrawer() {
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 animate-fade-in"
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 animate-fade-in"
         onClick={closeCart}
       />
 
       {/* Drawer */}
-      <div className="fixed right-0 top-0 h-full w-full sm:w-[480px] bg-white shadow-2xl z-50 animate-slide-in-right flex flex-col">
+      <div className="fixed right-0 top-0 h-full w-full sm:w-[440px] bg-white border-l border-[#E5E7EB] shadow-2xl z-50 animate-slide-in-right flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-gradient-to-r from-purple-50 to-pink-50">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-600 via-pink-600 to-orange-500 flex items-center justify-center shadow-lg">
-              <ShoppingBag className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h2 className="text-2xl font-black text-gray-900">Votre Panier</h2>
-              <p className="text-sm text-gray-600 font-semibold">
-                {itemCount} {itemCount > 1 ? "articles" : "article"}
-              </p>
-            </div>
+        <div className="flex items-center justify-between px-6 py-5 border-b border-[#E5E7EB]">
+          <div>
+            <h2 className="text-xl font-bold text-[#111827]">Your Cart</h2>
+            <p className="text-sm text-[#4B5563] font-medium">
+              {itemCount} {itemCount === 1 ? "item" : "items"}
+            </p>
           </div>
           <button
             onClick={closeCart}
-            className="w-10 h-10 rounded-xl bg-white hover:bg-gray-100 flex items-center justify-center transition-all hover:scale-110 active:scale-95 shadow-md"
+            className="w-9 h-9 rounded-lg border border-[#E5E7EB] hover:bg-[#F9FAFB] flex items-center justify-center transition-all"
           >
-            <X className="w-5 h-5 text-gray-600" />
+            <X className="w-4 h-4 text-[#4B5563]" />
           </button>
         </div>
 
@@ -51,59 +48,53 @@ export default function CartDrawer() {
         <div className="flex-1 overflow-y-auto p-6">
           {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center">
-              <div className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                <ShoppingBag className="w-12 h-12 text-gray-400" />
+              <div className="w-20 h-20 rounded-full bg-[#F9FAFB] border border-[#E5E7EB] flex items-center justify-center mb-4">
+                <ShoppingBag className="w-10 h-10 text-[#E5E7EB]" />
               </div>
-              <h3 className="text-xl font-black text-gray-900 mb-2">Panier vide</h3>
-              <p className="text-gray-600 font-medium mb-6">
-                Ajoutez des produits pour commencer
+              <h3 className="text-lg font-bold text-[#111827] mb-1">Your cart is empty</h3>
+              <p className="text-sm text-[#4B5563] mb-6">
+                Browse our services and add a plan to get started.
               </p>
               <button
                 onClick={closeCart}
-                className="bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 text-white font-bold px-6 py-3 rounded-xl hover:opacity-90 transition-all shadow-lg"
+                className="bg-[#FF4B6A] hover:bg-[#E8435F] text-white font-semibold px-6 py-2.5 rounded-lg transition-all text-sm"
               >
-                Continuer mes achats
+                Browse Services
               </button>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3">
               {items.map((item) => (
                 <div
                   key={item.id}
-                  className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-5 border-2 border-gray-200 hover:border-purple-300 transition-all hover:shadow-lg group"
+                  className="bg-[#F9FAFB] rounded-xl p-4 border border-[#E5E7EB] hover:border-[#FF4B6A]/30 transition-all"
                 >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-xs font-black text-white bg-gradient-to-r from-purple-600 to-pink-600 px-3 py-1 rounded-full">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <span className="text-[11px] font-semibold text-[#FF4B6A] bg-[#FF4B6A]/10 px-2 py-0.5 rounded capitalize">
                           {item.platform}
                         </span>
                       </div>
-                      <h3 className="font-black text-gray-900 text-lg mb-1">
-                        {item.productName}
+                      <h3 className="font-semibold text-[#111827] text-[15px] mb-1 truncate">
+                        {item.productName} — {item.quantity.toLocaleString("en-US")}
                       </h3>
-                      <div className="flex items-center gap-2 text-sm text-gray-600 font-semibold mb-3">
-                        <span className="bg-purple-100 text-purple-700 px-2 py-1 rounded-lg">
-                          {item.quantity.toLocaleString()} unités
-                        </span>
-                        <span className="text-gray-400">•</span>
-                        <span>{item.pricePerUnit.toFixed(3)}€/u</span>
-                      </div>
                       {item.username && (
-                        <div className="text-sm text-gray-600 font-medium">
-                          Pour: <span className="font-bold text-gray-900">@{item.username}</span>
-                        </div>
+                        <p className="text-xs text-[#4B5563]">
+                          @{item.username}
+                        </p>
                       )}
                     </div>
-                    <div className="flex flex-col items-end gap-3">
-                      <div className="text-2xl font-black bg-gradient-to-r from-purple-600 via-pink-600 to-orange-600 bg-clip-text text-transparent">
-                        {item.price.toFixed(2)}€
+                    <div className="flex flex-col items-end gap-2 flex-shrink-0">
+                      <div className="text-lg font-bold text-[#111827]">
+                        {formatUSD(item.price)}
                       </div>
                       <button
                         onClick={() => removeItem(item.id)}
-                        className="w-9 h-9 rounded-lg bg-red-50 hover:bg-red-100 flex items-center justify-center transition-all hover:scale-110 active:scale-95 group"
+                        className="p-1.5 text-[#4B5563]/50 hover:text-red-500 hover:bg-red-50 rounded-md transition-all"
+                        title="Remove item"
                       >
-                        <Trash2 className="w-4 h-4 text-red-600 group-hover:text-red-700" />
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
@@ -115,20 +106,24 @@ export default function CartDrawer() {
 
         {/* Footer */}
         {items.length > 0 && (
-          <div className="border-t border-gray-200 p-6 bg-gradient-to-br from-gray-50 to-white">
+          <div className="border-t border-[#E5E7EB] p-6 bg-white">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-lg font-bold text-gray-700">Total</span>
-              <span className="text-3xl font-black bg-gradient-to-r from-purple-600 via-pink-600 to-orange-600 bg-clip-text text-transparent">
-                {totalPrice.toFixed(2)}€
+              <span className="text-[15px] font-semibold text-[#4B5563]">Subtotal</span>
+              <span className="text-2xl font-extrabold text-[#111827]">
+                {formatUSD(totalPrice)}
               </span>
             </div>
             <button
               onClick={handleCheckout}
-              className="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 hover:from-purple-500 hover:via-pink-500 hover:to-orange-400 text-white font-black px-6 py-4 rounded-xl shadow-2xl shadow-purple-500/30 hover:shadow-purple-500/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-3 text-lg uppercase tracking-wide"
+              className="w-full bg-[#FF4B6A] hover:bg-[#E8435F] text-white font-bold h-12 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2 text-[15px]"
             >
-              Passer au paiement
-              <ArrowRight className="w-6 h-6" />
+              Checkout Securely
+              <ArrowRight className="w-4 h-4" />
             </button>
+            <div className="flex items-center justify-center gap-1.5 mt-3 text-xs text-[#4B5563]">
+              <Lock className="w-3 h-3" />
+              <span>Secure checkout with SSL encryption</span>
+            </div>
           </div>
         )}
       </div>

@@ -3,35 +3,35 @@
 import { Zap, Shield, UserCheck, Award, Users, TrendingUp, Star } from "lucide-react";
 
 const kpis = [
-  { value: "50K+", label: "Clients satisfaits", icon: <Users className="w-5 h-5" /> },
-  { value: "5M+", label: "Commandes traitées", icon: <TrendingUp className="w-5 h-5" /> },
-  { value: "4.9/5", label: "Note moyenne", icon: <Star className="w-5 h-5" /> },
+  { value: "50K+", label: "Happy Customers", icon: <Users className="w-5 h-5" /> },
+  { value: "5M+", label: "Orders Delivered", icon: <TrendingUp className="w-5 h-5" /> },
+  { value: "4.9/5", label: "Average Rating", icon: <Star className="w-5 h-5" /> },
 ];
 
 const features = [
   {
     icon: <Zap className="w-6 h-6" />,
-    title: "Livraison instantanée",
+    title: "Fast Delivery",
     description:
-      "Nous traitons et délivrons toutes les commandes immédiatement après la réalisation du paiement, sans aucun délai d'attente.",
+      "We process and deliver all orders promptly after payment, with gradual delivery that looks natural and organic.",
   },
   {
     icon: <Shield className="w-6 h-6" />,
-    title: "Garantie à vie",
+    title: "Lifetime Guarantee",
     description:
-      "Tous nos services sont couverts par une garantie à vie. En cas de problème, nous interviendrons immédiatement et gratuitement.",
+      "All our services are backed by a lifetime retention guarantee. If anything goes wrong, we'll make it right — free of charge.",
   },
   {
     icon: <UserCheck className="w-6 h-6" />,
-    title: "Profils réels et actifs",
+    title: "Real & Active Profiles",
     description:
-      "Nous vous garantissons des profils réels et actifs. En cas de doute, n'hésitez pas à nous contacter.",
+      "We only deliver real, active profiles. Our promotion methods are safe and comply with platform guidelines.",
   },
   {
     icon: <Award className="w-6 h-6" />,
-    title: "La meilleure qualité en France",
+    title: "Premium Quality Service",
     description:
-      "Nous offrons le plus haut niveau de profils sur les réseaux sociaux en France. Avec un service premium, obtenez des résultats à la carte.",
+      "We provide the highest quality social media growth services available. Professional support, reliable results, every time.",
   },
 ];
 
@@ -42,14 +42,14 @@ export default function Features() {
         {/* Section header */}
         <div className="text-center mb-10">
           <span className="inline-block px-4 py-1.5 bg-[#FFE4EC] text-[#FF4B6A] text-xs font-bold uppercase tracking-wider rounded-full mb-4">
-            Pourquoi nous choisir ?
+            Why Choose Us
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#111827] leading-tight">
-            Le <span className="text-[#FF4B6A]">meilleur site</span> pour booster
-            vos réseaux sociaux en France
+            The <span className="text-[#FF4B6A]">#1 platform</span> for social
+            media growth services
           </h2>
           <p className="text-[#111827]/50 mt-4 max-w-2xl mx-auto text-sm sm:text-base font-medium">
-            Plus de 50 000+ clients nous font confiance pour booster leur présence sur les réseaux sociaux.
+            Over 50,000+ creators and businesses trust us to grow their social media presence safely.
           </p>
         </div>
 

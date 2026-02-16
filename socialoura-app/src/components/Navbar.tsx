@@ -8,23 +8,23 @@ import { useCart } from "@/contexts/CartContext";
 
 const platformMenus = {
   instagram: [
-    { label: "Abonnés Instagram", href: "/products/instagram-followers" },
-    { label: "Likes Instagram", href: "/products/instagram-likes" },
-    { label: "Vues Instagram", href: "/products/instagram-views" },
+    { label: "Instagram Followers", href: "/products/instagram-followers" },
+    { label: "Instagram Likes", href: "/products/instagram-likes" },
+    { label: "Instagram Views", href: "/products/instagram-views" },
   ],
   tiktok: [
-    { label: "Abonnés TikTok", href: "/products/tiktok-followers" },
-    { label: "Likes TikTok", href: "/products/tiktok-likes" },
-    { label: "Vues TikTok", href: "/products/tiktok-views" },
+    { label: "TikTok Followers", href: "/products/tiktok-followers" },
+    { label: "TikTok Likes", href: "/products/tiktok-likes" },
+    { label: "TikTok Views", href: "/products/tiktok-views" },
   ],
   youtube: [
-    { label: "Abonnés YouTube", href: "/products/youtube-subscribers" },
-    { label: "Vues YouTube", href: "/products/youtube-views" },
-    { label: "Likes YouTube", href: "/products/youtube-likes" },
+    { label: "YouTube Subscribers", href: "/products/youtube-subscribers" },
+    { label: "YouTube Views", href: "/products/youtube-views" },
+    { label: "YouTube Likes", href: "/products/youtube-likes" },
   ],
   facebook: [
-    { label: "Abonnés Facebook", href: "/products/facebook-followers" },
-    { label: "Likes Facebook", href: "/products/facebook-likes" },
+    { label: "Facebook Followers", href: "/products/facebook-followers" },
+    { label: "Facebook Likes", href: "/products/facebook-likes" },
   ],
 };
 
@@ -80,8 +80,8 @@ export default function Navbar() {
       <div className="bg-[#FF4B6A]/95 text-white text-center py-2 px-4">
         <div className="flex items-center justify-center gap-2 text-xs font-semibold">
           <Sparkles className="w-3.5 h-3.5 animate-pulse" />
-          <span className="hidden sm:inline">OFFRE SPÉCIALE — RÉDUCTION DE 5% AVEC LE CODE</span>
-          <span className="sm:hidden">-5% CODE</span>
+          <span className="hidden sm:inline">SPECIAL OFFER — GET 5% OFF WITH CODE</span>
+          <span className="sm:hidden">5% OFF CODE</span>
           <span className="px-2 py-0.5 bg-white/20 rounded-md font-mono font-bold">TOP5</span>
         </div>
       </div>
@@ -272,7 +272,7 @@ export default function Navbar() {
                 href="/avis"
                 className="relative text-[#111827] hover:text-[#FF4B6A] font-semibold text-sm transition-all duration-300 group py-2"
               >
-                Avis
+                Reviews
                 <span className="absolute -bottom-0 left-0 w-0 h-0.5 bg-[#FF4B6A] group-hover:w-full transition-all duration-300 rounded-full" />
               </Link>
             </div>
@@ -389,21 +389,21 @@ export default function Navbar() {
                   className="block py-3 px-4 text-[#111827] font-semibold hover:bg-[#FFE4EC] hover:text-[#FF4B6A] rounded-xl transition-all duration-200 active:scale-95 bg-[#FFF7FA]"
                   onClick={() => setMobileOpen(false)}
                 >
-                  💬 Contact
+                  Contact
                 </Link>
                 <Link
                   href="/faq"
                   className="block py-3 px-4 text-[#111827] font-semibold hover:bg-[#FFE4EC] hover:text-[#FF4B6A] rounded-xl transition-all duration-200 active:scale-95 bg-[#FFF7FA]"
                   onClick={() => setMobileOpen(false)}
                 >
-                  ❓ FAQ
+                  FAQ
                 </Link>
                 <Link
                   href="/avis"
                   className="block py-3 px-4 text-[#111827] font-semibold hover:bg-[#FFE4EC] hover:text-[#FF4B6A] rounded-xl transition-all duration-200 active:scale-95 bg-[#FFF7FA]"
                   onClick={() => setMobileOpen(false)}
                 >
-                  ⭐ Avis
+                  Reviews
                 </Link>
               </div>
             </div>

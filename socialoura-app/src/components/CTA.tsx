@@ -2,9 +2,9 @@ import { ArrowRight, Zap, Shield, Check } from "lucide-react";
 import Link from "next/link";
 
 const steps = [
-  { icon: <Check className="w-4 h-4" />, text: "Choisissez votre réseau social" },
-  { icon: <Zap className="w-4 h-4" />, text: "Sélectionnez la quantité souhaitée" },
-  { icon: <Shield className="w-4 h-4" />, text: "Livraison instantanée et sécurisée" },
+  { icon: <Check className="w-4 h-4" />, text: "Choose your social network" },
+  { icon: <Zap className="w-4 h-4" />, text: "Select the quantity you need" },
+  { icon: <Shield className="w-4 h-4" />, text: "Fast, secure delivery" },
 ];
 
 export default function CTA() {
@@ -17,15 +17,15 @@ export default function CTA() {
 
         <div className="relative text-center">
           <span className="inline-block px-4 py-1.5 bg-white/20 text-white text-xs font-bold uppercase tracking-wider rounded-full mb-6">
-            Créer mon pack
+            Build Your Plan
           </span>
 
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white leading-tight mb-4">
-            Obtenez des followers réels et actifs en quelques secondes
+            Grow your audience with real, active promotion services
           </h2>
 
           <p className="text-white/70 text-sm sm:text-base mb-8 max-w-2xl mx-auto leading-relaxed">
-            Choisissez votre réseau + quantité + options. La meilleure qualité, 100% sans risque et parfaitement anonyme.
+            Pick your network, choose a quantity, and watch your profile grow. Premium quality, 100% safe and private.
           </p>
 
           {/* Steps */}
@@ -44,7 +44,7 @@ export default function CTA() {
             href="/"
             className="inline-flex items-center gap-2 bg-white text-[#FF4B6A] font-bold text-lg px-8 py-4 rounded-full md:hover:bg-gray-50 md:hover:shadow-xl md:hover:scale-105 active:scale-95 transition-all duration-300 shadow-lg"
           >
-            Commencer maintenant
+            Get Started Now
             <ArrowRight className="w-5 h-5" />
           </Link>
         </div>

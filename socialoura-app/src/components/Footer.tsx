@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
         {/* Payment methods — prominent */}
         <div className="mb-12">
-          <h4 className="text-xs font-bold text-[#111827]/40 uppercase tracking-wider mb-4 text-center">Moyens de paiement acceptés</h4>
+          <h4 className="text-xs font-bold text-[#111827]/40 uppercase tracking-wider mb-4 text-center">Accepted Payment Methods</h4>
           <div className="flex items-center justify-center gap-3 flex-wrap">
             {[
               { src: "/payment_methods/visa.svg", alt: "Visa", w: 50, h: 32 },
@@ -41,11 +41,11 @@ export default function Footer() {
               />
             </Link>
             <p className="text-[#111827]/50 text-sm leading-relaxed mb-4 font-medium max-w-xs">
-              Outil en ligne instantané pour augmenter la popularité sur les réseaux sociaux.
+              Professional social media growth and promotion services. Safe, fast, and reliable.
             </p>
             <div className="flex items-center gap-2 text-[#111827]/30 text-xs">
               <Lock className="w-3.5 h-3.5" />
-              <span className="font-semibold">Paiement 100% sécurisé</span>
+              <span className="font-semibold">100% Secure Payment</span>
             </div>
           </div>
 
@@ -68,12 +68,12 @@ export default function Footer() {
           {/* Liens utiles */}
           <div>
             <h3 className="text-[#111827] font-bold text-sm uppercase tracking-wider mb-4">
-              Liens utiles
+              Quick Links
             </h3>
             <ul className="space-y-2.5">
               {[
                 { label: "FAQ", href: "/faq" },
-                { label: "Avis", href: "/avis" },
+                { label: "Reviews", href: "/avis" },
                 { label: "Contact", href: "/contact" },
               ].map((item) => (
                 <li key={item.label}>
@@ -88,13 +88,13 @@ export default function Footer() {
           {/* Legal — dedicated column */}
           <div>
             <h3 className="text-[#111827] font-bold text-sm uppercase tracking-wider mb-4">
-              Légal
+              Legal
             </h3>
             <ul className="space-y-2.5">
               {[
-                { label: "Mentions légales", href: "#" },
-                { label: "CGV", href: "#" },
-                { label: "Politique de confidentialité", href: "#" },
+                { label: "Terms of Service", href: "#" },
+                { label: "Privacy Policy", href: "#" },
+                { label: "Refund Policy", href: "#" },
               ].map((item) => (
                 <li key={item.label}>
                   <Link href={item.href} className="text-[#111827]/50 hover:text-[#FF4B6A] text-sm transition-colors duration-200 font-medium">
@@ -109,19 +109,19 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-[#F1E4EA] mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-[#111827]/30 text-xs font-medium">
-            &copy; 2025 SocialOura &middot; Tous droits réservés
+            &copy; 2025 SocialNovaly &middot; All rights reserved
           </p>
           <div className="flex items-center gap-4 text-xs text-[#111827]/30">
             <Link href="#" className="hover:text-[#FF4B6A] transition-colors duration-200 font-medium">
-              CGV
+              Terms
             </Link>
             <span>&middot;</span>
             <Link href="#" className="hover:text-[#FF4B6A] transition-colors duration-200 font-medium">
-              Confidentialité
+              Privacy
             </Link>
             <span>&middot;</span>
             <Link href="#" className="hover:text-[#FF4B6A] transition-colors duration-200 font-medium">
-              Mentions légales
+              Refund Policy
             </Link>
           </div>
         </div>

@@ -31,9 +31,9 @@ export async function getProducts(): Promise<Product[]> {
           type: pack.type,
           icon: pack.platform.toLowerCase(),
           color: getColorForPlatform(pack.platform),
-          description: `Boostez votre ${pack.platform} avec des ${pack.type} authentiques`,
-          deliveryTime: "Instantané",
-          guarantee: "Garantie à vie",
+          description: `Grow your ${pack.platform} with authentic ${pack.type} promotion services.`,
+          deliveryTime: "Fast Delivery",
+          guarantee: "Lifetime Guarantee",
           pricingTiers: [
             {
               quantity: pack.quantity,
@@ -43,11 +43,11 @@ export async function getProducts(): Promise<Product[]> {
             },
           ],
           features: [
-            "Profils 100% réels",
-            "Livraison instantanée",
-            "Garantie à vie",
-            "Service client 24/7",
-            "Paiement sécurisé",
+            "100% real profiles",
+            "Fast delivery",
+            "Lifetime guarantee",
+            "24/7 customer support",
+            "Secure payment",
           ],
         }));
 

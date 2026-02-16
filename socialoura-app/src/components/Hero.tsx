@@ -14,33 +14,33 @@ const socialIcons = [
 
 const platformServices = {
   Instagram: [
-    { icon: <Users className="w-5 h-5" />, label: "Abonnés Instagram", href: "/products/instagram-followers" },
-    { icon: <Heart className="w-5 h-5" />, label: "Likes Instagram", href: "/products/instagram-likes" },
-    { icon: <Play className="w-5 h-5" />, label: "Vues Instagram", href: "/products/instagram-views" },
+    { icon: <Users className="w-5 h-5" />, label: "Instagram Followers", href: "/products/instagram-followers" },
+    { icon: <Heart className="w-5 h-5" />, label: "Instagram Likes", href: "/products/instagram-likes" },
+    { icon: <Play className="w-5 h-5" />, label: "Instagram Views", href: "/products/instagram-views" },
   ],
   TikTok: [
-    { icon: <Users className="w-5 h-5" />, label: "Abonnés TikTok", href: "/products/tiktok-followers" },
-    { icon: <Heart className="w-5 h-5" />, label: "Likes TikTok", href: "/products/tiktok-likes" },
-    { icon: <Play className="w-5 h-5" />, label: "Vues TikTok", href: "/products/tiktok-views" },
+    { icon: <Users className="w-5 h-5" />, label: "TikTok Followers", href: "/products/tiktok-followers" },
+    { icon: <Heart className="w-5 h-5" />, label: "TikTok Likes", href: "/products/tiktok-likes" },
+    { icon: <Play className="w-5 h-5" />, label: "TikTok Views", href: "/products/tiktok-views" },
   ],
   YouTube: [
-    { icon: <Users className="w-5 h-5" />, label: "Abonnés YouTube", href: "/products/youtube-subscribers" },
-    { icon: <Heart className="w-5 h-5" />, label: "Likes YouTube", href: "/products/youtube-likes" },
-    { icon: <Play className="w-5 h-5" />, label: "Vues YouTube", href: "/products/youtube-views" },
+    { icon: <Users className="w-5 h-5" />, label: "YouTube Subscribers", href: "/products/youtube-subscribers" },
+    { icon: <Heart className="w-5 h-5" />, label: "YouTube Likes", href: "/products/youtube-likes" },
+    { icon: <Play className="w-5 h-5" />, label: "YouTube Views", href: "/products/youtube-views" },
   ],
   Facebook: [
-    { icon: <Users className="w-5 h-5" />, label: "Abonnés Facebook", href: "/products/facebook-followers" },
-    { icon: <Heart className="w-5 h-5" />, label: "Likes Facebook", href: "/products/facebook-likes" },
+    { icon: <Users className="w-5 h-5" />, label: "Facebook Followers", href: "/products/facebook-followers" },
+    { icon: <Heart className="w-5 h-5" />, label: "Facebook Likes", href: "/products/facebook-likes" },
   ],
 };
 
 const features = [
-  { icon: <Zap className="w-4 h-4" />, text: "Livraison instantanée" },
-  { icon: <Star className="w-4 h-4" />, text: "Qualité n°1" },
-  { icon: <Shield className="w-4 h-4" />, text: "Risque 0 algorithme" },
-  { icon: <Check className="w-4 h-4" />, text: "Followers 100 % Réels et actifs" },
-  { icon: <Globe className="w-4 h-4" />, text: "N°1 en France" },
-  { icon: <CreditCard className="w-4 h-4" />, text: "PayPal, Apple Pay ou CB" },
+  { icon: <Zap className="w-4 h-4" />, text: "Fast delivery" },
+  { icon: <Star className="w-4 h-4" />, text: "#1 rated service" },
+  { icon: <Shield className="w-4 h-4" />, text: "Safe promotion" },
+  { icon: <Check className="w-4 h-4" />, text: "100% real & active" },
+  { icon: <Globe className="w-4 h-4" />, text: "Trusted worldwide" },
+  { icon: <CreditCard className="w-4 h-4" />, text: "PayPal, Apple Pay or Card" },
 ];
 
 export default function Hero() {
@@ -58,23 +58,23 @@ export default function Hero() {
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 md:pt-24 pb-16 md:pb-20 text-center">
         {/* Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#FFE4EC] rounded-full mb-6">
-          <span className="text-xs font-bold text-[#FF4B6A] uppercase tracking-wide">#1 Plateforme en France</span>
+          <span className="text-xs font-bold text-[#FF4B6A] uppercase tracking-wide">#1 Social Growth Platform</span>
           <TrendingUp className="w-3.5 h-3.5 text-[#FF4B6A]" />
         </div>
 
         {/* Heading */}
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#111827] leading-[1.1] mb-6 tracking-tight">
-          Obtenez des{" "}
-          <span className="text-[#FF4B6A]">followers</span>
+          Grow your{" "}
+          <span className="text-[#FF4B6A]">audience</span>
           <br />
-          en quelques{" "}
-          <span className="text-[#FF4B6A]">secondes</span>
+          with real{" "}
+          <span className="text-[#FF4B6A]">results</span>
         </h1>
 
         <p className="text-[#111827]/60 text-lg sm:text-xl mb-8 max-w-3xl mx-auto font-medium leading-relaxed">
-          La meilleure qualité sur le marché français.
+          Safe, organic-style social media promotion services.
           <br className="hidden sm:block" />
-          <span className="text-[#FF4B6A] font-bold">Boostez votre algorithme</span> dès maintenant.
+          <span className="text-[#FF4B6A] font-bold">Boost your visibility</span> today.
         </p>
 
         {/* CTA Button */}
@@ -82,12 +82,12 @@ export default function Hero() {
           href="#services"
           className="inline-flex items-center gap-2 bg-[#FF4B6A] text-white font-bold text-lg px-8 py-4 rounded-full shadow-[0_8px_30px_-6px_rgba(255,75,106,0.5)] md:hover:shadow-[0_12px_40px_-6px_rgba(255,75,106,0.6)] md:hover:-translate-y-0.5 md:hover:scale-105 active:scale-95 transition-all duration-300 mb-4"
         >
-          Commencer maintenant
+          Get Started
           <ChevronRight className="w-5 h-5" />
         </Link>
 
         {/* Trust micro-line */}
-        <p className="text-[#111827]/40 text-sm font-medium mb-6">+5 000 commandes traitées cette semaine</p>
+        <p className="text-[#111827]/40 text-sm font-medium mb-6">5,000+ orders processed this week</p>
 
         {/* Trustpilot — under CTA */}
         <div className="inline-flex items-center gap-3 bg-white px-5 py-3 rounded-full border border-[#F1E4EA] shadow-sm mb-14">
@@ -98,7 +98,7 @@ export default function Hero() {
           </div>
           <div className="h-4 w-px bg-[#F1E4EA]" />
           <span className="font-bold text-[#111827] text-sm">4.9/5</span>
-          <span className="text-[#111827]/40 text-xs font-medium">Trustpilot · 2,847 avis</span>
+          <span className="text-[#111827]/40 text-xs font-medium">Trustpilot · 2,847 reviews</span>
         </div>
 
         {/* Social media icons — 3D style */}
@@ -153,12 +153,12 @@ export default function Hero() {
                         </span>
                         <div className="flex items-center gap-1.5">
                           <Zap className="w-3.5 h-3.5 text-[#FF4B6A]/60" />
-                          <span className="text-xs text-[#111827]/40 font-medium">Livraison instantanée</span>
+                          <span className="text-xs text-[#111827]/40 font-medium">Fast delivery</span>
                         </div>
                       </div>
                     </div>
                     <div className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#FFE4EC] text-[#FF4B6A] md:group-hover:bg-[#FF4B6A] md:group-hover:text-white transition-colors duration-300">
-                      <span className="text-sm font-bold">Voir</span>
+                      <span className="text-sm font-bold">View</span>
                       <ChevronRight className="w-4 h-4 md:group-hover:translate-x-0.5 transition-transform duration-300" />
                     </div>
                   </div>

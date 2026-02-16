@@ -1,149 +1,160 @@
 "use client";
 
-import { Star, Quote, TrendingUp, Users, Shield, Award } from "lucide-react";
+import { Star, TrendingUp, Users, Shield, Award, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const testimonials = [
   {
-    name: "Sophie M.",
+    name: "Sarah M.",
     platform: "Instagram",
     rating: 5,
-    comment: "Service incroyable ! J'ai reçu mes abonnés en quelques minutes et ils sont tous réels et actifs. Mon compte a vraiment décollé depuis.",
-    followers: "+2.5K",
-    date: "Il y a 2 jours",
+    comment: "Amazing service! The delivery was smooth and gradual. My profile visibility improved significantly. Highly recommend for anyone looking to grow their audience.",
+    growth: "+2.5K",
+    date: "2 days ago",
   },
   {
-    name: "Thomas L.",
+    name: "James L.",
     platform: "TikTok",
     rating: 5,
-    comment: "La meilleure qualité que j'ai trouvée en France. Pas de bots, que des vrais profils qui interagissent avec mon contenu. Je recommande à 100%.",
-    followers: "+5K",
-    date: "Il y a 5 jours",
+    comment: "Best quality I've found. Real profiles that actually engage with my content. The growth felt natural and my analytics improved across the board.",
+    growth: "+5K",
+    date: "5 days ago",
   },
   {
-    name: "Emma D.",
+    name: "Emily D.",
     platform: "YouTube",
     rating: 5,
-    comment: "Livraison instantanée et service client au top. J'ai eu un petit souci et ils ont répondu en moins de 10 minutes. Très professionnel !",
-    followers: "+1K",
-    date: "Il y a 1 semaine",
+    comment: "Fast delivery and excellent support team. Had a small question and they responded within minutes. Very professional growth service!",
+    growth: "+1K",
+    date: "1 week ago",
   },
   {
-    name: "Lucas B.",
+    name: "Michael B.",
     platform: "Instagram",
     rating: 5,
-    comment: "J'étais sceptique au début mais après avoir testé, je suis bluffé. Les abonnés restent et interagissent vraiment. Aucun risque pour mon compte.",
-    followers: "+3K",
-    date: "Il y a 1 semaine",
+    comment: "Was skeptical at first but the results speak for themselves. Real engagement, safe for my account, and great customer support. Will use again!",
+    growth: "+3K",
+    date: "1 week ago",
   },
   {
-    name: "Chloé R.",
+    name: "Rachel F.",
     platform: "TikTok",
     rating: 5,
-    comment: "Site sérieux et fiable. J'ai commandé plusieurs fois et c'est toujours parfait. Les prix sont corrects et la qualité est au rendez-vous.",
-    followers: "+4.2K",
-    date: "Il y a 2 semaines",
+    comment: "Reliable and trustworthy service. I've ordered multiple times and it's been perfect every time. Fair pricing and consistent quality.",
+    growth: "+4.2K",
+    date: "2 weeks ago",
   },
   {
-    name: "Alexandre P.",
+    name: "Alex P.",
     platform: "YouTube",
     rating: 5,
-    comment: "Excellent service ! Mon nombre d'abonnés a explosé et ma chaîne gagne en visibilité. Merci pour votre professionnalisme.",
-    followers: "+800",
-    date: "Il y a 3 semaines",
+    comment: "Excellent promotion service! My channel gained serious visibility and my subscriber count grew steadily. Thank you for the professionalism.",
+    growth: "+800",
+    date: "3 weeks ago",
   },
 ];
 
 const stats = [
-  { icon: <Users className="w-6 h-6" />, value: "500K+", label: "Clients satisfaits" },
-  { icon: <TrendingUp className="w-6 h-6" />, value: "5M+", label: "Commandes traitées" },
-  { icon: <Star className="w-6 h-6" />, value: "4.9/5", label: "Note moyenne" },
-  { icon: <Shield className="w-6 h-6" />, value: "100%", label: "Sécurisé" },
+  { icon: <Users className="w-5 h-5" />, value: "50K+", label: "Happy Customers" },
+  { icon: <TrendingUp className="w-5 h-5" />, value: "5M+", label: "Orders Delivered" },
+  { icon: <Star className="w-5 h-5" />, value: "4.9/5", label: "Average Rating" },
+  { icon: <Shield className="w-5 h-5" />, value: "100%", label: "Safe & Secure" },
 ];
-
-const platformColors: Record<string, string> = {
-  Instagram: "from-purple-500 to-pink-500",
-  TikTok: "from-black to-cyan-500",
-  YouTube: "from-red-500 to-red-600",
-  Facebook: "from-blue-500 to-blue-600",
-};
 
 export default function AvisPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-orange-50/30 via-white to-purple-50/20">
+    <div className="min-h-screen bg-[#F9FAFB]">
+      <Navbar />
+
+      {/* Rating banner */}
+      <div className="bg-white border-b border-[#E5E7EB]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-center gap-3 flex-wrap">
+            <div className="flex gap-0.5">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-5 h-5 fill-[#FBBF24] text-[#FBBF24]" />
+              ))}
+            </div>
+            <span className="text-[15px] font-bold text-[#111827]">Rated 4.9/5 by 3,000+ creators</span>
+          </div>
+        </div>
+      </div>
+
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMTAgNjAgTSAwIDEwIEwgNjAgMTAgTSAyMCAwIEwgMjAgNjAgTSAwIDIwIEwgNjAgMjAgTSAzMCAwIEwgMzAgNjAgTSAwIDMwIEwgNjAgMzAgTSA0MCAwIEwgNDAgNjAgTSAwIDQwIEwgNjAgNDAgTSA1MCAwIEwgNTAgNjAgTSAwIDUwIEwgNjAgNTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLW9wYWNpdHk9IjAuMDIiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-40" />
-        
-        <div className="relative max-w-6xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-100 text-orange-600 text-xs font-bold uppercase tracking-wider rounded-full mb-6">
-            <Award className="w-4 h-4" />
-            Avis clients
+      <section className="pt-16 pb-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#FF4B6A]/10 text-[#FF4B6A] text-xs font-bold uppercase tracking-wider rounded-full mb-6">
+            <Award className="w-3.5 h-3.5" />
+            Customer Reviews
           </div>
           
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
-            Ce que nos clients <span className="gradient-text">disent de nous</span>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#111827] leading-tight mb-4">
+            What Our Customers Say
           </h1>
           
-          <p className="text-gray-600 text-lg max-w-3xl mx-auto mb-12">
-            Plus de 500 000 clients nous font confiance pour booster leur présence sur les réseaux sociaux.
-            Découvrez leurs témoignages authentiques.
+          <p className="text-[#4B5563] text-lg max-w-3xl mx-auto mb-12">
+            Thousands of creators and businesses trust our social media growth services.
+            Read their honest feedback below.
           </p>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
             {stats.map((stat, idx) => (
               <div
                 key={idx}
-                className="bg-white/70 backdrop-blur-xl rounded-2xl p-6 border border-white/60 shadow-[0_14px_40px_-22px_rgba(15,23,42,0.35)]"
+                className="bg-white rounded-2xl p-5 border border-[#E5E7EB] shadow-sm"
               >
-                <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white">
+                <div className="w-10 h-10 mx-auto mb-3 rounded-xl bg-[#FF4B6A]/10 flex items-center justify-center text-[#FF4B6A]">
                   {stat.icon}
                 </div>
-                <div className="text-2xl font-extrabold text-gray-900 mb-1">{stat.value}</div>
-                <div className="text-xs text-gray-600">{stat.label}</div>
+                <div className="text-2xl font-extrabold text-[#111827] mb-0.5">{stat.value}</div>
+                <div className="text-xs text-[#4B5563] font-medium">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      {/* Testimonials Grid */}
+      <section className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {testimonials.map((testimonial, idx) => (
               <div
                 key={idx}
-                className="group bg-white/70 backdrop-blur-xl rounded-2xl p-6 border border-white/60 shadow-[0_14px_40px_-22px_rgba(15,23,42,0.35)] md:hover:shadow-[0_24px_60px_-28px_rgba(15,23,42,0.45)] transition-all duration-300 md:hover:-translate-y-1 flex flex-col"
+                className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-sm hover:shadow-md transition-all duration-200 flex flex-col"
               >
                 {/* Header */}
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h3 className="font-bold text-gray-900 text-lg">{testimonial.name}</h3>
-                    <div className={`inline-block mt-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-gradient-to-r ${platformColors[testimonial.platform]} text-white`}>
-                      {testimonial.platform}
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-[#FF4B6A]/10 flex items-center justify-center text-[#FF4B6A] font-bold text-sm">
+                      {testimonial.name.charAt(0)}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-[#111827] text-[15px]">{testimonial.name}</h3>
+                      <span className="text-xs text-[#4B5563] font-medium">{testimonial.platform}</span>
                     </div>
                   </div>
-                  <Quote className="w-8 h-8 text-orange-500/20" />
+                  <span className="text-sm font-bold text-[#FF4B6A]">{testimonial.growth}</span>
                 </div>
 
                 {/* Rating */}
-                <div className="flex gap-1 mb-4">
+                <div className="flex gap-0.5 mb-3">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-orange-500 text-orange-500" />
+                    <Star key={i} className="w-4 h-4 fill-[#FBBF24] text-[#FBBF24]" />
                   ))}
                 </div>
 
                 {/* Comment */}
-                <p className="text-gray-600 text-sm leading-relaxed mb-4 flex-grow">
-                  {testimonial.comment}
+                <p className="text-[#4B5563] text-sm leading-relaxed mb-4 flex-grow">
+                  &ldquo;{testimonial.comment}&rdquo;
                 </p>
 
                 {/* Footer */}
-                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                  <span className="text-xs text-gray-500">{testimonial.date}</span>
-                  <span className="text-sm font-bold text-orange-600">{testimonial.followers}</span>
+                <div className="pt-3 border-t border-[#E5E7EB]">
+                  <span className="text-xs text-[#4B5563]/60">{testimonial.date}</span>
                 </div>
               </div>
             ))}
@@ -154,29 +165,30 @@ export default function AvisPage() {
       {/* CTA Section */}
       <section className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-orange-500 via-orange-600 to-orange-500 p-10 sm:p-14 shadow-[0_20px_60px_-20px_rgba(249,115,22,0.5)]">
-            {/* Decorative circles */}
+          <div className="relative overflow-hidden rounded-3xl bg-[#FF4B6A] p-10 sm:p-14 shadow-[0_20px_60px_-20px_rgba(255,75,106,0.4)]">
             <div className="absolute -top-20 -right-20 w-60 h-60 bg-white/10 rounded-full" />
             <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-white/10 rounded-full" />
             
             <div className="relative text-center">
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white leading-tight mb-4">
-                Rejoignez nos 500 000+ clients satisfaits
+                Join thousands of satisfied creators
               </h2>
-              <p className="text-white/80 text-base mb-8 max-w-2xl mx-auto">
-                Commencez dès maintenant à booster votre présence sur les réseaux sociaux avec des followers réels et actifs.
+              <p className="text-white/70 text-base mb-8 max-w-2xl mx-auto">
+                Start growing your social media presence today with safe, professional promotion services.
               </p>
               <Link
                 href="/"
-                className="inline-flex items-center gap-2 bg-white text-orange-600 font-bold px-8 py-4 rounded-full md:hover:bg-gray-50 transition-all duration-300 shadow-lg md:hover:shadow-xl md:hover:scale-105 active:scale-95"
+                className="inline-flex items-center gap-2 bg-white text-[#FF4B6A] font-bold px-8 py-4 rounded-full md:hover:bg-gray-50 transition-all duration-300 shadow-lg md:hover:shadow-xl md:hover:scale-105 active:scale-95"
               >
-                Commencer maintenant
-                <TrendingUp className="w-5 h-5" />
+                Get Started
+                <ArrowRight className="w-5 h-5" />
               </Link>
             </div>
           </div>
         </div>
       </section>
-    </main>
+
+      <Footer />
+    </div>
   );
 }

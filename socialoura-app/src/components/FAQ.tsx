@@ -5,28 +5,28 @@ import { ChevronDown } from "lucide-react";
 
 const faqs = [
   {
-    question: "Les profils que vous recevez sont-ils réels et actifs ?",
-    preview: "Oui, 100% réels et actifs — aucun bot.",
+    question: "Are the profiles real and active?",
+    preview: "Yes, 100% real and active — no bots.",
     answer:
-      "Oui, tous nos profils sont 100% réels et actifs. Nous ne fournissons jamais de bots ou de faux comptes. Chaque profil est vérifié pour garantir la meilleure qualité possible.",
+      "Yes, all profiles are 100% real and active. We never deliver bots or fake accounts. Every profile is verified to ensure the highest quality possible.",
   },
   {
-    question: "Pourquoi choisir une qualité française ?",
-    preview: "Optimisé pour l'algorithme et le marché FR.",
+    question: "Is it safe to use your services?",
+    preview: "Completely safe — compliant with platform guidelines.",
     answer:
-      "Nos services sont optimisés pour le marché français. Nous comprenons les spécificités de l'algorithme et proposons des profils francophones qui interagissent naturellement avec votre contenu.",
+      "Absolutely. Our promotion methods are safe and comply with social media platform guidelines. Your account will never be put at risk. We use organic-style delivery methods.",
   },
   {
-    question: "Y a-t-il un risque à passer commande sur votre site ?",
-    preview: "Aucun risque — 100% sûr et conforme.",
+    question: "How fast is the delivery?",
+    preview: "Most orders start within minutes.",
     answer:
-      "Absolument aucun risque. Nos méthodes sont 100% sûres et conformes aux conditions d'utilisation des réseaux sociaux. Votre compte ne sera jamais mis en danger.",
+      "Most orders begin processing within minutes of payment. Delivery is gradual and natural-looking to ensure the best results and safety for your account.",
   },
   {
-    question: "Est-ce qu'il y a un abonnement après la commande ?",
-    preview: "Non, aucun abonnement caché.",
+    question: "Is there a subscription or recurring charge?",
+    preview: "No, one-time payment only.",
     answer:
-      "Non, il n'y a aucun abonnement caché. Vous payez uniquement pour le service commandé. Pas de frais récurrents ni de surprises.",
+      "No, there are no hidden subscriptions. You pay once for the service you order. No recurring fees, no surprises.",
   },
 ];
 
@@ -42,10 +42,10 @@ export default function FAQ() {
             FAQ
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#111827]">
-            Questions fréquentes
+            Frequently Asked Questions
           </h2>
           <p className="text-[#111827]/40 mt-3 text-sm sm:text-base font-medium">
-            Les réponses aux questions les plus posées par nos clients.
+            Answers to the most common questions from our customers.
           </p>
         </div>
 
