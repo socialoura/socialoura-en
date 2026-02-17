@@ -71,10 +71,47 @@ export default function CheckoutPage() {
     createPaymentIntent();
   }, [items, totalAmount]);
 
-  const handlePaymentSuccess = () => {
-    // Clear cart and redirect to success page
+  const handlePaymentSuccess = async (email: string) => {
+    // For each cart item, create an order via confirm API
+    try {
+      for (const item of items) {
+        const orderData = {
+          email,
+          username: item.username || "",
+          platform: item.platform,
+          type: item.productId?.split("-").pop() || "followers",
+          quantity: item.quantity,
+          price: item.price,
+        };
+
+        const res = await fetch("/api/orders/confirm", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(orderData),
+        });
+
+        const data = await res.json();
+
+        if (data.success && data.orderId) {
+          // Store order details in sessionStorage for the success page
+          sessionStorage.setItem(
+            `order_${data.orderId}`,
+            JSON.stringify(orderData)
+          );
+
+          // Redirect to success page with last order ID
+          clearCart();
+          window.location.href = `/order/success/${data.orderId}`;
+          return;
+        }
+      }
+    } catch (err) {
+      console.error("Failed to confirm order:", err);
+    }
+
+    // Fallback: clear cart and go home
     clearCart();
-    window.location.href = "/payment-success";
+    window.location.href = "/";
   };
 
   const handlePaymentError = (errorMsg: string) => {

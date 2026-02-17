@@ -151,6 +151,11 @@ class AdminStorage {
     return [...this.orders];
   }
 
+  addOrder(order: Order): Order {
+    this.orders.unshift(order);
+    return order;
+  }
+
   updateOrder(id: string, updates: Partial<Order>): Order | null {
     const index = this.orders.findIndex((o) => o.id === id);
     if (index === -1) return null;

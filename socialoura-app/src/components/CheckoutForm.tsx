@@ -10,7 +10,7 @@ import { Loader2, Lock, CheckCircle, AlertCircle, Mail } from "lucide-react";
 
 interface CheckoutFormProps {
   amount: number;
-  onSuccess?: () => void;
+  onSuccess?: (email: string) => void;
   onError?: (error: string) => void;
 }
 
@@ -74,7 +74,7 @@ export default function CheckoutForm({
       } else if (paymentIntent && paymentIntent.status === "succeeded") {
         // Payment succeeded
         setPaymentStatus("success");
-        onSuccess?.();
+        onSuccess?.(email);
       }
     } catch (err: any) {
       setPaymentStatus("error");

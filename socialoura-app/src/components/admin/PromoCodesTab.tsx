@@ -201,7 +201,7 @@ export default function PromoCodesTab() {
             resetForm();
             setShowModal(true);
           }}
-          className="flex items-center gap-2 bg-orange-gradient text-white px-4 py-2 rounded-lg font-medium hover:shadow-lg transition-all"
+          className="flex items-center gap-2 bg-[#FF4B6A] hover:bg-[#E8435F] text-white px-4 py-2 rounded-lg font-medium hover:shadow-lg transition-all"
         >
           <Plus className="w-4 h-4" />
           Add Promo Code
@@ -272,7 +272,7 @@ export default function PromoCodesTab() {
                   <td className="px-4 py-3 text-sm font-mono font-bold text-gray-900">
                     {code.code}
                   </td>
-                  <td className="px-4 py-3 text-sm font-semibold text-orange-600">
+                  <td className="px-4 py-3 text-sm font-semibold text-[#FF4B6A]">
                     {code.discount_percent}%
                   </td>
                   <td className="px-4 py-3 text-sm text-gray-600">
@@ -347,7 +347,7 @@ export default function PromoCodesTab() {
                   onChange={(e) =>
                     setFormData({ ...formData, code: e.target.value.toUpperCase() })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 font-mono uppercase"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF4B6A] font-mono uppercase"
                   placeholder="SUMMER20"
                   required
                 />
@@ -367,7 +367,7 @@ export default function PromoCodesTab() {
                       discount_percent: parseInt(e.target.value),
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF4B6A]"
                   required
                 />
               </div>
@@ -385,7 +385,7 @@ export default function PromoCodesTab() {
                       max_uses: parseInt(e.target.value),
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF4B6A]"
                 />
               </div>
               <div>
@@ -398,7 +398,7 @@ export default function PromoCodesTab() {
                   onChange={(e) =>
                     setFormData({ ...formData, expires_at: e.target.value })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF4B6A]"
                 />
               </div>
               <div className="flex items-center gap-2">
@@ -409,7 +409,7 @@ export default function PromoCodesTab() {
                   onChange={(e) =>
                     setFormData({ ...formData, is_active: e.target.checked })
                   }
-                  className="w-4 h-4 text-orange-600 rounded focus:ring-orange-500"
+                  className="w-4 h-4 text-[#FF4B6A] rounded focus:ring-[#FF4B6A]"
                 />
                 <label htmlFor="is_active" className="text-sm font-medium text-gray-700">
                   Active
@@ -428,7 +428,7 @@ export default function PromoCodesTab() {
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-orange-gradient text-white rounded-lg font-medium hover:shadow-lg"
+                  className="flex-1 px-4 py-2 bg-[#FF4B6A] hover:bg-[#E8435F] text-white rounded-lg font-medium transition-all"
                 >
                   {editingCode ? "Update" : "Create"}
                 </button>

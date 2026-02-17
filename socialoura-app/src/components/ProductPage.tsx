@@ -3,7 +3,7 @@
 import { useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Product } from "@/types/product";
-import { Star, Check, Shield, Zap, Clock, ShoppingCart, Lock, Sparkles, ArrowRight, Instagram, Youtube, Facebook, Music } from "lucide-react";
+import { Star, Check, Shield, Zap, Clock, ShoppingCart, Lock, Sparkles, ArrowRight, Instagram, Youtube, Facebook, Music, Info } from "lucide-react";
 import { getRandomReviews, getAverageRating } from "@/data/reviews";
 import { useCart } from "@/contexts/CartContext";
 import Navbar from "./Navbar";
@@ -103,10 +103,17 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
   const formatUSD = (amount: number) =>
     new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(amount);
 
+  // Proportional pricing: rule of three based on first tier
+  // e.g. if 1000 followers = $10, then 3500 = (3500/1000) * 10 = $35
+  const getCustomPrice = (qty: number): number => {
+    if (product.pricingTiers.length === 0) return 0;
+    const baseTier = product.pricingTiers[0];
+    return (qty / baseTier.quantity) * baseTier.price;
+  };
+
   const currentPrice = useMemo(() => {
     if (isCustomSelected && customQuantity && parseInt(customQuantity) >= 100) {
-      if (product.pricingTiers.length === 0) return 0;
-      return parseInt(customQuantity) * product.pricingTiers[product.pricingTiers.length - 1].pricePerUnit;
+      return getCustomPrice(parseInt(customQuantity));
     }
     return selectedTier?.price || 0;
   }, [selectedTier?.price, isCustomSelected, customQuantity, product.pricingTiers]);
@@ -136,8 +143,8 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
           alert("No plans available at the moment");
           return;
         }
-        pricePerUnit = product.pricingTiers[product.pricingTiers.length - 1].pricePerUnit;
-        price = quantity * pricePerUnit;
+        price = getCustomPrice(quantity);
+        pricePerUnit = price / quantity;
       } else {
         if (!selectedTier || !selectedTier.quantity) {
           alert("Please select a plan");
@@ -333,14 +340,14 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
                       </div>
 
                       {isCustomSelected && (
-                        <div className="absolute top-3 left-3">
-                          <div className="w-5 h-5 rounded-full bg-[#FF4B6A] flex items-center justify-center">
-                            <Check className="w-3 h-3 text-white" />
+                        <div className="absolute -top-2 -right-2 z-10">
+                          <div className="w-6 h-6 rounded-full bg-[#FF4B6A] flex items-center justify-center shadow-sm border-2 border-white">
+                            <Check className="w-3.5 h-3.5 text-white" />
                           </div>
                         </div>
                       )}
 
-                      <div className="mt-2">
+                      <div className="mt-3 text-center">
                         <input
                           type="number"
                           min="100"
@@ -351,24 +358,23 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
                             setIsCustomSelected(true);
                           }}
                           onClick={(e) => e.stopPropagation()}
-                          placeholder="Enter qty"
-                          className="w-full text-2xl font-extrabold text-[#111827] bg-transparent border-b-2 border-[#E5E7EB] focus:border-[#FF4B6A] outline-none pb-1 mb-1 placeholder:text-[#111827]/25"
+                          placeholder="Enter quantity"
+                          className="w-full text-center text-xl font-extrabold text-[#111827] bg-white rounded-lg border border-[#E5E7EB] focus:border-[#FF4B6A] focus:ring-2 focus:ring-[#FF4B6A]/20 outline-none py-2 px-3 mb-2 placeholder:text-[#111827]/25 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         />
-                        <div className="text-xs text-[#4B5563] mb-3">
-                          {typeLabel[product.type] || product.type} &bull; Min 100
+                        <div className="text-xs text-[#4B5563] mb-2">
+                          {typeLabel[product.type] || product.type} &bull; 100 – 1,000,000
                         </div>
-                        {customQuantity && parseInt(customQuantity) >= 100 && product.pricingTiers.length > 0 ? (
-                          <div className="text-xl font-bold text-[#111827]">
-                            {formatUSD(parseInt(customQuantity) * product.pricingTiers[product.pricingTiers.length - 1].pricePerUnit)}
+                        {customQuantity && parseInt(customQuantity) >= 100 && parseInt(customQuantity) <= 1000000 && product.pricingTiers.length > 0 ? (
+                          <div className="text-2xl font-extrabold text-[#111827]">
+                            {formatUSD(getCustomPrice(parseInt(customQuantity)))}
                           </div>
                         ) : customQuantity && parseInt(customQuantity) < 100 ? (
                           <div className="text-sm text-red-500 font-medium">Minimum 100 units</div>
+                        ) : customQuantity && parseInt(customQuantity) > 1000000 ? (
+                          <div className="text-sm text-red-500 font-medium">Maximum 1,000,000 units</div>
                         ) : (
                           <div className="text-sm text-[#4B5563]">Enter your quantity</div>
                         )}
-                        <div className="text-xs text-[#4B5563] mt-1">
-                          Best unit price applied
-                        </div>
                       </div>
                     </button>
                   </div>
@@ -382,7 +388,18 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
                   return (
                     <div className="px-6 sm:px-8 pb-6 animate-fade-in">
                       <div className="bg-[#F9FAFB] rounded-xl p-5 border border-[#E5E7EB]">
-                        <h3 className="text-lg font-bold text-[#111827] mb-1">{cfg.label}</h3>
+                        <div className="flex items-center justify-between mb-1">
+                          <h3 className="text-lg font-bold text-[#111827]">{cfg.label}</h3>
+                          <div className="relative group">
+                            <Info className="w-4 h-4 text-[#4B5563] cursor-help" />
+                            <div className="absolute right-0 bottom-full mb-2 w-64 bg-[#111827] text-white text-xs rounded-lg px-3 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 shadow-lg pointer-events-none">
+                              {isUrlField
+                                ? "Copy the URL of your post, reel, or video from the app and paste it here."
+                                : "Enter your public username (e.g. @davidguetta). We never ask for your password."}
+                              <div className="absolute top-full right-3 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-[#111827]" />
+                            </div>
+                          </div>
+                        </div>
                         <p className="text-sm text-[#4B5563] flex items-center gap-1.5 mb-4">
                           <Lock className="w-3.5 h-3.5" />
                           {isUrlField ? "We only need the public link" : "We never ask for your password"}
