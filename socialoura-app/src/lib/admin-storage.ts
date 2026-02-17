@@ -35,45 +35,7 @@ class AdminStorage {
     },
   ];
 
-  private orders: Order[] = [
-    {
-      id: "ord-001",
-      username: "john_doe",
-      email: "john@example.com",
-      platform: "instagram",
-      type: "followers",
-      quantity: 1000,
-      price: 17.99,
-      created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-      order_status: "completed",
-      notes: "Delivered successfully",
-      country: "US",
-    },
-    {
-      id: "ord-002",
-      username: "jane_smith",
-      email: "jane@example.com",
-      platform: "tiktok",
-      type: "followers",
-      quantity: 500,
-      price: 9.99,
-      created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-      order_status: "processing",
-      country: "US",
-    },
-    {
-      id: "ord-003",
-      username: "mike_wilson",
-      email: "mike@example.com",
-      platform: "instagram",
-      type: "likes",
-      quantity: 500,
-      price: 9.99,
-      created_at: new Date().toISOString(),
-      order_status: "pending",
-      country: "CA",
-    },
-  ];
+  private orders: Order[] = [];
 
   private promoCodes: PromoCode[] = [
     {

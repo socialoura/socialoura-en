@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { adminStorage } from "@/lib/admin-storage";
+import { getAllOrders } from "@/lib/orders-db";
 
 export async function GET(request: NextRequest) {
   try {
-    const orders = adminStorage.getOrders();
+    const orders = await getAllOrders();
     const now = new Date();
 
     // Revenue calculations

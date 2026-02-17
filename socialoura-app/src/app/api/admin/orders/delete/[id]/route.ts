@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { adminStorage } from "@/lib/admin-storage";
 import { verifyAuthHeader } from "@/lib/admin-auth";
+import { deleteOrder } from "@/lib/orders-db";
 
 export async function DELETE(
   request: NextRequest,
@@ -19,7 +19,7 @@ export async function DELETE(
     return NextResponse.json({ error: "Order ID required" }, { status: 400 });
   }
 
-  const deleted = adminStorage.deleteOrder(id);
+  const deleted = await deleteOrder(id);
 
   if (!deleted) {
     return NextResponse.json({ error: "Order not found" }, { status: 404 });

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
-import { adminStorage } from "@/lib/admin-storage";
+import { createOrder } from "@/lib/orders-db";
 
 const resend = process.env.RESEND_API_KEY
   ? new Resend(process.env.RESEND_API_KEY)
@@ -11,18 +11,20 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { email, username, platform, type, quantity, price, country } = body;
 
-    if (!email || !username || !platform || !type || !quantity || !price) {
+    // username can be empty for some product types (likes/views use URLs in a separate field)
+    if (!email || !platform || !type || !quantity || !price) {
+      console.error("[orders/confirm] Missing required fields:", { email: !!email, platform: !!platform, type: !!type, quantity: !!quantity, price: !!price });
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
       );
     }
 
-    // Create order in storage
+    // Create order in DB (PostgreSQL via orders-db, with in-memory fallback)
     const orderId = `ord-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     const order = {
       id: orderId,
-      username,
+      username: username || "",
       email,
       platform,
       type,
@@ -33,8 +35,8 @@ export async function POST(request: NextRequest) {
       country: country || "US",
     };
 
-    // Add to admin storage
-    adminStorage.addOrder(order);
+    await createOrder(order);
+    console.log("[orders/confirm] Order created:", orderId);
 
     // Send confirmation email via Resend
     if (resend) {
@@ -95,10 +97,12 @@ export async function POST(request: NextRequest) {
             </div>
           `,
         });
-      } catch (emailError) {
-        console.error("Failed to send confirmation email:", emailError);
+      } catch (emailError: any) {
+        console.error("[orders/confirm] Email send failed:", emailError?.message || emailError);
         // Don't fail the order if email fails
       }
+    } else {
+      console.warn("[orders/confirm] Resend not configured — RESEND_API_KEY is missing. Email NOT sent.");
     }
 
     return NextResponse.json({
