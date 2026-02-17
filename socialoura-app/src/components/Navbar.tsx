@@ -76,16 +76,6 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Promo bar — compact rose */}
-      <div className="bg-[#FF4B6A]/95 text-white text-center py-2 px-4">
-        <div className="flex items-center justify-center gap-2 text-xs font-semibold">
-          <Sparkles className="w-3.5 h-3.5 animate-pulse" />
-          <span className="hidden sm:inline">SPECIAL OFFER — GET 5% OFF WITH CODE</span>
-          <span className="sm:hidden">5% OFF CODE</span>
-          <span className="px-2 py-0.5 bg-white/20 rounded-md font-mono font-bold">TOP5</span>
-        </div>
-      </div>
-
       {/* Navbar */}
       <nav className={`sticky top-0 z-50 transition-all duration-300 ${
         scrolled
