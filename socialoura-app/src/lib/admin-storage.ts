@@ -1,4 +1,4 @@
-import { PricingPack, Order, PromoCode, StripeSettings, PromoSettings } from "@/types/admin";
+import { PricingPack, Order, PromoCode, StripeSettings, PromoSettings, HeaderBarSettings } from "@/types/admin";
 
 // In-memory storage (fallback if DB unavailable)
 class AdminStorage {
@@ -66,6 +66,15 @@ class AdminStorage {
 
   private promoSettings: PromoSettings = {
     enabled: true,
+  };
+
+  private headerBarSettings: HeaderBarSettings = {
+    enabled: false,
+    text: "🎉 Special Offer: 20% off all packages this week!",
+    backgroundColor: "#FF4B6A",
+    textColor: "#FFFFFF",
+    linkUrl: "/#services",
+    linkText: "Shop Now",
   };
 
   // Auth methods
@@ -179,6 +188,15 @@ class AdminStorage {
   updatePromoSettings(settings: PromoSettings): PromoSettings {
     this.promoSettings = settings;
     return { ...this.promoSettings };
+  }
+
+  getHeaderBarSettings(): HeaderBarSettings {
+    return { ...this.headerBarSettings };
+  }
+
+  updateHeaderBarSettings(settings: HeaderBarSettings): HeaderBarSettings {
+    this.headerBarSettings = settings;
+    return { ...this.headerBarSettings };
   }
 }
 

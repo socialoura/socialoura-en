@@ -17,6 +17,7 @@ import {
   ClipboardList,
   Tag,
   Package,
+  Megaphone,
 } from "lucide-react";
 import {
   LineChart,
@@ -36,6 +37,7 @@ import {
 import OrdersTab from "@/components/admin/OrdersTab";
 import PricingTab from "@/components/admin/PricingTab";
 import PromoCodesTab from "@/components/admin/PromoCodesTab";
+import HeaderSettingsTab from "@/components/admin/HeaderSettingsTab";
 import { getToken, encodeToken } from "@/lib/admin-auth";
 
 const PIE_COLORS = ["#FF4B6A", "#6366F1", "#F59E0B", "#10B981"];
@@ -51,7 +53,7 @@ interface AnalyticsData {
 
 export default function AdminDashboard() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<"overview" | "orders" | "pricing" | "promo">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "orders" | "pricing" | "promo" | "header">("overview");
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [loadingAnalytics, setLoadingAnalytics] = useState(true);
 
@@ -87,6 +89,7 @@ export default function AdminDashboard() {
     { key: "orders", label: "Orders", icon: <ClipboardList className="w-4 h-4" /> },
     { key: "pricing", label: "Pricing", icon: <Package className="w-4 h-4" /> },
     { key: "promo", label: "Promo Codes", icon: <Tag className="w-4 h-4" /> },
+    { key: "header", label: "Header Bar", icon: <Megaphone className="w-4 h-4" /> },
   ] as const;
 
   return (
@@ -311,6 +314,13 @@ export default function AdminDashboard() {
         {activeTab === "promo" && (
           <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm">
             <PromoCodesTab />
+          </div>
+        )}
+
+        {/* HEADER BAR TAB */}
+        {activeTab === "header" && (
+          <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm">
+            <HeaderSettingsTab />
           </div>
         )}
       </div>

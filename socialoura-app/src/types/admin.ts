@@ -63,3 +63,12 @@ export interface AnalyticsData {
   platformDistribution: { platform: string; count: number; revenue: number }[];
   topPackages: { name: string; count: number; revenue: number }[];
 }
+
+export interface HeaderBarSettings {
+  enabled: boolean;
+  text: string;
+  backgroundColor: string;
+  textColor: string;
+  linkUrl?: string;
+  linkText?: string;
+}

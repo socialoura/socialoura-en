@@ -253,7 +253,7 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
 
                 {/* Pricing grid */}
                 <div className="px-6 sm:px-8 pb-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 gap-3">
                     {product.pricingTiers.map((tier) => {
                       const isSelected = !isCustomSelected && selectedTier.quantity === tier.quantity;
                       const bestUnitPrice = product.pricingTiers.length > 0
