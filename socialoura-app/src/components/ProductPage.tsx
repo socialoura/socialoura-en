@@ -27,6 +27,16 @@ const typeLabel: Record<string, string> = {
   followers: "Followers",
   likes: "Likes",
   views: "Views",
+  comments: "Comments",
+  subscribers: "Subscribers",
+};
+
+const inputConfig: Record<string, { label: string; placeholder: string; example: string; inputMode: "text" | "url" }> = {
+  followers: { label: "Enter your username", placeholder: "Your {platform} username", example: "Example: @yourusername", inputMode: "text" },
+  subscribers: { label: "Enter your channel URL", placeholder: "https://youtube.com/@yourchannel", example: "Paste your YouTube channel link", inputMode: "url" },
+  likes: { label: "Enter the post URL", placeholder: "https://{platform}.com/p/...", example: "Paste the link to the post or reel", inputMode: "url" },
+  views: { label: "Enter the video URL", placeholder: "https://{platform}.com/...", example: "Paste the link to the video", inputMode: "url" },
+  comments: { label: "Enter the post URL", placeholder: "https://{platform}.com/p/...", example: "Paste the link to the post", inputMode: "url" },
 };
 
 export default function ProductPage({ product: initialProduct }: ProductPageProps) {
@@ -113,7 +123,8 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
       setStep(2);
     } else if (step === 2) {
       if (!username.trim()) {
-        alert("Please enter your username");
+        const isUrl = (inputConfig[product.type] || inputConfig.followers).inputMode === "url";
+        alert(isUrl ? "Please enter the URL" : "Please enter your username");
         return;
       }
       
@@ -179,7 +190,7 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
 
               {/* Bullet points */}
               <div className="space-y-3 mb-8">
-                {["Fast and gradual delivery", "No password required", "24/7 customer support", "Safe — no risk to your account"].map((item, idx) => (
+                {["AI-powered gradual delivery", "No password required", "24/7 human support", "Safe & policy-compliant"].map((item, idx) => (
                   <div key={idx} className="flex items-center gap-3">
                     <div className="w-6 h-6 rounded-full bg-[#FF4B6A]/10 flex items-center justify-center flex-shrink-0">
                       <Check className="w-3.5 h-3.5 text-[#FF4B6A]" />
@@ -369,33 +380,39 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
                   </div>
                 </div>
 
-                {/* Username input (step 2) */}
-                {step === 2 && (
-                  <div className="px-6 sm:px-8 pb-6 animate-fade-in">
-                    <div className="bg-[#F9FAFB] rounded-xl p-5 border border-[#E5E7EB]">
-                      <h3 className="text-lg font-bold text-[#111827] mb-1">Enter your username</h3>
-                      <p className="text-sm text-[#4B5563] flex items-center gap-1.5 mb-4">
-                        <Lock className="w-3.5 h-3.5" />
-                        We never ask for your password
-                      </p>
-                      <div className="relative">
-                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#4B5563]">
-                          {platformIconMap[product.platform] || <Instagram className="w-5 h-5" />}
+                {/* Dynamic input (step 2) — username OR URL depending on service type */}
+                {step === 2 && (() => {
+                  const cfg = inputConfig[product.type] || inputConfig.followers;
+                  const isUrlField = cfg.inputMode === "url";
+                  const placeholderText = cfg.placeholder.replace("{platform}", platformName.toLowerCase());
+                  return (
+                    <div className="px-6 sm:px-8 pb-6 animate-fade-in">
+                      <div className="bg-[#F9FAFB] rounded-xl p-5 border border-[#E5E7EB]">
+                        <h3 className="text-lg font-bold text-[#111827] mb-1">{cfg.label}</h3>
+                        <p className="text-sm text-[#4B5563] flex items-center gap-1.5 mb-4">
+                          <Lock className="w-3.5 h-3.5" />
+                          {isUrlField ? "We only need the public link" : "We never ask for your password"}
+                        </p>
+                        <div className="relative">
+                          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#4B5563]">
+                            {platformIconMap[product.platform] || <Instagram className="w-5 h-5" />}
+                          </div>
+                          <input
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            placeholder={placeholderText}
+                            className="w-full h-12 pl-12 pr-4 rounded-xl border border-[#E5E7EB] bg-white text-[#111827] text-[15px] font-medium outline-none focus:border-[#FF4B6A] focus:ring-2 focus:ring-[#FF4B6A]/20 transition-all"
+                            inputMode={cfg.inputMode}
+                            autoComplete="off"
+                            autoFocus
+                            type={isUrlField ? "url" : "text"}
+                          />
                         </div>
-                        <input
-                          value={username}
-                          onChange={(e) => setUsername(e.target.value)}
-                          placeholder={`Enter your ${platformName} username`}
-                          className="w-full h-12 pl-12 pr-4 rounded-xl border border-[#E5E7EB] bg-white text-[#111827] text-[15px] font-medium outline-none focus:border-[#FF4B6A] focus:ring-2 focus:ring-[#FF4B6A]/20 transition-all"
-                          inputMode="text"
-                          autoComplete="off"
-                          autoFocus
-                        />
+                        <p className="mt-2 text-xs text-[#4B5563]">{cfg.example}</p>
                       </div>
-                      <p className="mt-2 text-xs text-[#4B5563]">Example: @yourusername</p>
                     </div>
-                  </div>
-                )}
+                  );
+                })()}
 
                 {/* Summary + CTA */}
                 <div className="px-6 sm:px-8 pb-6 sm:pb-8">

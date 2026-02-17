@@ -6,13 +6,16 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-import { Loader2, Lock, CheckCircle, AlertCircle } from "lucide-react";
+import { Loader2, Lock, CheckCircle, AlertCircle, Mail } from "lucide-react";
 
 interface CheckoutFormProps {
   amount: number;
   onSuccess?: () => void;
   onError?: (error: string) => void;
 }
+
+const isValidEmail = (email: string) =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
 export default function CheckoutForm({
   amount,
@@ -27,11 +30,20 @@ export default function CheckoutForm({
     "idle" | "processing" | "success" | "error"
   >("idle");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [email, setEmail] = useState("");
+  const [emailTouched, setEmailTouched] = useState(false);
+
+  const emailValid = isValidEmail(email);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!stripe || !elements) {
+      return;
+    }
+
+    if (!emailValid) {
+      setEmailTouched(true);
       return;
     }
 
@@ -45,6 +57,11 @@ export default function CheckoutForm({
         elements,
         confirmParams: {
           return_url: `${window.location.origin}/payment-success`,
+          payment_method_data: {
+            billing_details: {
+              email: email,
+            },
+          },
         },
         redirect: "if_required", // Stay on page if possible
       });
@@ -73,6 +90,36 @@ export default function CheckoutForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Email field — REQUIRED above payment */}
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm">
+        <label className="block text-sm font-semibold text-[#111827] mb-2">
+          Email Address *
+        </label>
+        <div className="relative">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#4B5563]">
+            <Mail className="w-4 h-4" />
+          </div>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            onBlur={() => setEmailTouched(true)}
+            placeholder="you@email.com"
+            className={`w-full h-12 pl-11 pr-4 rounded-xl border text-[#111827] text-[15px] font-medium outline-none transition-all ${
+              emailTouched && !emailValid
+                ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-200"
+                : "border-[#E5E7EB] focus:border-[#FF4B6A] focus:ring-2 focus:ring-[#FF4B6A]/20"
+            }`}
+            autoComplete="email"
+            required
+          />
+        </div>
+        {emailTouched && !emailValid && (
+          <p className="text-xs text-red-500 mt-1.5 font-medium">Please enter a valid email address</p>
+        )}
+        <p className="text-xs text-[#4B5563] mt-1.5">Your order confirmation will be sent here</p>
+      </div>
+
       {/* Payment Element Container */}
       <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm">
         <div className="flex items-center gap-2 mb-4">
@@ -124,7 +171,7 @@ export default function CheckoutForm({
       {/* Submit Button */}
       <button
         type="submit"
-        disabled={!stripe || isProcessing || paymentStatus === "success"}
+        disabled={!stripe || isProcessing || paymentStatus === "success" || !emailValid}
         className="w-full bg-[#FF4B6A] hover:bg-[#E8435F] disabled:bg-[#E5E7EB] disabled:text-[#4B5563] disabled:cursor-not-allowed text-white font-bold px-6 py-4 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center gap-3 uppercase tracking-wide"
       >
         {isProcessing ? (

@@ -163,13 +163,13 @@ export default function OrdersTab() {
               placeholder="Search by username or email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 text-sm"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF4B6A] text-sm"
             />
           </div>
           <select
             value={platformFilter}
             onChange={(e) => setPlatformFilter(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 text-sm"
+            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF4B6A] text-sm"
           >
             <option value="all">All Platforms</option>
             <option value="instagram">Instagram</option>
@@ -180,7 +180,7 @@ export default function OrdersTab() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 text-sm"
+            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF4B6A] text-sm"
           >
             <option value="all">All Status</option>
             <option value="pending">Pending</option>
@@ -208,9 +208,6 @@ export default function OrdersTab() {
                   Customer
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">
-                  Country
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">
                   Platform
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">
@@ -218,6 +215,9 @@ export default function OrdersTab() {
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">
                   Price
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">
+                  Country
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">
                   Status
@@ -242,9 +242,6 @@ export default function OrdersTab() {
                     </div>
                     <div className="text-xs text-gray-500">{order.email}</div>
                   </td>
-                  <td className="px-4 py-3 text-sm text-gray-700">
-                    {order.country || "—"}
-                  </td>
                   <td className="px-4 py-3">
                     <span className="text-sm font-medium text-gray-900 capitalize">
                       {order.platform}
@@ -257,6 +254,9 @@ export default function OrdersTab() {
                   </td>
                   <td className="px-4 py-3 text-sm font-semibold text-gray-900">
                     ${order.price.toFixed(2)}
+                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-600">
+                    {order.country || "—"}
                   </td>
                   <td className="px-4 py-3">
                     <select
@@ -323,7 +323,7 @@ export default function OrdersTab() {
                 defaultValue={editingOrder.notes || ""}
                 id="notes-textarea"
                 rows={4}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FF4B6A]"
                 placeholder="Add notes about this order..."
               />
             </div>
@@ -341,7 +341,7 @@ export default function OrdersTab() {
                   ) as HTMLTextAreaElement;
                   handleUpdateNotes(editingOrder.id, textarea.value);
                 }}
-                className="flex-1 px-4 py-2 bg-orange-gradient text-white rounded-lg font-medium hover:shadow-lg"
+                className="flex-1 px-4 py-2 bg-[#FF4B6A] hover:bg-[#E8435F] text-white rounded-lg font-medium transition-all"
               >
                 Save
               </button>

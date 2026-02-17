@@ -106,173 +106,80 @@ export default function Navbar() {
               />
             </Link>
 
-            {/* Desktop nav - Premium dropdowns */}
+            {/* Desktop nav — Home / All Services / Reviews / Contact */}
             <div className="hidden lg:flex items-center gap-6">
-              {/* Instagram Dropdown - Premium */}
-              <div
-                className="relative"
-                onMouseEnter={() => openMenu("instagram")}
-                onMouseLeave={scheduleCloseMenu}
-              >
-                <button
-                  type="button"
-                  aria-haspopup="menu"
-                  aria-expanded={openDropdown === "instagram"}
-                  onClick={() =>
-                    setOpenDropdown((prev) => (prev === "instagram" ? null : "instagram"))
-                  }
-                  className="relative text-[#111827] hover:text-[#FF4B6A] font-semibold text-sm transition-all duration-300 flex items-center gap-1.5 group py-2"
-                >
-                  Instagram
-                  <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180" />
-                  <span className="absolute -bottom-0 left-0 w-0 h-0.5 bg-[#FF4B6A] group-hover:w-full transition-all duration-300 rounded-full" />
-                </button>
-                {openDropdown === "instagram" && (
-                  <div
-                    className="absolute top-full left-0 mt-3 w-64 bg-white rounded-2xl shadow-lg border border-[#F1E4EA] py-2 z-50 animate-scale-in"
-                    onMouseEnter={clearCloseTimeout}
-                    onMouseLeave={scheduleCloseMenu}
-                  >
-                    {platformMenus.instagram.map((item, idx) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className="block px-5 py-3 text-sm font-medium text-[#111827] hover:bg-[#FFE4EC] hover:text-[#FF4B6A] transition-all duration-200 hover:translate-x-1 border-l-2 border-transparent hover:border-[#FF4B6A]"
-                        style={{ animationDelay: `${idx * 50}ms` }}
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* TikTok Dropdown - Premium */}
-              <div
-                className="relative"
-                onMouseEnter={() => openMenu("tiktok")}
-                onMouseLeave={scheduleCloseMenu}
-              >
-                <button
-                  type="button"
-                  aria-haspopup="menu"
-                  aria-expanded={openDropdown === "tiktok"}
-                  onClick={() => setOpenDropdown((prev) => (prev === "tiktok" ? null : "tiktok"))}
-                  className="relative text-[#111827] hover:text-[#FF4B6A] font-semibold text-sm transition-all duration-300 flex items-center gap-1.5 group py-2"
-                >
-                  TikTok
-                  <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180" />
-                  <span className="absolute -bottom-0 left-0 w-0 h-0.5 bg-[#FF4B6A] group-hover:w-full transition-all duration-300 rounded-full" />
-                </button>
-                {openDropdown === "tiktok" && (
-                  <div
-                    className="absolute top-full left-0 mt-3 w-64 bg-white rounded-2xl shadow-lg border border-[#F1E4EA] py-2 z-50 animate-scale-in"
-                    onMouseEnter={clearCloseTimeout}
-                    onMouseLeave={scheduleCloseMenu}
-                  >
-                    {platformMenus.tiktok.map((item, idx) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className="block px-5 py-3 text-sm font-medium text-[#111827] hover:bg-[#FFE4EC] hover:text-[#FF4B6A] transition-all duration-200 hover:translate-x-1 border-l-2 border-transparent hover:border-[#FF4B6A]"
-                        style={{ animationDelay: `${idx * 50}ms` }}
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* YouTube Dropdown - Premium */}
-              <div
-                className="relative"
-                onMouseEnter={() => openMenu("youtube")}
-                onMouseLeave={scheduleCloseMenu}
-              >
-                <button
-                  type="button"
-                  aria-haspopup="menu"
-                  aria-expanded={openDropdown === "youtube"}
-                  onClick={() => setOpenDropdown((prev) => (prev === "youtube" ? null : "youtube"))}
-                  className="relative text-[#111827] hover:text-[#FF4B6A] font-semibold text-sm transition-all duration-300 flex items-center gap-1.5 group py-2"
-                >
-                  YouTube
-                  <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180" />
-                  <span className="absolute -bottom-0 left-0 w-0 h-0.5 bg-[#FF4B6A] group-hover:w-full transition-all duration-300 rounded-full" />
-                </button>
-                {openDropdown === "youtube" && (
-                  <div
-                    className="absolute top-full left-0 mt-3 w-64 bg-white rounded-2xl shadow-lg border border-[#F1E4EA] py-2 z-50 animate-scale-in"
-                    onMouseEnter={clearCloseTimeout}
-                    onMouseLeave={scheduleCloseMenu}
-                  >
-                    {platformMenus.youtube.map((item, idx) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className="block px-5 py-3 text-sm font-medium text-[#111827] hover:bg-[#FFE4EC] hover:text-[#FF4B6A] transition-all duration-200 hover:translate-x-1 border-l-2 border-transparent hover:border-[#FF4B6A]"
-                        style={{ animationDelay: `${idx * 50}ms` }}
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Facebook Dropdown - Premium */}
-              <div
-                className="relative"
-                onMouseEnter={() => openMenu("facebook")}
-                onMouseLeave={scheduleCloseMenu}
-              >
-                <button
-                  type="button"
-                  aria-haspopup="menu"
-                  aria-expanded={openDropdown === "facebook"}
-                  onClick={() => setOpenDropdown((prev) => (prev === "facebook" ? null : "facebook"))}
-                  className="relative text-[#111827] hover:text-[#FF4B6A] font-semibold text-sm transition-all duration-300 flex items-center gap-1.5 group py-2"
-                >
-                  Facebook
-                  <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180" />
-                  <span className="absolute -bottom-0 left-0 w-0 h-0.5 bg-[#FF4B6A] group-hover:w-full transition-all duration-300 rounded-full" />
-                </button>
-                {openDropdown === "facebook" && (
-                  <div
-                    className="absolute top-full left-0 mt-3 w-64 bg-white rounded-2xl shadow-lg border border-[#F1E4EA] py-2 z-50 animate-scale-in"
-                    onMouseEnter={clearCloseTimeout}
-                    onMouseLeave={scheduleCloseMenu}
-                  >
-                    {platformMenus.facebook.map((item, idx) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className="block px-5 py-3 text-sm font-medium text-[#111827] hover:bg-[#FFE4EC] hover:text-[#FF4B6A] transition-all duration-200 hover:translate-x-1 border-l-2 border-transparent hover:border-[#FF4B6A]"
-                        style={{ animationDelay: `${idx * 50}ms` }}
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Contact Link - Premium */}
+              {/* Home */}
               <Link
-                href="/contact"
+                href="/"
                 className="relative text-[#111827] hover:text-[#FF4B6A] font-semibold text-sm transition-all duration-300 group py-2"
               >
-                Contact
+                Home
                 <span className="absolute -bottom-0 left-0 w-0 h-0.5 bg-[#FF4B6A] group-hover:w-full transition-all duration-300 rounded-full" />
               </Link>
 
-              {/* Avis Link */}
+              {/* All Services — mega dropdown */}
+              <div
+                className="relative"
+                onMouseEnter={() => openMenu("services")}
+                onMouseLeave={scheduleCloseMenu}
+              >
+                <button
+                  type="button"
+                  aria-haspopup="menu"
+                  aria-expanded={openDropdown === "services"}
+                  onClick={() =>
+                    setOpenDropdown((prev) => (prev === "services" ? null : "services"))
+                  }
+                  className="relative text-[#111827] hover:text-[#FF4B6A] font-semibold text-sm transition-all duration-300 flex items-center gap-1.5 group py-2"
+                >
+                  All Services
+                  <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180" />
+                  <span className="absolute -bottom-0 left-0 w-0 h-0.5 bg-[#FF4B6A] group-hover:w-full transition-all duration-300 rounded-full" />
+                </button>
+                {openDropdown === "services" && (
+                  <div
+                    className="absolute top-full left-1/2 -translate-x-1/2 mt-3 bg-white rounded-2xl shadow-lg border border-[#F1E4EA] p-5 z-50 animate-scale-in"
+                    style={{ width: "580px" }}
+                    onMouseEnter={clearCloseTimeout}
+                    onMouseLeave={scheduleCloseMenu}
+                  >
+                    <div className="grid grid-cols-2 gap-5">
+                      {(Object.keys(platformMenus) as Array<keyof typeof platformMenus>).map((platform) => (
+                        <div key={platform}>
+                          <h4 className="text-xs font-bold text-[#FF4B6A] uppercase tracking-wider mb-2 px-1 capitalize">{platform}</h4>
+                          <div className="space-y-0.5">
+                            {platformMenus[platform].map((item) => (
+                              <Link
+                                key={item.href}
+                                href={item.href}
+                                className="block px-3 py-2 text-sm font-medium text-[#111827] hover:bg-[#FFE4EC] hover:text-[#FF4B6A] rounded-lg transition-all duration-200"
+                              >
+                                {item.label}
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Reviews */}
               <Link
                 href="/avis"
                 className="relative text-[#111827] hover:text-[#FF4B6A] font-semibold text-sm transition-all duration-300 group py-2"
               >
                 Reviews
+                <span className="absolute -bottom-0 left-0 w-0 h-0.5 bg-[#FF4B6A] group-hover:w-full transition-all duration-300 rounded-full" />
+              </Link>
+
+              {/* Contact */}
+              <Link
+                href="/contact"
+                className="relative text-[#111827] hover:text-[#FF4B6A] font-semibold text-sm transition-all duration-300 group py-2"
+              >
+                Contact
                 <span className="absolute -bottom-0 left-0 w-0 h-0.5 bg-[#FF4B6A] group-hover:w-full transition-all duration-300 rounded-full" />
               </Link>
             </div>

@@ -18,8 +18,6 @@ export interface Order {
   id: string;
   username: string;
   email: string;
-  country?: string;
-  stripe_payment_intent_id?: string;
   platform: "instagram" | "tiktok" | "youtube" | "facebook";
   type: "followers" | "likes" | "views";
   quantity: number;
@@ -27,6 +25,7 @@ export interface Order {
   created_at: string;
   order_status: "pending" | "processing" | "completed" | "cancelled";
   notes?: string;
+  country?: string;
 }
 
 export interface PromoCode {

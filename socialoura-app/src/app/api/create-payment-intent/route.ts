@@ -11,7 +11,7 @@ function getStripeClient() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { amount, currency = "eur", metadata = {}, receiptEmail } = body;
+    const { amount, currency = "usd", metadata = {} } = body;
 
     // Validation
     if (!amount || typeof amount !== "number" || amount <= 0) {
@@ -45,15 +45,8 @@ export async function POST(request: NextRequest) {
       automatic_payment_methods: {
         enabled: true, // Enables Card, Apple Pay, Google Pay, etc.
       },
-      receipt_email:
-        typeof receiptEmail === "string" && receiptEmail.trim().length > 0
-          ? receiptEmail.trim()
-          : undefined,
       metadata: {
         ...metadata,
-        ...(typeof receiptEmail === "string" && receiptEmail.trim().length > 0
-          ? { email: receiptEmail.trim() }
-          : {}),
         created_at: new Date().toISOString(),
       },
     });

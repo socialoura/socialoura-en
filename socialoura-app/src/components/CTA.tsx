@@ -17,15 +17,15 @@ export default function CTA() {
 
         <div className="relative text-center">
           <span className="inline-block px-4 py-1.5 bg-white/20 text-white text-xs font-bold uppercase tracking-wider rounded-full mb-6">
-            Build Your Plan
+            Start Growing Today
           </span>
 
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white leading-tight mb-4">
-            Grow your audience with real, active promotion services
+            Ready to grow your social presence with AI-powered tools?
           </h2>
 
           <p className="text-white/70 text-sm sm:text-base mb-8 max-w-2xl mx-auto leading-relaxed">
-            Pick your network, choose a quantity, and watch your profile grow. Premium quality, 100% safe and private.
+            Join 50K+ creators and brands who trust SocialNovaly for safe, transparent social media promotion.
           </p>
 
           {/* Steps */}

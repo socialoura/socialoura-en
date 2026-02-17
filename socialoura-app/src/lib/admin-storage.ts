@@ -47,6 +47,7 @@ class AdminStorage {
       created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
       order_status: "completed",
       notes: "Delivered successfully",
+      country: "US",
     },
     {
       id: "ord-002",
@@ -58,6 +59,7 @@ class AdminStorage {
       price: 9.99,
       created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
       order_status: "processing",
+      country: "US",
     },
     {
       id: "ord-003",
@@ -69,6 +71,7 @@ class AdminStorage {
       price: 9.99,
       created_at: new Date().toISOString(),
       order_status: "pending",
+      country: "CA",
     },
   ];
 
@@ -146,15 +149,6 @@ class AdminStorage {
   // Order methods
   getOrders(): Order[] {
     return [...this.orders];
-  }
-
-  addOrder(order: Omit<Order, "id"> & { id?: string }): Order {
-    const newOrder: Order = {
-      ...order,
-      id: order.id || `ord-${Date.now()}`,
-    };
-    this.orders.unshift(newOrder);
-    return newOrder;
   }
 
   updateOrder(id: string, updates: Partial<Order>): Order | null {

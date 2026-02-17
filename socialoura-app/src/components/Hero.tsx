@@ -35,11 +35,11 @@ const platformServices = {
 };
 
 const features = [
-  { icon: <Zap className="w-4 h-4" />, text: "Fast delivery" },
-  { icon: <Star className="w-4 h-4" />, text: "#1 rated service" },
-  { icon: <Shield className="w-4 h-4" />, text: "Safe promotion" },
-  { icon: <Check className="w-4 h-4" />, text: "100% real & active" },
-  { icon: <Globe className="w-4 h-4" />, text: "Trusted worldwide" },
+  { icon: <Check className="w-4 h-4" />, text: "No Passwords Required" },
+  { icon: <Zap className="w-4 h-4" />, text: "Real-Time Tracking" },
+  { icon: <Users className="w-4 h-4" />, text: "24/7 Human Support" },
+  { icon: <Shield className="w-4 h-4" />, text: "Safe & Policy-Compliant" },
+  { icon: <Globe className="w-4 h-4" />, text: "Trusted by 50K+ Creators" },
   { icon: <CreditCard className="w-4 h-4" />, text: "PayPal, Apple Pay or Card" },
 ];
 
@@ -58,23 +58,22 @@ export default function Hero() {
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 md:pt-24 pb-16 md:pb-20 text-center">
         {/* Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#FFE4EC] rounded-full mb-6">
-          <span className="text-xs font-bold text-[#FF4B6A] uppercase tracking-wide">#1 Social Growth Platform</span>
+          <span className="text-xs font-bold text-[#FF4B6A] uppercase tracking-wide">AI-Powered Social Growth</span>
           <TrendingUp className="w-3.5 h-3.5 text-[#FF4B6A]" />
         </div>
 
         {/* Heading */}
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#111827] leading-[1.1] mb-6 tracking-tight">
-          Grow your{" "}
-          <span className="text-[#FF4B6A]">audience</span>
+          Grow Your Social Presence
           <br />
-          with real{" "}
-          <span className="text-[#FF4B6A]">results</span>
+          With{" "}
+          <span className="text-[#FF4B6A]">AI-Powered</span>{" "}Tools
         </h1>
 
         <p className="text-[#111827]/60 text-lg sm:text-xl mb-8 max-w-3xl mx-auto font-medium leading-relaxed">
-          Safe, organic-style social media promotion services.
+          Promote your TikTok, Instagram, YouTube, and more with real
           <br className="hidden sm:block" />
-          <span className="text-[#FF4B6A] font-bold">Boost your visibility</span> today.
+          <span className="text-[#FF4B6A] font-bold">AI-powered engagement services</span> trusted by creators and brands.
         </p>
 
         {/* CTA Button */}
@@ -87,7 +86,7 @@ export default function Hero() {
         </Link>
 
         {/* Trust micro-line */}
-        <p className="text-[#111827]/40 text-sm font-medium mb-6">5,000+ orders processed this week</p>
+        <p className="text-[#111827]/40 text-sm font-medium mb-6">Trusted by 50K+ creators &amp; brands worldwide</p>
 
         {/* Trustpilot — under CTA */}
         <div className="inline-flex items-center gap-3 bg-white px-5 py-3 rounded-full border border-[#F1E4EA] shadow-sm mb-14">

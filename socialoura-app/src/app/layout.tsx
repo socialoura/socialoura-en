@@ -1,12 +1,18 @@
 import type { Metadata } from "next";
+import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/contexts/CartContext";
 import CartDrawer from "@/components/CartDrawer";
 
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+});
+
 export const metadata: Metadata = {
-  title: "SocialNovaly — Social Media Growth & Promotion Services",
+  title: "SocialNovaly — AI-Powered Social Media Growth Tools",
   description:
-    "Grow your audience on Instagram, TikTok, YouTube & Facebook with safe, organic-style promotion services. Fast delivery, 24/7 support.",
+    "Grow your social presence with AI-powered engagement services for Instagram, TikTok, YouTube & Facebook. Trusted by 50K+ creators. Safe, policy-compliant, 24/7 support.",
   icons: {
     icon: "/favicon.png",
   },
@@ -19,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="font-sans antialiased">
+      <body className={`${spaceGrotesk.variable} font-sans antialiased`}>
         <CartProvider>
           {children}
           <CartDrawer />

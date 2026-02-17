@@ -3,35 +3,35 @@
 import { Zap, Shield, UserCheck, Award, Users, TrendingUp, Star } from "lucide-react";
 
 const kpis = [
-  { value: "50K+", label: "Happy Customers", icon: <Users className="w-5 h-5" /> },
-  { value: "5M+", label: "Orders Delivered", icon: <TrendingUp className="w-5 h-5" /> },
+  { value: "+100M", label: "Interactions Delivered", icon: <TrendingUp className="w-5 h-5" /> },
   { value: "4.9/5", label: "Average Rating", icon: <Star className="w-5 h-5" /> },
+  { value: "78K+", label: "Campaigns Launched", icon: <Users className="w-5 h-5" /> },
 ];
 
 const features = [
   {
     icon: <Zap className="w-6 h-6" />,
-    title: "Fast Delivery",
+    title: "AI-Powered Delivery",
     description:
-      "We process and deliver all orders promptly after payment, with gradual delivery that looks natural and organic.",
+      "Our smart system processes and delivers all orders with gradual, organic-style pacing that keeps your account safe.",
   },
   {
     icon: <Shield className="w-6 h-6" />,
     title: "Lifetime Guarantee",
     description:
-      "All our services are backed by a lifetime retention guarantee. If anything goes wrong, we'll make it right — free of charge.",
+      "All services are backed by a lifetime retention guarantee. If anything drops, we’ll replenish it — free of charge.",
   },
   {
     icon: <UserCheck className="w-6 h-6" />,
-    title: "Real & Active Profiles",
+    title: "Real & Active Engagement",
     description:
-      "We only deliver real, active profiles. Our promotion methods are safe and comply with platform guidelines.",
+      "We deliver real, active profiles and engagement. Our methods are safe, transparent, and fully policy-compliant.",
   },
   {
     icon: <Award className="w-6 h-6" />,
-    title: "Premium Quality Service",
+    title: "Trusted by 50K+ Creators",
     description:
-      "We provide the highest quality social media growth services available. Professional support, reliable results, every time.",
+      "From solo creators to established brands, thousands trust SocialNovaly for safe, professional social media growth.",
   },
 ];
 
@@ -42,14 +42,14 @@ export default function Features() {
         {/* Section header */}
         <div className="text-center mb-10">
           <span className="inline-block px-4 py-1.5 bg-[#FFE4EC] text-[#FF4B6A] text-xs font-bold uppercase tracking-wider rounded-full mb-4">
-            Why Choose Us
+            Why Thousands Trust SocialNovaly
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#111827] leading-tight">
-            The <span className="text-[#FF4B6A]">#1 platform</span> for social
-            media growth services
+            AI-powered <span className="text-[#FF4B6A]">social growth</span> you
+            can actually trust
           </h2>
           <p className="text-[#111827]/50 mt-4 max-w-2xl mx-auto text-sm sm:text-base font-medium">
-            Over 50,000+ creators and businesses trust us to grow their social media presence safely.
+            Safe, transparent promotion services trusted by 50K+ creators and brands worldwide.
           </p>
         </div>
 
