@@ -41,7 +41,7 @@ export default function CTA() {
           </div>
 
           <Link
-            href="/"
+            href="/#services"
             className="inline-flex items-center gap-2 bg-white text-[#FF4B6A] font-bold text-lg px-8 py-4 rounded-full md:hover:bg-gray-50 md:hover:shadow-xl md:hover:scale-105 active:scale-95 transition-all duration-300 shadow-lg"
           >
             Get Started Now

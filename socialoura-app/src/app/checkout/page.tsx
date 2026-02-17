@@ -20,8 +20,10 @@ export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart();
   const router = useRouter();
   const [clientSecret, setClientSecret] = useState<string>("");
+  const [paymentIntentId, setPaymentIntentId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
 
   // Calculate total amount in cents from cart
   const totalAmount = Math.round(totalPrice * 100);
@@ -37,6 +39,7 @@ export default function CheckoutPage() {
     // Create PaymentIntent only if cart has items
     const createPaymentIntent = async () => {
       if (items.length === 0) return;
+      if (!email || email.trim().length === 0) return;
       
       try {
         const response = await fetch("/api/create-payment-intent", {
@@ -47,6 +50,7 @@ export default function CheckoutPage() {
           body: JSON.stringify({
             amount: totalAmount,
             currency: "usd",
+            receiptEmail: email.trim(),
             metadata: {
               items: JSON.stringify(items),
               itemCount: items.length,
@@ -60,6 +64,7 @@ export default function CheckoutPage() {
           setError(data.error);
         } else {
           setClientSecret(data.clientSecret);
+          setPaymentIntentId(data.paymentIntentId || "");
         }
       } catch (err: any) {
         setError(err.message || "Failed to initialize payment");
@@ -69,12 +74,29 @@ export default function CheckoutPage() {
     };
 
     createPaymentIntent();
-  }, [items, totalAmount]);
+  }, [items, totalAmount, email]);
 
-  const handlePaymentSuccess = () => {
-    // Clear cart and redirect to success page
-    clearCart();
-    window.location.href = "/payment-success";
+  const handlePaymentSuccess = async () => {
+    try {
+      if (paymentIntentId && email.trim().length > 0) {
+        await fetch("/api/orders/record", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            paymentIntentId,
+            items,
+            email: email.trim(),
+          }),
+        });
+      }
+    } catch {
+      // Intentionally ignore: payment already succeeded; order can be reconciled in Stripe.
+    } finally {
+      clearCart();
+      window.location.href = "/payment-success";
+    }
   };
 
   const handlePaymentError = (errorMsg: string) => {
@@ -137,6 +159,22 @@ export default function CheckoutPage() {
           </p>
         </div>
 
+        <div className="max-w-xl mx-auto mb-8">
+          <label className="block text-sm font-semibold text-[#111827] mb-2">
+            Email for receipt and order updates
+          </label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="you@email.com"
+            className="w-full px-4 py-3 bg-white border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF4B6A]/20 focus:border-[#FF4B6A] transition"
+          />
+          <p className="text-xs text-[#4B5563] mt-2">
+            We use your email to send your payment receipt and confirm your order.
+          </p>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Order Summary */}
           <div className="lg:col-span-1">
@@ -193,7 +231,13 @@ export default function CheckoutPage() {
 
           {/* Payment Form */}
           <div className="lg:col-span-2">
-            {isLoading ? (
+            {!email || email.trim().length === 0 ? (
+              <div className="bg-white rounded-2xl border border-[#E5E7EB] p-8 shadow-sm">
+                <p className="text-[#4B5563] font-medium">
+                  Enter your email to continue to secure payment.
+                </p>
+              </div>
+            ) : isLoading ? (
               <div className="bg-white rounded-2xl border border-[#E5E7EB] p-12 shadow-sm flex flex-col items-center justify-center">
                 <Loader2 className="w-12 h-12 text-[#FF4B6A] animate-spin mb-4" />
                 <p className="text-[#4B5563] font-semibold">

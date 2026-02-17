@@ -208,6 +208,9 @@ export default function OrdersTab() {
                   Customer
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">
+                  Country
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">
                   Platform
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">
@@ -239,6 +242,9 @@ export default function OrdersTab() {
                     </div>
                     <div className="text-xs text-gray-500">{order.email}</div>
                   </td>
+                  <td className="px-4 py-3 text-sm text-gray-700">
+                    {order.country || "—"}
+                  </td>
                   <td className="px-4 py-3">
                     <span className="text-sm font-medium text-gray-900 capitalize">
                       {order.platform}
@@ -250,7 +256,7 @@ export default function OrdersTab() {
                     </div>
                   </td>
                   <td className="px-4 py-3 text-sm font-semibold text-gray-900">
-                    €{order.price.toFixed(2)}
+                    ${order.price.toFixed(2)}
                   </td>
                   <td className="px-4 py-3">
                     <select
