@@ -267,7 +267,7 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
                             setSelectedTier(tier);
                             setIsCustomSelected(false);
                           }}
-                          className={`relative rounded-2xl p-5 text-left transition-all duration-200 ${
+                          className={`relative rounded-xl p-4 text-left transition-all duration-200 ${
                             isSelected
                               ? "bg-white border-2 border-[#FF4B6A] shadow-[0_0_0_3px_rgba(255,75,106,0.1)]"
                               : "bg-[#F9FAFB] border border-[#E5E7EB] hover:border-[#FF4B6A]/40 hover:bg-white"
@@ -284,34 +284,28 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
 
                           {/* Save badge */}
                           {savingsPercent > 0 && (
-                            <div className="absolute top-3 right-3">
-                              <span className="bg-[#FF4B6A] text-white text-[11px] font-bold px-2 py-0.5 rounded-md">
-                                Save {savingsPercent}%
+                            <div className="absolute top-2 right-2">
+                              <span className="bg-[#FF4B6A] text-white text-[10px] font-bold px-2 py-0.5 rounded-md">
+                                -{savingsPercent}%
                               </span>
                             </div>
                           )}
 
                           {/* Selected check */}
                           {isSelected && (
-                            <div className="absolute top-3 left-3">
-                              <div className="w-5 h-5 rounded-full bg-[#FF4B6A] flex items-center justify-center">
-                                <Check className="w-3 h-3 text-white" />
+                            <div className="absolute -top-2 -right-2 z-10">
+                              <div className="w-6 h-6 rounded-full bg-[#FF4B6A] flex items-center justify-center shadow-sm border-2 border-white">
+                                <Check className="w-3.5 h-3.5 text-white" />
                               </div>
                             </div>
                           )}
 
                           <div className={`${tier.popular ? "mt-2" : ""}`}>
-                            <div className="text-2xl font-extrabold text-[#111827] mb-1">
-                              {tier.quantity.toLocaleString("en-US")}
+                            <div className="text-xs font-semibold text-[#4B5563] mb-2">
+                              {tier.quantity.toLocaleString("en-US")} {typeLabel[product.type] || product.type}
                             </div>
-                            <div className="text-xs text-[#4B5563] mb-3">
-                              {typeLabel[product.type] || product.type}
-                            </div>
-                            <div className="text-xl font-bold text-[#111827]">
+                            <div className="text-2xl font-extrabold text-[#111827]">
                               {formatUSD(tier.price)}
-                            </div>
-                            <div className="text-xs text-[#4B5563] mt-1">
-                              Gradual delivery &bull; Safe promotion
                             </div>
                           </div>
                         </button>
@@ -325,7 +319,7 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
                         setIsCustomSelected(true);
                         if (product.pricingTiers.length > 0) setSelectedTier(product.pricingTiers[0]);
                       }}
-                      className={`relative rounded-2xl p-5 text-left transition-all duration-200 ${
+                      className={`relative rounded-xl p-4 text-left transition-all duration-200 ${
                         isCustomSelected
                           ? "bg-white border-2 border-[#FF4B6A] shadow-[0_0_0_3px_rgba(255,75,106,0.1)]"
                           : "bg-[#F9FAFB] border border-[#E5E7EB] hover:border-[#FF4B6A]/40 hover:bg-white"
