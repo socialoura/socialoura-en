@@ -1,9 +1,29 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { ArrowRight, Sparkles } from "lucide-react";
+
+declare global {
+  interface Window {
+    gtag?: (...args: any[]) => void;
+  }
+}
+
+function handleCtaClick(e: React.MouseEvent<HTMLAnchorElement>) {
+  e.preventDefault();
+  const url = "/products/instagram-followers";
+  if (typeof window !== "undefined" && typeof window.gtag === "function") {
+    window.gtag("event", "conversion", {
+      send_to: "AW-17893452047/Nv9FCLrkvPobEI_SodRC",
+      value: 1.0,
+      currency: "EUR",
+      event_callback: () => { window.location.href = url; },
+    });
+  } else {
+    window.location.href = url;
+  }
+}
 
 const stats = [
   { value: "50K+", label: "Campaigns Deployed" },
@@ -78,13 +98,14 @@ export default function InstagramFollowersLanding() {
         </p>
 
         {/* CTA button */}
-        <Link
+        <a
           href="/products/instagram-followers"
+          onClick={handleCtaClick}
           className="inline-flex items-center gap-3 bg-[#FF4B6A] text-white font-bold text-lg sm:text-xl px-10 py-5 rounded-full shadow-[0_8px_30px_-6px_rgba(255,75,106,0.5)] hover:shadow-[0_12px_40px_-6px_rgba(255,75,106,0.65)] hover:-translate-y-0.5 hover:scale-105 active:scale-95 transition-all duration-300"
         >
           Launch My Growth Campaign
           <ArrowRight className="w-5 h-5" />
-        </Link>
+        </a>
 
         {/* Stats strip */}
         <div className="mt-14 flex items-center justify-center gap-8 sm:gap-16">
