@@ -148,8 +148,17 @@ export default function CheckoutForm({
         <div className="stripe-payment-element">
           <PaymentElement
             options={{
-              layout: "tabs",
-              paymentMethodOrder: ["card", "apple_pay", "google_pay"],
+              layout: {
+                type: "accordion",
+                defaultCollapsed: false,
+                radios: true,
+                spacedAccordionItems: true,
+              },
+              paymentMethodOrder: ["apple_pay", "google_pay", "card"],
+              wallets: {
+                applePay: "auto",
+                googlePay: "auto",
+              },
             }}
           />
         </div>
