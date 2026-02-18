@@ -11,7 +11,7 @@ function getStripeClient() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { amount, currency = "usd", metadata = {} } = body;
+    const { amount, currency = "eur", metadata = {} } = body;
 
     // Validation
     if (!amount || typeof amount !== "number" || amount <= 0) {
