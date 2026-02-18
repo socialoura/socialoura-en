@@ -135,33 +135,23 @@ export default function CheckoutForm({
         <p className="text-xs text-[#4B5563] mt-1.5">Your order confirmation will be sent here</p>
       </div>
 
-      {/* Payment Element Container */}
-      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm">
-        <div className="flex items-center gap-2 mb-4">
-          <Lock className="w-5 h-5 text-[#FF4B6A]" />
-          <h3 className="text-lg font-bold text-[#111827]">
-            Secure Payment
-          </h3>
-        </div>
-
-        {/* Stripe Payment Element */}
-        <div className="stripe-payment-element">
-          <PaymentElement
-            options={{
-              layout: {
-                type: "accordion",
-                defaultCollapsed: false,
-                radios: true,
-                spacedAccordionItems: true,
-              },
-              paymentMethodOrder: ["apple_pay", "google_pay", "card"],
-              wallets: {
-                applePay: "auto",
-                googlePay: "auto",
-              },
-            }}
-          />
-        </div>
+      {/* Stripe Payment Element — clean, no wrapper */}
+      <div className="stripe-payment-element">
+        <PaymentElement
+          options={{
+            layout: {
+              type: "accordion",
+              defaultCollapsed: false,
+              radios: true,
+              spacedAccordionItems: true,
+            },
+            paymentMethodOrder: ["apple_pay", "google_pay", "card"],
+            wallets: {
+              applePay: "auto",
+              googlePay: "auto",
+            },
+          }}
+        />
       </div>
 
       {/* Error Message */}

@@ -121,28 +121,67 @@ export default function CheckoutPage() {
   const appearance = {
     theme: "stripe" as const,
     variables: {
-      colorPrimary: "#FF4B6A",
+      colorPrimary: "#111827",
       colorBackground: "#ffffff",
-      colorText: "#111827", // Gray-900
+      colorText: "#111827",
+      colorTextSecondary: "#6B7280",
       colorDanger: "#ef4444",
       fontFamily: "var(--font-space-grotesk), system-ui, sans-serif",
-      spacingUnit: "4px",
-      borderRadius: "12px",
+      fontSizeBase: "15px",
+      spacingUnit: "5px",
+      borderRadius: "14px",
+      colorIconCardCvc: "#6B7280",
     },
     rules: {
-      ".Input": {
-        border: "2px solid #e5e7eb",
+      ".Tab": {
+        border: "1.5px solid #E5E7EB",
+        borderRadius: "14px",
+        padding: "14px 16px",
         boxShadow: "none",
-        padding: "12px",
+        backgroundColor: "#ffffff",
+      },
+      ".Tab:hover": {
+        border: "1.5px solid #D1D5DB",
+        boxShadow: "none",
+      },
+      ".Tab--selected": {
+        border: "1.5px solid #111827",
+        boxShadow: "none",
+        backgroundColor: "#ffffff",
+      },
+      ".TabIcon": {
+        fill: "#111827",
+      },
+      ".TabLabel": {
+        fontWeight: "600",
+        fontSize: "15px",
+      },
+      ".Input": {
+        border: "1.5px solid #E5E7EB",
+        borderRadius: "12px",
+        boxShadow: "none",
+        padding: "14px 16px",
+        fontSize: "15px",
+        backgroundColor: "#F9FAFB",
       },
       ".Input:focus": {
-        border: "2px solid #FF4B6A",
-        boxShadow: "0 0 0 3px rgba(255, 75, 106, 0.1)",
+        border: "1.5px solid #111827",
+        boxShadow: "0 0 0 3px rgba(17, 24, 39, 0.08)",
+        backgroundColor: "#ffffff",
+      },
+      ".Input::placeholder": {
+        color: "#9CA3AF",
       },
       ".Label": {
         fontWeight: "600",
-        fontSize: "14px",
-        marginBottom: "8px",
+        fontSize: "13px",
+        marginBottom: "6px",
+        color: "#4B5563",
+      },
+      ".Block": {
+        borderRadius: "14px",
+        border: "1.5px solid #E5E7EB",
+        padding: "4px",
       },
     },
   };
