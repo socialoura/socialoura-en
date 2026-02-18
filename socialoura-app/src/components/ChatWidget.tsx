@@ -150,54 +150,6 @@ export default function ChatWidget() {
 
   return (
     <>
-      {/* ── MOBILE: bottom-left, 48px, no pulse ── */}
-      <div className="md:hidden fixed bottom-4 left-4 z-50 flex flex-col items-start gap-2">
-        {/* Mobile modal — slides up from button, full-width */}
-        {isOpen && (
-          <>
-            {/* Overlay */}
-            <div
-              className="fixed inset-0 bg-black/50 z-40"
-              onClick={handleClose}
-            />
-            <div
-              className="fixed bottom-[72px] left-3 right-3 z-50 bg-white rounded-2xl shadow-[0_20px_60px_-10px_rgba(0,0,0,0.25)] border border-[#E5E7EB] overflow-hidden"
-              style={{ animation: "chatSlideUp 0.22s ease-out" }}
-            >
-              <div className="flex items-center justify-between px-4 py-3.5 bg-[#FF4B6A]">
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center">
-                    <MessageCircle className="w-3.5 h-3.5 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-white font-bold text-sm leading-tight">Chat with Support</p>
-                    <p className="text-white/70 text-xs">We reply within 24h</p>
-                  </div>
-                </div>
-                <button
-                  onClick={handleClose}
-                  className="w-7 h-7 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
-                >
-                  <X className="w-3.5 h-3.5 text-white" />
-                </button>
-              </div>
-              <div className="p-4">
-                <ChatForm onClose={handleClose} />
-              </div>
-            </div>
-          </>
-        )}
-
-        {/* Mobile trigger — 48px, no pulse */}
-        <button
-          onClick={isOpen ? handleClose : handleOpen}
-          aria-label="Open support chat"
-          className="w-12 h-12 rounded-full bg-[#FF4B6A] text-white flex items-center justify-center shadow-[0_6px_20px_-4px_rgba(255,75,106,0.45)] hover:scale-105 active:scale-95 transition-all duration-200"
-        >
-          {isOpen ? <X className="w-5 h-5" /> : <MessageCircle className="w-5 h-5" />}
-        </button>
-      </div>
-
       {/* ── DESKTOP: bottom-right, 60px, pulse ── */}
       <div className="hidden md:flex fixed bottom-6 right-6 z-50 flex-col items-end gap-3">
         {/* Desktop overlay */}
