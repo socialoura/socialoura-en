@@ -1,6 +1,13 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+
+declare global {
+  interface Window {
+    gtag?: (...args: any[]) => void;
+  }
+}
+
 import {
   PaymentElement,
   useStripe,
@@ -72,7 +79,15 @@ export default function CheckoutForm({
         setErrorMessage(error.message || "An error occurred");
         onError?.(error.message || "Payment failed");
       } else if (paymentIntent && paymentIntent.status === "succeeded") {
-        // Payment succeeded
+        // Payment succeeded — fire Google Ads click conversion tag
+        if (typeof window !== "undefined" && typeof window.gtag === "function") {
+          window.gtag("event", "conversion", {
+            send_to: "AW-17893452047/E_73CPm3vPobEI_SodRC",
+            value: amount / 100,
+            currency: "EUR",
+            transaction_id: paymentIntent.id,
+          });
+        }
         setPaymentStatus("success");
         onSuccess?.(email);
       }

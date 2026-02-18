@@ -2,9 +2,16 @@
 
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import { useEffect } from "react";
 import { CheckCircle, Package, ArrowRight, Mail, Clock, Shield } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+
+declare global {
+  interface Window {
+    gtag?: (...args: any[]) => void;
+  }
+}
 
 export default function OrderSuccessPage() {
   const params = useParams();
@@ -18,6 +25,20 @@ export default function OrderSuccessPage() {
       if (stored) orderDetails = JSON.parse(stored);
     } catch {}
   }
+
+  // Google Ads — page-load conversion tag (fires once on mount)
+  useEffect(() => {
+    if (typeof window !== "undefined" && typeof window.gtag === "function") {
+      window.gtag("event", "conversion", {
+        send_to: "AW-17893452047/E_73CPm3vPobEI_SodRC",
+        value: orderDetails?.price ? Number(orderDetails.price) : 1.0,
+        currency: "EUR",
+        transaction_id: orderId,
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
   return (
     <div className="min-h-screen bg-[#F9FAFB]">
