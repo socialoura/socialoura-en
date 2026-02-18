@@ -5,6 +5,8 @@ import { CartProvider } from "@/contexts/CartContext";
 import CartDrawer from "@/components/CartDrawer";
 import HeaderBar from "@/components/HeaderBar";
 import ChatWidget from "@/components/ChatWidget";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -34,6 +36,8 @@ export default function RootLayout({
           <CartDrawer />
           <ChatWidget />
         </CartProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
