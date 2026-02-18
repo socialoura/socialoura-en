@@ -38,6 +38,36 @@ export async function POST(request: NextRequest) {
     await createOrder(order);
     console.log("[orders/confirm] Order created:", orderId);
 
+    // Send Discord purchase notification (fire-and-forget)
+    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
+    if (webhookUrl) {
+      const platformName = platform.charAt(0).toUpperCase() + platform.slice(1);
+      const typeName = type.charAt(0).toUpperCase() + type.slice(1);
+      fetch(webhookUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          embeds: [
+            {
+              title: "💰 NOUVEAU ACHAT !",
+              fields: [
+                { name: "💳 Client Email", value: email, inline: true },
+                { name: "📦 Produit", value: `${platformName} ${typeName}`, inline: true },
+                { name: "💵 Montant", value: `${price.toFixed(2)} USD`, inline: true },
+                { name: "👤 Target", value: username || "—", inline: true },
+                { name: "📦 Quantité", value: String(quantity), inline: true },
+                { name: "🆔 Order ID", value: orderId, inline: false },
+              ],
+              color: 65280,
+              timestamp: new Date().toISOString(),
+            },
+          ],
+        }),
+      }).catch((err) =>
+        console.error("[orders/confirm] Discord notification failed:", err)
+      );
+    }
+
     // Send confirmation email via Resend
     if (resend) {
       try {

@@ -4,6 +4,7 @@ import "./globals.css";
 import { CartProvider } from "@/contexts/CartContext";
 import CartDrawer from "@/components/CartDrawer";
 import HeaderBar from "@/components/HeaderBar";
+import ChatWidget from "@/components/ChatWidget";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -31,6 +32,7 @@ export default function RootLayout({
         <CartProvider>
           {children}
           <CartDrawer />
+          <ChatWidget />
         </CartProvider>
       </body>
     </html>
