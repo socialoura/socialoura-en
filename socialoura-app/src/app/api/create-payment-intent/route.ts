@@ -38,13 +38,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create PaymentIntent with automatic payment methods
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount), // Ensure integer
+      amount: Math.round(amount),
       currency: currency.toLowerCase(),
-      automatic_payment_methods: {
-        enabled: true, // Enables Card, Apple Pay, Google Pay, etc.
-      },
+      payment_method_types: ['card', 'apple_pay', 'google_pay'],
       metadata: {
         ...metadata,
         created_at: new Date().toISOString(),
