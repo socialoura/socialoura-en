@@ -35,10 +35,10 @@ const platformServices = {
 };
 
 const features = [
-  { icon: <Check className="w-4 h-4" />, text: "No Passwords Required" },
-  { icon: <Zap className="w-4 h-4" />, text: "Real-Time Tracking" },
-  { icon: <Users className="w-4 h-4" />, text: "24/7 Human Support" },
-  { icon: <Shield className="w-4 h-4" />, text: "Safe & Policy-Compliant" },
+  { icon: <Check className="w-4 h-4" />, text: "Non-Intrusive Integration" },
+  { icon: <Zap className="w-4 h-4" />, text: "Live Analytics Dashboard" },
+  { icon: <Users className="w-4 h-4" />, text: "Dedicated Growth Specialists" },
+  { icon: <Shield className="w-4 h-4" />, text: "Risk-Free Compliance Protocol" },
   { icon: <Globe className="w-4 h-4" />, text: "Trusted by 50K+ Creators" },
   { icon: <CreditCard className="w-4 h-4" />, text: "PayPal, Apple Pay or Card" },
 ];
@@ -58,22 +58,22 @@ export default function Hero() {
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 md:pt-24 pb-16 md:pb-20 text-center">
         {/* Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#FFE4EC] rounded-full mb-6">
-          <span className="text-xs font-bold text-[#FF4B6A] uppercase tracking-wide">AI-Powered Social Growth</span>
+          <span className="text-xs font-bold text-[#FF4B6A] uppercase tracking-wide">Trusted by 50K+ Creators • Powered by SocialNovaly™ Engine</span>
           <TrendingUp className="w-3.5 h-3.5 text-[#FF4B6A]" />
         </div>
 
         {/* Heading */}
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#111827] leading-[1.1] mb-6 tracking-tight">
-          Grow Your Social Presence
+          Accelerate Your Social Authority
           <br />
-          With{" "}
-          <span className="text-[#FF4B6A]">AI-Powered</span>{" "}Tools
+          with{" "}
+          <span className="text-[#FF4B6A]">AI-Driven Growth</span>
         </h1>
 
         <p className="text-[#111827]/60 text-lg sm:text-xl mb-8 max-w-3xl mx-auto font-medium leading-relaxed">
-          Promote your TikTok, Instagram, YouTube, and more with real
+          Leverage proprietary AI algorithms to analyze, target, and attract
           <br className="hidden sm:block" />
-          <span className="text-[#FF4B6A] font-bold">AI-powered engagement services</span> trusted by creators and brands.
+          relevant engagement for <span className="text-[#FF4B6A] font-bold">TikTok, Instagram, and YouTube</span>. Safe, data-driven, and policy-compliant.
         </p>
 
         {/* CTA Button */}
@@ -86,7 +86,7 @@ export default function Hero() {
         </Link>
 
         {/* Trust micro-line */}
-        <p className="text-[#111827]/40 text-sm font-medium mb-6">Trusted by 50K+ creators &amp; brands worldwide</p>
+        <p className="text-[#111827]/40 text-sm font-medium mb-6">Data-backed growth trusted by 50K+ creators &amp; brands worldwide</p>
 
         {/* Trustpilot — under CTA */}
         <div className="inline-flex items-center gap-3 bg-white px-5 py-3 rounded-full border border-[#F1E4EA] shadow-sm mb-14">
@@ -152,7 +152,7 @@ export default function Hero() {
                         </span>
                         <div className="flex items-center gap-1.5">
                           <Zap className="w-3.5 h-3.5 text-[#FF4B6A]/60" />
-                          <span className="text-xs text-[#111827]/40 font-medium">Fast delivery</span>
+                          <span className="text-xs text-[#111827]/40 font-medium">Smart-Paced Delivery</span>
                         </div>
                       </div>
                     </div>

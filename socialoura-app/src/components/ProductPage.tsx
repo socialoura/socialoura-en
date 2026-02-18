@@ -197,7 +197,7 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
 
               {/* Bullet points */}
               <div className="space-y-3 mb-8">
-                {["AI-powered gradual delivery", "No password required", "24/7 human support", "Safe & policy-compliant"].map((item, idx) => (
+                {["Smart-Paced Delivery — organic growth curve", "Non-Intrusive Integration — no credentials needed", "Dedicated Growth Specialists — 24/7", "Risk-Free Compliance Protocol"].map((item, idx) => (
                   <div key={idx} className="flex items-center gap-3">
                     <div className="w-6 h-6 rounded-full bg-[#FF4B6A]/10 flex items-center justify-center flex-shrink-0">
                       <Check className="w-3.5 h-3.5 text-[#FF4B6A]" />
@@ -218,13 +218,13 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
                   <span className="text-[15px] font-bold text-[#111827]">{avgRating}/5</span>
                 </div>
                 <p className="text-sm text-[#4B5563]">
-                  Rated by <span className="font-semibold text-[#111827]">3,000+</span> verified customers
+                  Trusted by <span className="font-semibold text-[#111827]">3,000+</span> verified campaigns
                 </p>
               </div>
 
               {/* Why choose us - desktop only */}
               <div className="hidden lg:block">
-                <h3 className="text-sm font-bold text-[#111827] uppercase tracking-wider mb-4">Why choose us</h3>
+                <h3 className="text-sm font-bold text-[#111827] uppercase tracking-wider mb-4">Platform Technology</h3>
                 <div className="space-y-3">
                   {product.features.slice(0, 4).map((feature, idx) => (
                     <div key={idx} className="flex items-start gap-3">
@@ -242,13 +242,13 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
                 {/* Header */}
                 <div className="px-6 sm:px-8 pt-6 sm:pt-8 pb-4">
                   <div className="flex items-center justify-between mb-1">
-                    <h2 className="text-xl font-bold text-[#111827]">Choose your plan</h2>
+                    <h2 className="text-xl font-bold text-[#111827]">Select your growth campaign</h2>
                     <div className="flex items-center gap-1.5 text-xs font-semibold text-[#FF4B6A] bg-[#FF4B6A]/10 px-3 py-1.5 rounded-full">
                       <Zap className="w-3.5 h-3.5" />
                       {product.deliveryTime}
                     </div>
                   </div>
-                  <p className="text-sm text-[#4B5563]">Select the quantity that fits your goals</p>
+                  <p className="text-sm text-[#4B5563]">Choose the engagement volume that fits your growth objective</p>
                 </div>
 
                 {/* Pricing grid */}
@@ -430,7 +430,7 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
                   <div className="bg-[#F9FAFB] rounded-xl p-5 border border-[#E5E7EB]">
                     <div className="flex items-center justify-between mb-4">
                       <div>
-                        <div className="text-sm text-[#4B5563] mb-1">Your order</div>
+                        <div className="text-sm text-[#4B5563] mb-1">Your campaign</div>
                         <div className="text-sm font-semibold text-[#111827]">
                           {currentQuantity.toLocaleString("en-US")} {typeLabel[product.type] || product.type}
                           {isCustomSelected && customQuantity ? " (Custom)" : ""}
@@ -454,9 +454,9 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
                     </button>
 
                     <div className="flex items-center justify-center gap-4 mt-4 text-xs text-[#4B5563]">
-                      <span className="flex items-center gap-1"><Shield className="w-3.5 h-3.5" /> Secure</span>
+                      <span className="flex items-center gap-1"><Shield className="w-3.5 h-3.5" /> Compliance Protocol</span>
                       <span className="flex items-center gap-1"><Zap className="w-3.5 h-3.5" /> {product.deliveryTime}</span>
-                      <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> 24/7 Support</span>
+                      <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> Growth Specialists</span>
                     </div>
                   </div>
                 </div>
@@ -464,7 +464,7 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
 
               {/* Features — mobile only */}
               <div className="lg:hidden mt-6 bg-white rounded-2xl border border-[#E5E7EB] p-6">
-                <h3 className="text-sm font-bold text-[#111827] uppercase tracking-wider mb-4">Why choose us</h3>
+                <h3 className="text-sm font-bold text-[#111827] uppercase tracking-wider mb-4">Platform Technology</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {product.features.map((feature, idx) => (
                     <div key={idx} className="flex items-start gap-3">

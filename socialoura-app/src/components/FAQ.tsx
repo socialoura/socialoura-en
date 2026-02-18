@@ -6,27 +6,39 @@ import { ChevronDown } from "lucide-react";
 const faqs = [
   {
     question: "Are the profiles real and active?",
-    preview: "Yes, 100% real and active — no bots.",
+    preview: "Verified, active users filtered by our quality-control AI.",
     answer:
-      "Yes, all profiles are 100% real and active. We never deliver bots or fake accounts. Every profile is verified to ensure the highest quality possible.",
+      "We utilize a network of verified, active users filtered by our multi-layer quality-control AI. Every profile passes automated authenticity checks before being included in any campaign — ensuring premium-grade, high-retention engagement.",
   },
   {
-    question: "Is it safe to use your services?",
-    preview: "Completely safe — compliant with platform guidelines.",
+    question: "Is it safe for my account?",
+    preview: "Yes. Our delivery engine triggers zero platform flags.",
     answer:
-      "Absolutely. Our promotion methods are safe and comply with social media platform guidelines. Your account will never be put at risk. We use organic-style delivery methods.",
+      "Yes. Our SocialNovaly™ delivery engine strictly adheres to platform velocity limits and mimics organic behavior patterns to ensure 100% safety. Your account is never put at risk at any stage of the process.",
   },
   {
-    question: "How fast is the delivery?",
-    preview: "Most orders start within minutes.",
+    question: "How does Smart-Paced Delivery work?",
+    preview: "Gradual, organic-style distribution — no sudden spikes.",
     answer:
-      "Most orders begin processing within minutes of payment. Delivery is gradual and natural-looking to ensure the best results and safety for your account.",
+      "Our AI-driven delivery system distributes engagement incrementally over time, replicating the natural growth curve of an organically growing account. This approach avoids anomalous activity spikes and ensures stable, long-term results.",
+  },
+  {
+    question: "Do you need my password or login credentials?",
+    preview: "Never. Public URL or username only.",
+    answer:
+      "No login credentials are ever required. Our platform operates via Non-Intrusive Integration — we only need your public profile URL or username. Your account security is fully preserved throughout the entire process.",
+  },
+  {
+    question: "What is the High-Retention Guarantee?",
+    preview: "Lifetime stability — we auto-replenish any variance.",
+    answer:
+      "Every campaign is backed by a lifetime stability guarantee. Our quality-control AI continuously monitors your results post-delivery. If any variance is detected, we automatically replenish it at no additional cost to you.",
   },
   {
     question: "Is there a subscription or recurring charge?",
-    preview: "No, one-time payment only.",
+    preview: "No — one-time payment, no hidden fees.",
     answer:
-      "No, there are no hidden subscriptions. You pay once for the service you order. No recurring fees, no surprises.",
+      "No. All plans are one-time purchases with no hidden subscriptions or recurring charges. You select your growth campaign, pay once, and our platform handles the rest. No surprises, ever.",
   },
 ];
 
