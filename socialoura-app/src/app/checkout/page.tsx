@@ -39,9 +39,6 @@ export default function CheckoutPage() {
       if (items.length === 0) return;
       
       try {
-        const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
-        const userCurrency = userTimezone.startsWith('America') ? 'usd' : 'eur';
-
         const response = await fetch("/api/create-payment-intent", {
           method: "POST",
           headers: {
@@ -49,7 +46,7 @@ export default function CheckoutPage() {
           },
           body: JSON.stringify({
             amount: totalAmount,
-            currency: userCurrency,
+            currency: "usd",
             metadata: {
               items: JSON.stringify(items),
               itemCount: items.length,

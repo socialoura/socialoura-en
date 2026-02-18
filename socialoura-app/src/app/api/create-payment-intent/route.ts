@@ -11,7 +11,7 @@ function getStripeClient() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { amount, currency = "eur", metadata = {} } = body;
+    const { amount, metadata = {} } = body;
 
     // Validation
     if (!amount || typeof amount !== "number" || amount <= 0) {
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
 
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(amount),
-      currency: currency.toLowerCase(),
+      currency: "usd",
       automatic_payment_methods: {
         enabled: true,
         allow_redirects: 'never',
