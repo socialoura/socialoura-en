@@ -13,7 +13,7 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-import { Loader2, Lock, CheckCircle, AlertCircle, Mail } from "lucide-react";
+import { Loader2, Lock, CheckCircle, AlertCircle } from "lucide-react";
 
 interface CheckoutFormProps {
   amount: number;
@@ -84,7 +84,7 @@ export default function CheckoutForm({
           window.gtag("event", "conversion", {
             send_to: "AW-17893452047/E_73CPm3vPobEI_SodRC",
             value: amount / 100,
-            currency: "EUR",
+            currency: "USD",
             transaction_id: paymentIntent.id,
           });
         }
@@ -104,89 +104,81 @@ export default function CheckoutForm({
   const formattedAmount = (amount / 100).toFixed(2);
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Email field — REQUIRED above payment */}
-      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-6 shadow-sm">
-        <label className="block text-sm font-semibold text-[#111827] mb-2">
-          Email Address *
-        </label>
-        <div className="relative">
-          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#4B5563]">
-            <Mail className="w-4 h-4" />
-          </div>
+    <form onSubmit={handleSubmit} className="space-y-5">
+      {/* ── Billing Info ── */}
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-5 shadow-sm">
+        <h3 className="text-sm font-bold text-[#111827] uppercase tracking-wide mb-4">
+          Billing Information
+        </h3>
+        <div>
+          <label className="block text-xs font-semibold text-[#4B5563] mb-1.5">
+            Email address *
+          </label>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             onBlur={() => setEmailTouched(true)}
             placeholder="you@email.com"
-            className={`w-full h-12 pl-11 pr-4 rounded-xl border text-[#111827] text-[15px] font-medium outline-none transition-all ${
+            className={`w-full h-12 px-4 rounded-xl border text-[#111827] text-[15px] font-medium outline-none transition-all bg-[#F9FAFB] ${
               emailTouched && !emailValid
                 ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-200"
-                : "border-[#E5E7EB] focus:border-[#FF4B6A] focus:ring-2 focus:ring-[#FF4B6A]/20"
+                : "border-[#E5E7EB] focus:border-[#FF4B6A] focus:ring-2 focus:ring-[#FF4B6A]/10"
             }`}
             autoComplete="email"
             required
           />
+          {emailTouched && !emailValid && (
+            <p className="text-xs text-red-500 mt-1 font-medium">Please enter a valid email address</p>
+          )}
         </div>
-        {emailTouched && !emailValid && (
-          <p className="text-xs text-red-500 mt-1.5 font-medium">Please enter a valid email address</p>
-        )}
-        <p className="text-xs text-[#4B5563] mt-1.5">Your order confirmation will be sent here</p>
       </div>
 
-      {/* Stripe Payment Element — clean, no wrapper */}
-      <div className="stripe-payment-element">
-        <PaymentElement
-          options={{
-            layout: {
-              type: "accordion",
-              defaultCollapsed: false,
-              radios: true,
-              spacedAccordionItems: true,
-            },
-            paymentMethodOrder: ["apple_pay", "google_pay", "card"],
-            wallets: {
-              applePay: "auto",
-              googlePay: "auto",
-            },
-          }}
-        />
+      {/* ── Payment ── */}
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] p-4 sm:p-5 shadow-sm">
+        <h3 className="text-sm font-bold text-[#111827] uppercase tracking-wide mb-4">
+          Payment
+        </h3>
+        <div className="stripe-payment-element">
+          <PaymentElement
+            options={{
+              layout: {
+                type: "accordion",
+                defaultCollapsed: false,
+                radios: true,
+                spacedAccordionItems: true,
+              },
+              paymentMethodOrder: ["apple_pay", "google_pay", "card"],
+              wallets: {
+                applePay: "auto",
+                googlePay: "auto",
+              },
+            }}
+          />
+        </div>
       </div>
 
-      {/* Error Message */}
+      {/* Error */}
       {paymentStatus === "error" && errorMessage && (
-        <div className="bg-red-50 border-2 border-red-200 rounded-2xl p-4 animate-scale-in">
-          <div className="flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-            <div>
-              <h4 className="font-bold text-red-900 mb-1">Payment Error</h4>
-              <p className="text-sm text-red-700">{errorMessage}</p>
-            </div>
-          </div>
+        <div className="bg-red-50 border border-red-200 rounded-xl p-3 flex items-start gap-2.5">
+          <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+          <p className="text-sm text-red-700 font-medium">{errorMessage}</p>
         </div>
       )}
 
-      {/* Success Message */}
+      {/* Success */}
       {paymentStatus === "success" && (
-        <div className="bg-green-50 border-2 border-green-200 rounded-2xl p-4 animate-scale-in">
-          <div className="flex items-start gap-3">
-            <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-            <div>
-              <h4 className="font-bold text-green-900 mb-1">Payment Successful!</h4>
-              <p className="text-sm text-green-700">
-                Your order has been confirmed
-              </p>
-            </div>
-          </div>
+        <div className="bg-green-50 border border-green-200 rounded-xl p-3 flex items-start gap-2.5">
+          <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+          <p className="text-sm text-green-700 font-medium">Payment successful! Redirecting…</p>
         </div>
       )}
 
-      {/* Submit Button */}
+      {/* Pay Now CTA */}
       <button
         type="submit"
         disabled={!stripe || isProcessing || paymentStatus === "success" || !emailValid}
-        className="w-full bg-[#FF4B6A] hover:bg-[#E8435F] disabled:bg-[#E5E7EB] disabled:text-[#4B5563] disabled:cursor-not-allowed text-white font-bold px-6 py-4 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center gap-3 uppercase tracking-wide"
+        className="w-full bg-[#FF4B6A] hover:bg-[#E8435F] disabled:bg-[#D1D5DB] disabled:cursor-not-allowed text-white font-bold text-base px-6 py-4 rounded-2xl shadow-[0_4px_14px_-3px_rgba(255,75,106,0.4)] hover:shadow-[0_6px_20px_-3px_rgba(255,75,106,0.5)] transition-all duration-200 flex items-center justify-center gap-2"
       >
         {isProcessing ? (
           <>
@@ -196,28 +188,20 @@ export default function CheckoutForm({
         ) : paymentStatus === "success" ? (
           <>
             <CheckCircle className="w-5 h-5" />
-            Payment Confirmed
+            Confirmed
           </>
         ) : (
           <>
-            <Lock className="w-5 h-5" />
-            Pay ${formattedAmount}
+            Pay Now ${formattedAmount}
+            <Lock className="w-4 h-4 opacity-70" />
           </>
         )}
       </button>
 
-      {/* Security Badges */}
-      <div className="flex items-center justify-center gap-4 pt-2">
-        <div className="flex items-center gap-2 text-xs text-[#4B5563]">
-          <Lock className="w-3.5 h-3.5" />
-          <span className="font-semibold">SSL Secure Payment</span>
-        </div>
-        <div className="w-1 h-1 bg-[#E5E7EB] rounded-full" />
-        <div className="flex items-center gap-2 text-xs text-[#4B5563]">
-          <CheckCircle className="w-3.5 h-3.5" />
-          <span className="font-semibold">Powered by Stripe</span>
-        </div>
-      </div>
+      {/* Trust line */}
+      <p className="text-center text-xs text-[#9CA3AF] font-medium">
+        Secure payment · Powered by Stripe
+      </p>
     </form>
   );
 }

@@ -32,7 +32,7 @@ export default function OrderSuccessPage() {
       window.gtag("event", "conversion", {
         send_to: "AW-17893452047/E_73CPm3vPobEI_SodRC",
         value: orderDetails?.price ? Number(orderDetails.price) : 1.0,
-        currency: "EUR",
+        currency: "USD",
         transaction_id: orderId,
       });
     }
