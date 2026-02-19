@@ -211,6 +211,22 @@ button, a, input, select, textarea {
 }
 
 /* ChatWidget animations */
+/* CheckoutPopup animations */
+@keyframes checkoutSlideUp {
+  from { opacity: 0; transform: translateY(50px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes checkoutFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.checkout-popup input:focus,
+.checkout-popup textarea:focus {
+  box-shadow: none;
+}
+
 @keyframes chatPulse {
   0%, 100% { box-shadow: 0 8px 24px -4px rgba(255,75,106,0.5); }
   50% { box-shadow: 0 8px 32px -2px rgba(255,75,106,0.75), 0 0 0 8px rgba(255,75,106,0.1); }

@@ -10,6 +10,7 @@ import { useCart } from "@/contexts/CartContext";
 import { Loader2, ShoppingCart, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useGeoLocation } from "@/hooks/useGeoLocation";
 
 // Load Stripe publishable key
 const stripePromise = loadStripe(
@@ -19,6 +20,7 @@ const stripePromise = loadStripe(
 export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart();
   const router = useRouter();
+  const country = useGeoLocation();
   const [clientSecret, setClientSecret] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>("");
@@ -82,6 +84,7 @@ export default function CheckoutPage() {
           type: item.productId?.split("-").pop() || "followers",
           quantity: item.quantity,
           price: item.price,
+          country,
         };
 
         const res = await fetch("/api/orders/confirm", {
