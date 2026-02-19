@@ -1,16 +1,15 @@
 "use client";
 
 import { useMemo, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { Product } from "@/types/product";
-import { Star, Check, Shield, Zap, Clock, ShoppingCart, Lock, Sparkles, ArrowRight, Instagram, Youtube, Facebook, Music, Info } from "lucide-react";
+import { Star, Check, Shield, Zap, Clock, Lock, Sparkles, ArrowRight, Instagram, Youtube, Facebook, Music } from "lucide-react";
 import { getRandomReviews, getAverageRating } from "@/data/reviews";
-import { useCart } from "@/contexts/CartContext";
 import Navbar from "./Navbar";
 import Features from "./Features";
 import FAQ from "./FAQ";
 import CTA from "./CTA";
 import Footer from "./Footer";
+import BuyPopup, { type BuyPlan } from "./BuyPopup";
 
 interface ProductPageProps {
   product: Product;
@@ -40,10 +39,7 @@ const inputConfig: Record<string, { label: string; placeholder: string; example:
 };
 
 export default function ProductPage({ product: initialProduct }: ProductPageProps) {
-  const router = useRouter();
-  const { addItem, openCart } = useCart();
   const [product, setProduct] = useState(initialProduct);
-  const [step, setStep] = useState<1 | 2>(1);
   
   // Default tier with safe fallback
   const defaultTier = product.pricingTiers.length > 0
@@ -51,9 +47,10 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
     : { quantity: 100, price: 0, pricePerUnit: 0 };
   
   const [selectedTier, setSelectedTier] = useState(defaultTier);
-  const [username, setUsername] = useState("");
   const [customQuantity, setCustomQuantity] = useState<string>("");
   const [isCustomSelected, setIsCustomSelected] = useState(false);
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [popupPlan, setPopupPlan] = useState<BuyPlan | null>(null);
   const reviews = useMemo(() => getRandomReviews(4, product.id), [product.id]);
   const avgRating = useMemo(() => getAverageRating(), []);
 
@@ -126,54 +123,43 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
   }, [selectedTier?.quantity, isCustomSelected, customQuantity]);
 
   const handleContinue = () => {
-    if (step === 1) {
-      setStep(2);
-    } else if (step === 2) {
-      if (!username.trim()) {
-        const isUrl = (inputConfig[product.type] || inputConfig.followers).inputMode === "url";
-        alert(isUrl ? "Please enter the URL" : "Please enter your username");
+    let quantity: number;
+    let price: number;
+    let pricePerUnit: number;
+
+    if (isCustomSelected && customQuantity && parseInt(customQuantity) >= 100) {
+      quantity = parseInt(customQuantity);
+      if (product.pricingTiers.length === 0) {
+        alert("No plans available at the moment");
         return;
       }
-      
-      let quantity, price, pricePerUnit;
-      
-      if (isCustomSelected && customQuantity && parseInt(customQuantity) >= 100) {
-        quantity = parseInt(customQuantity);
-        if (product.pricingTiers.length === 0) {
-          alert("No plans available at the moment");
-          return;
-        }
-        price = getCustomPrice(quantity);
-        pricePerUnit = price / quantity;
-      } else {
-        if (!selectedTier || !selectedTier.quantity) {
-          alert("Please select a plan");
-          return;
-        }
-        quantity = selectedTier.quantity;
-        price = selectedTier.price;
-        pricePerUnit = selectedTier.pricePerUnit;
+      price = getCustomPrice(quantity);
+      pricePerUnit = price / quantity;
+    } else {
+      if (!selectedTier || !selectedTier.quantity) {
+        alert("Please select a plan");
+        return;
       }
-      
-      const cartItem = {
-        id: `${product.id}-${quantity}-${Date.now()}`,
-        productId: product.id,
-        productName: product.name,
-        platform: product.platform,
-        quantity: quantity,
-        price: price,
-        pricePerUnit: pricePerUnit,
-        username: username,
-      };
-      
-      addItem(cartItem);
-      openCart();
-      
-      setStep(1);
-      setUsername("");
-      setCustomQuantity("");
-      setIsCustomSelected(false);
+      quantity = selectedTier.quantity;
+      price = selectedTier.price;
+      pricePerUnit = selectedTier.pricePerUnit;
     }
+
+    const cfg = inputConfig[product.type] || inputConfig.followers;
+    const platformName = product.platform.charAt(0).toUpperCase() + product.platform.slice(1);
+
+    setPopupPlan({
+      productId: product.id,
+      productName: product.name,
+      platform: product.platform,
+      type: product.type,
+      quantity,
+      price,
+      inputMode: cfg.inputMode,
+      inputLabel: cfg.label,
+      inputPlaceholder: cfg.placeholder.replace("{platform}", platformName.toLowerCase()),
+    });
+    setPopupOpen(true);
   };
 
   const platformName = product.platform.charAt(0).toUpperCase() + product.platform.slice(1);
@@ -380,50 +366,6 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
                   </div>
                 </div>
 
-                {/* Dynamic input (step 2) — username OR URL depending on service type */}
-                {step === 2 && (() => {
-                  const cfg = inputConfig[product.type] || inputConfig.followers;
-                  const isUrlField = cfg.inputMode === "url";
-                  const placeholderText = cfg.placeholder.replace("{platform}", platformName.toLowerCase());
-                  return (
-                    <div className="px-6 sm:px-8 pb-6 animate-fade-in">
-                      <div className="bg-[#F9FAFB] rounded-xl p-5 border border-[#E5E7EB]">
-                        <div className="flex items-center justify-between mb-1">
-                          <h3 className="text-lg font-bold text-[#111827]">{cfg.label}</h3>
-                          <div className="relative group">
-                            <Info className="w-4 h-4 text-[#4B5563] cursor-help" />
-                            <div className="absolute right-0 bottom-full mb-2 w-64 bg-[#111827] text-white text-xs rounded-lg px-3 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 shadow-lg pointer-events-none">
-                              {isUrlField
-                                ? "Copy the URL of your post, reel, or video from the app and paste it here."
-                                : "Enter your public username (e.g. @davidguetta). We never ask for your password."}
-                              <div className="absolute top-full right-3 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-[#111827]" />
-                            </div>
-                          </div>
-                        </div>
-                        <p className="text-sm text-[#4B5563] flex items-center gap-1.5 mb-4">
-                          <Lock className="w-3.5 h-3.5" />
-                          {isUrlField ? "We only need the public link" : "We never ask for your password"}
-                        </p>
-                        <div className="relative">
-                          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#4B5563]">
-                            {platformIconMap[product.platform] || <Instagram className="w-5 h-5" />}
-                          </div>
-                          <input
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            placeholder={placeholderText}
-                            className="w-full h-12 pl-12 pr-4 rounded-xl border border-[#E5E7EB] bg-white text-[#111827] text-[15px] font-medium outline-none focus:border-[#FF4B6A] focus:ring-2 focus:ring-[#FF4B6A]/20 transition-all"
-                            inputMode={cfg.inputMode}
-                            autoComplete="off"
-                            autoFocus
-                            type={isUrlField ? "url" : "text"}
-                          />
-                        </div>
-                        <p className="mt-2 text-xs text-[#4B5563]">{cfg.example}</p>
-                      </div>
-                    </div>
-                  );
-                })()}
 
                 {/* Summary + CTA */}
                 <div className="px-6 sm:px-8 pb-6 sm:pb-8">
@@ -443,14 +385,10 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
 
                     <button
                       onClick={handleContinue}
-                      disabled={step === 2 && !username.trim()}
+                      disabled={currentPrice <= 0}
                       className="w-full bg-[#FF4B6A] hover:bg-[#E8435F] disabled:bg-[#E5E7EB] disabled:text-[#4B5563] disabled:cursor-not-allowed text-white font-bold text-[15px] h-12 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2"
                     >
-                      {step === 1 ? (
-                        <>Continue <ArrowRight className="w-4 h-4" /></>
-                      ) : (
-                        <>Add to Cart <ShoppingCart className="w-4 h-4" /></>
-                      )}
+                      Continue <ArrowRight className="w-4 h-4" />
                     </button>
 
                     <div className="flex items-center justify-center gap-4 mt-4 text-xs text-[#4B5563]">
@@ -548,14 +486,23 @@ export default function ProductPage({ product: initialProduct }: ProductPageProp
             </div>
             <button
               onClick={handleContinue}
-              disabled={step === 2 && !username.trim()}
+              disabled={currentPrice <= 0}
               className="flex-shrink-0 bg-[#FF4B6A] hover:bg-[#E8435F] text-white font-bold px-6 py-3 rounded-xl shadow-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
-              {step === 1 ? "Continue" : "Add to Cart"}
+              Continue
             </button>
           </div>
         </div>
       </div>
+
+      {/* Buy Popup */}
+      {popupPlan && (
+        <BuyPopup
+          isOpen={popupOpen}
+          onClose={() => setPopupOpen(false)}
+          plan={popupPlan}
+        />
+      )}
     </div>
   );
 }
