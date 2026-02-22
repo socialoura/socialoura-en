@@ -126,7 +126,7 @@ export const products: Product[] = [
     id: "youtube-subscribers",
     name: "YouTube Subscribers",
     platform: "youtube",
-    type: "followers",
+    type: "subscribers",
     icon: "youtube",
     color: "#FF0000",
     description: "Build your YouTube channel authority with AI-Driven Audience Targeting. Our Smart Growth Algorithms deliver subscriber growth with organic-style pacing, fully aligned with monetization thresholds.",
