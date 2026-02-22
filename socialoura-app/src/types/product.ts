@@ -9,7 +9,7 @@ export interface Product {
   id: string;
   name: string;
   platform: "instagram" | "tiktok" | "youtube" | "facebook";
-  type: "followers" | "likes" | "views";
+  type: "followers" | "likes" | "views" | "subscribers";
   icon: string;
   color: string;
   description: string;
