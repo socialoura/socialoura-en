@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { ArrowRight, Sparkles, CheckCircle } from "lucide-react";
-import CheckoutPopup, { type CheckoutPlan } from "@/components/CheckoutPopup";
+import NewCheckoutDrawer, { type CheckoutPlan } from "@/components/NewCheckoutDrawer";
 
 declare global {
   interface Window {
@@ -11,13 +11,17 @@ declare global {
   }
 }
 
-// ← Configure the plan here (amount in cents)
+// ← Configure the plan here
 const plan: CheckoutPlan = {
-  name: "Instagram Followers",
-  amount: 4499, // $44.99
-  quantity: 1000,
+  productId: "instagram-followers",
+  productName: "Instagram Followers",
   platform: "instagram",
   type: "followers",
+  quantity: 1000,
+  price: 44.99,
+  inputMode: "text",
+  inputLabel: "Enter your username",
+  inputPlaceholder: "Your Instagram username",
 };
 
 const stats = [
@@ -37,10 +41,6 @@ export default function InstagramFollowersLanding() {
     setCheckoutOpen(true);
   };
 
-  const handleSuccess = () => {
-    setCheckoutOpen(false);
-    setSuccess(true);
-  };
 
   return (
     <div className="min-h-screen bg-[#FFF7FA] flex flex-col items-center justify-center relative overflow-hidden">
@@ -137,12 +137,11 @@ export default function InstagramFollowersLanding() {
         )}
       </div>
 
-      {/* Checkout popup */}
-      <CheckoutPopup
+      {/* Checkout drawer */}
+      <NewCheckoutDrawer
         isOpen={checkoutOpen}
-        onClose={() => setCheckoutOpen(false)}
+        onClose={() => { setCheckoutOpen(false); setSuccess(true); }}
         plan={plan}
-        onSuccess={handleSuccess}
       />
     </div>
   );
