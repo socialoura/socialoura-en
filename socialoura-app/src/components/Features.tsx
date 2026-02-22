@@ -13,7 +13,7 @@ const features = [
     icon: <Zap className="w-6 h-6" />,
     title: "Algorithmic Reach Optimization",
     description:
-      "Our SocialNovaly™ Engine distributes engagement using organic-style pacing algorithms, ensuring your growth curve mirrors natural audience behavior — zero flags, maximum reach.",
+      "Our AI-powered platform distributes engagement using organic-style pacing algorithms, ensuring your growth curve mirrors natural audience behavior — zero flags, maximum reach.",
   },
   {
     icon: <Shield className="w-6 h-6" />,
@@ -66,10 +66,10 @@ export default function Features() {
             Enterprise-Grade Growth Infrastructure
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#111827] leading-tight">
-            Smart Growth Algorithms <span className="text-[#FF4B6A]">built for scale</span>
+            AI-Powered Growth <span className="text-[#FF4B6A]">Built for Scale</span>
           </h2>
           <p className="text-[#111827]/50 mt-4 max-w-2xl mx-auto text-sm sm:text-base font-medium">
-            Data-backed engagement technology trusted by 50K+ creators and brands worldwide.
+            Machine learning finds your ideal audience. Real users, real engagement, real growth.
           </p>
         </div>
 
@@ -110,7 +110,7 @@ export default function Features() {
             The Tech Process
           </span>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111827] leading-tight">
-            How the <span className="text-[#FF4B6A]">SocialNovaly™ Engine</span> works
+            How Our <span className="text-[#FF4B6A]">AI-Powered Platform</span> Works
           </h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">

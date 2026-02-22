@@ -48,7 +48,7 @@ export default function Hero() {
   const serviceLinks = platformServices[selectedPlatform];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[#FFF7FA] via-white to-[#FFF7FA]">
+    <section className="relative overflow-hidden bg-gradient-to-b from-[#FFF7FA] via-[#FAFAFA] to-[#FFF7FA]">
       {/* Subtle background glow */}
       <div className="absolute inset-0">
         <div className="absolute top-0 left-1/3 w-[500px] h-[500px] bg-[#FF4B6A]/[0.06] rounded-full blur-3xl" />
@@ -81,7 +81,7 @@ export default function Hero() {
           href="#services"
           className="inline-flex items-center gap-2 bg-[#FF4B6A] text-white font-bold text-lg px-8 py-4 rounded-full shadow-[0_8px_30px_-6px_rgba(255,75,106,0.5)] md:hover:shadow-[0_12px_40px_-6px_rgba(255,75,106,0.6)] md:hover:-translate-y-0.5 md:hover:scale-105 active:scale-95 transition-all duration-300 mb-4"
         >
-          Get Started
+          Start AI Campaign
           <ChevronRight className="w-5 h-5" />
         </Link>
 
@@ -152,7 +152,7 @@ export default function Hero() {
                         </span>
                         <div className="flex items-center gap-1.5">
                           <Zap className="w-3.5 h-3.5 text-[#FF4B6A]/60" />
-                          <span className="text-xs text-[#111827]/40 font-medium">Smart-Paced Delivery</span>
+                          <span className="text-xs text-[#111827]/40 font-medium">AI Smart Delivery Pacing</span>
                         </div>
                       </div>
                     </div>

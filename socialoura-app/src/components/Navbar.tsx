@@ -88,7 +88,7 @@ export default function Navbar() {
             <Link href="/" className="group">
               <Image
                 src="/logo.png"
-                alt="SocialOura"
+                alt="SocialNovaly"
                 width={120}
                 height={48}
                 className="object-contain md:group-hover:scale-105 transition-transform duration-300"

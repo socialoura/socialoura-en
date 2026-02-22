@@ -21,7 +21,7 @@ export default function CTA() {
           </span>
 
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white leading-tight mb-4">
-            Ready to deploy AI-Driven Audience Targeting for your profile?
+            Ready to grow your audience with AI?
           </h2>
 
           <p className="text-white/70 text-sm sm:text-base mb-8 max-w-2xl mx-auto leading-relaxed">
@@ -44,7 +44,7 @@ export default function CTA() {
             href="/#services"
             className="inline-flex items-center gap-2 bg-white text-[#FF4B6A] font-bold text-lg px-8 py-4 rounded-full md:hover:bg-gray-50 md:hover:shadow-xl md:hover:scale-105 active:scale-95 transition-all duration-300 shadow-lg"
           >
-            Start Your Campaign
+            Start Your AI Campaign
             <ArrowRight className="w-5 h-5" />
           </Link>
         </div>

@@ -146,7 +146,7 @@ export default function LandingPage() {
       </section>
 
       {/* SECTION 2 — Stats */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-white border-y border-[#E5E7EB]">
+      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-[#FAFAFA] border-y border-[#E5E7EB]">
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-3 gap-6">
             {stats.map((s, idx) => (

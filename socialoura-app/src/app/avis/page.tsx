@@ -69,7 +69,7 @@ export default function AvisPage() {
       <Navbar />
 
       {/* Rating banner */}
-      <div className="bg-white border-b border-[#E5E7EB]">
+      <div className="bg-[#FAFAFA] border-b border-[#E5E7EB]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-center gap-3 flex-wrap">
             <div className="flex gap-0.5">

@@ -33,7 +33,7 @@ export default function Footer() {
             <Link href="/" className="group inline-block mb-4">
               <Image
                 src="/logo.png"
-                alt="SocialOura"
+                alt="SocialNovaly"
                 width={130}
                 height={52}
                 className="object-contain"
@@ -41,7 +41,7 @@ export default function Footer() {
               />
             </Link>
             <p className="text-[#111827]/50 text-sm leading-relaxed mb-4 font-medium max-w-xs">
-              Professional social media growth and promotion services. Safe, fast, and reliable.
+              AI-powered social media growth platform. Safe, compliant, and data-driven.
             </p>
             <div className="flex items-center gap-2 text-[#111827]/30 text-xs">
               <Lock className="w-3.5 h-3.5" />
