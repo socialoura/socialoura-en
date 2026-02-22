@@ -43,7 +43,7 @@ export default function InstagramFollowersLanding() {
 
 
   return (
-    <div className="min-h-screen bg-[#FFF7FA] flex flex-col items-center justify-center relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-[#FFF0F5] to-[#F5F0FF] flex flex-col items-center justify-center relative overflow-hidden">
 
       {/* Background blobs */}
       <div className="absolute inset-0 pointer-events-none">

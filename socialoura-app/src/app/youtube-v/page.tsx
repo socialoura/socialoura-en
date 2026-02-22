@@ -32,7 +32,7 @@ export default function YouTubeViewersLanding() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] flex flex-col overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-[#FFF0F5] to-[#F5F0FF] flex flex-col overflow-x-hidden">
       {/* ═══════════════════════════════════════════════
           HERO SECTION
          ═══════════════════════════════════════════════ */}

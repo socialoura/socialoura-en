@@ -264,7 +264,7 @@ export default function ProductLayout({
   const featureDefaults = pricingFeatures || product.features.slice(0, 4);
 
   return (
-    <div className="min-h-screen bg-white overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-[#FFF0F5] to-[#F5F0FF] overflow-x-hidden">
       <Navbar />
 
       {/* ═══════════════════════════════════════════════
@@ -351,7 +351,7 @@ export default function ProductLayout({
       <section className="relative py-8 sm:py-14 overflow-hidden" ref={pricingRef}>
         <div
           className="absolute inset-0 -z-10"
-          style={{ background: `linear-gradient(180deg, ${grad.from}08 0%, white 40%, ${grad.to}06 100%)` }}
+          style={{ background: `linear-gradient(180deg, ${grad.from}0A 0%, transparent 40%, ${grad.to}08 100%)` }}
         />
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-6 sm:mb-8">
@@ -483,7 +483,7 @@ export default function ProductLayout({
             {benefits.map((b, i) => (
               <div
                 key={i}
-                className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 group"
+                className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-100 shadow-md hover:shadow-xl transition-all duration-300 group"
               >
                 <div
                   className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mb-5 text-white group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg"
@@ -503,7 +503,7 @@ export default function ProductLayout({
           4. ZIG-ZAG
          ═══════════════════════════════════════════════ */}
       {zigzag && zigzag.length > 0 && (
-        <section className="py-12 sm:py-20 bg-slate-50/50">
+        <section className="py-12 sm:py-20 bg-white/40">
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="text-center mb-10 sm:mb-14">
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-800">
@@ -586,7 +586,7 @@ export default function ProductLayout({
             {reviews.map((review, idx) => (
               <div
                 key={review.id}
-                className="relative bg-white rounded-2xl pt-14 sm:pt-16 px-5 sm:px-7 pb-5 sm:pb-7 border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-200"
+                className="relative bg-white rounded-2xl pt-14 sm:pt-16 px-5 sm:px-7 pb-5 sm:pb-7 border border-slate-100 shadow-md hover:shadow-lg transition-all duration-200"
               >
                 <div className="absolute bottom-3 right-4 text-8xl sm:text-9xl font-serif leading-none opacity-[0.03] pointer-events-none select-none" style={{ color: grad.from }}>
                   &ldquo;
@@ -627,7 +627,7 @@ export default function ProductLayout({
       {/* ═══════════════════════════════════════════════
           6. FAQ
          ═══════════════════════════════════════════════ */}
-      <section className="py-12 sm:py-20 bg-slate-50/50">
+      <section className="py-12 sm:py-20 bg-white/40">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-10 sm:mb-14">
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-800">

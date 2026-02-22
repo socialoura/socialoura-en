@@ -5,6 +5,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import {
   Elements,
   PaymentElement,
+  PaymentRequestButtonElement,
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
@@ -127,6 +128,7 @@ function PaymentStep({
   currencySymbol,
   currencyCode,
   countryCode,
+  clientSecret,
 }: {
   plan: CheckoutPlan;
   email: string;
@@ -137,12 +139,105 @@ function PaymentStep({
   currencySymbol: string;
   currencyCode: string;
   countryCode: string;
+  clientSecret: string;
 }) {
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [paymentRequest, setPaymentRequest] = useState<any>(null);
+  const [canMakePayment, setCanMakePayment] = useState(false);
+
+  // Create PaymentRequest for Apple Pay / Google Pay
+  useEffect(() => {
+    if (!stripe) return;
+
+    const pr = stripe.paymentRequest({
+      country: "US",
+      currency: currencyCode.toLowerCase(),
+      total: {
+        label: plan.productName,
+        amount: localPrice,
+      },
+      requestPayerName: false,
+      requestPayerEmail: false,
+    });
+
+    pr.canMakePayment().then((result) => {
+      if (result) {
+        setPaymentRequest(pr);
+        setCanMakePayment(true);
+      }
+    });
+
+    // Handle payment from Apple Pay / Google Pay
+    pr.on("paymentmethod", async (ev: any) => {
+      if (!elements) {
+        ev.complete("fail");
+        return;
+      }
+
+      const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(
+        clientSecret,
+        { payment_method: ev.paymentMethod.id },
+        { handleActions: false }
+      );
+
+      if (confirmError) {
+        ev.complete("fail");
+        setStatus("error");
+        setErrorMsg(confirmError.message || "Payment failed");
+        return;
+      }
+
+      ev.complete("success");
+
+      if (paymentIntent?.status === "requires_action") {
+        const { error } = await stripe.confirmCardPayment(clientSecret);
+        if (error) {
+          setStatus("error");
+          setErrorMsg(error.message || "Payment failed");
+          return;
+        }
+      }
+
+      // Success — fire tracking & confirm
+      handlePaymentSuccess(paymentIntent?.id || "");
+    });
+  }, [stripe, currencyCode, localPrice, plan.productName, clientSecret]);
+
+  const handlePaymentSuccess = async (piId: string) => {
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("event", "conversion", {
+        send_to: "AW-17964092485/QdtbCJ2R4vwbEMWY-fVC",
+        value: localPrice / 100,
+        currency: currencyCode.toUpperCase(),
+        transaction_id: piId,
+      });
+    }
+
+    try {
+      await fetch("/api/orders/confirm", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          username,
+          platform: plan.platform,
+          type: plan.type,
+          quantity: plan.quantity,
+          price: localPrice / 100,
+          country: countryCode,
+        }),
+      });
+    } catch {
+      // Non-blocking
+    }
+
+    setStatus("success");
+    setTimeout(onSuccess, 2500);
+  };
 
   const handlePay = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -168,35 +263,7 @@ function PaymentStep({
     }
 
     if (paymentIntent?.status === "succeeded") {
-      if (typeof window !== "undefined" && window.gtag) {
-        window.gtag("event", "conversion", {
-          send_to: "AW-17964092485/QdtbCJ2R4vwbEMWY-fVC",
-          value: localPrice / 100,
-          currency: currencyCode.toUpperCase(),
-          transaction_id: paymentIntent.id,
-        });
-      }
-
-      try {
-        await fetch("/api/orders/confirm", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email,
-            username,
-            platform: plan.platform,
-            type: plan.type,
-            quantity: plan.quantity,
-            price: localPrice / 100,
-            country: countryCode,
-          }),
-        });
-      } catch {
-        // Non-blocking
-      }
-
-      setStatus("success");
-      setTimeout(onSuccess, 2500);
+      handlePaymentSuccess(paymentIntent.id);
     }
 
     setIsProcessing(false);
@@ -248,18 +315,41 @@ function PaymentStep({
           </span>
         </div>
 
-        {/* Stripe Payment Element */}
+        {/* Apple Pay / Google Pay native button */}
+        {canMakePayment && paymentRequest && (
+          <div>
+            <PaymentRequestButtonElement
+              options={{
+                paymentRequest,
+                style: {
+                  paymentRequestButton: {
+                    type: "default",
+                    theme: "dark",
+                    height: "48px",
+                  },
+                },
+              }}
+            />
+            {/* "or" separator */}
+            <div className="flex items-center gap-3 my-4">
+              <div className="flex-1 h-px bg-slate-200" />
+              <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">or</span>
+              <div className="flex-1 h-px bg-slate-200" />
+            </div>
+          </div>
+        )}
+
+        {/* Card-only Stripe Payment Element (wallets disabled) */}
         <div>
           <PaymentElement
             options={{
               layout: {
                 type: "accordion",
                 defaultCollapsed: false,
-                radios: true,
-                spacedAccordionItems: true,
+                radios: false,
+                spacedAccordionItems: false,
               },
-              paymentMethodOrder: ["apple_pay", "google_pay", "card"],
-              wallets: { applePay: "auto", googlePay: "auto" },
+              wallets: { applePay: "never", googlePay: "never" },
             }}
           />
         </div>
@@ -610,6 +700,7 @@ export default function NewCheckoutDrawer({ isOpen, onClose, plan }: CheckoutDra
                 currencySymbol={geo.currency.symbol}
                 currencyCode={geo.currency.code}
                 countryCode={geo.country}
+                clientSecret={clientSecret}
               />
             </Elements>
           )}
