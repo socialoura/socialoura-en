@@ -34,14 +34,6 @@ export default function InstagramFollowersLanding() {
   useEffect(() => setMounted(true), []);
 
   const handleBuyNow = () => {
-    // Fire CTA click conversion
-    if (typeof window !== "undefined" && window.gtag) {
-      window.gtag("event", "conversion", {
-        send_to: "AW-17893452047/Nv9FCLrkvPobEI_SodRC",
-        value: plan.amount / 100,
-        currency: "USD",
-      });
-    }
     setCheckoutOpen(true);
   };
 

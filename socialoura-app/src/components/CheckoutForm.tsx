@@ -82,7 +82,7 @@ export default function CheckoutForm({
         // Payment succeeded — fire Google Ads click conversion tag
         if (typeof window !== "undefined" && typeof window.gtag === "function") {
           window.gtag("event", "conversion", {
-            send_to: "AW-17893452047/E_73CPm3vPobEI_SodRC",
+            send_to: "AW-17964092485/QdtbCJ2R4vwbEMWY-fVC",
             value: amount / 100,
             currency: "USD",
             transaction_id: paymentIntent.id,

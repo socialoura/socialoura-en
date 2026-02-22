@@ -10,6 +10,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { X, Loader2, Lock, CheckCircle, AlertCircle } from "lucide-react";
 import { useGeoLocation } from "@/hooks/useGeoLocation";
+import { convertAmountCents } from "@/lib/currency";
 
 declare global {
   interface Window {
@@ -90,14 +91,21 @@ function PopupForm({
   plan,
   onClose,
   onSuccess,
+  localAmountCents,
+  currencySymbol,
+  currencyCode,
+  countryCode,
 }: {
   plan: CheckoutPlan;
   onClose: () => void;
   onSuccess?: (orderId: string) => void;
+  localAmountCents: number;
+  currencySymbol: string;
+  currencyCode: string;
+  countryCode: string;
 }) {
   const stripe = useStripe();
   const elements = useElements();
-  const country = useGeoLocation();
 
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -107,7 +115,7 @@ function PopupForm({
   const [emailTouched, setEmailTouched] = useState(false);
 
   const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const formattedAmount = (plan.amount / 100).toFixed(2);
+  const formattedAmount = (localAmountCents / 100).toFixed(2);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -141,9 +149,9 @@ function PopupForm({
         // Google Ads purchase conversion
         if (typeof window !== "undefined" && window.gtag) {
           window.gtag("event", "conversion", {
-            send_to: "AW-17893452047/E_73CPm3vPobEI_SodRC",
-            value: plan.amount / 100,
-            currency: "USD",
+            send_to: "AW-17964092485/QdtbCJ2R4vwbEMWY-fVC",
+            value: localAmountCents / 100,
+            currency: currencyCode.toUpperCase(),
             transaction_id: paymentIntent.id,
           });
         }
@@ -159,8 +167,8 @@ function PopupForm({
               platform: plan.platform,
               type: plan.type,
               quantity: plan.quantity,
-              price: plan.amount / 100,
-              country,
+              price: localAmountCents / 100,
+              country: countryCode,
             }),
           });
           const data = await res.json();
@@ -189,7 +197,7 @@ function PopupForm({
             <p className="text-sm font-bold text-[#111827]">{plan.name}</p>
             <p className="text-xs text-[#6B7280]">{plan.quantity.toLocaleString()} {plan.type}</p>
           </div>
-          <span className="text-lg font-extrabold text-[#111827]">${formattedAmount}</span>
+          <span className="text-lg font-extrabold text-[#111827]">{currencySymbol}{formattedAmount}</span>
         </div>
 
         {/* Email */}
@@ -279,7 +287,7 @@ function PopupForm({
               </>
             ) : (
               <>
-                Pay ${formattedAmount}
+                Pay {currencySymbol}{formattedAmount}
                 <Lock className="w-4 h-4 opacity-70" />
               </>
             )}
@@ -300,9 +308,13 @@ export default function CheckoutPopup({
   plan,
   onSuccess,
 }: CheckoutPopupProps) {
+  const geo = useGeoLocation();
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Convert USD cents to local currency cents
+  const localAmountCents = convertAmountCents(plan.amount, geo.currency);
 
   // Lock body scroll when open
   useEffect(() => {
@@ -330,7 +342,7 @@ export default function CheckoutPopup({
     fetch("/api/create-payment-intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount: plan.amount }),
+      body: JSON.stringify({ amount: localAmountCents, currency: geo.currency.code }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -339,7 +351,7 @@ export default function CheckoutPopup({
       })
       .catch(() => setError("Connection failed"))
       .finally(() => setLoading(false));
-  }, [isOpen, plan.amount]);
+  }, [isOpen, localAmountCents, geo.currency.code]);
 
   if (!isOpen) return null;
 
@@ -392,7 +404,15 @@ export default function CheckoutPopup({
               stripe={stripePromise}
               options={{ clientSecret, appearance }}
             >
-              <PopupForm plan={plan} onClose={onClose} onSuccess={onSuccess} />
+              <PopupForm
+                plan={plan}
+                onClose={onClose}
+                onSuccess={onSuccess}
+                localAmountCents={localAmountCents}
+                currencySymbol={geo.currency.symbol}
+                currencyCode={geo.currency.code}
+                countryCode={geo.country}
+              />
             </Elements>
           ) : null}
         </div>

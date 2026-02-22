@@ -23,6 +23,7 @@ import {
   Shield,
 } from "lucide-react";
 import { useGeoLocation } from "@/hooks/useGeoLocation";
+import { convertAmountCents, formatPrice } from "@/lib/currency";
 
 declare global {
   interface Window {
@@ -112,16 +113,23 @@ function PaymentStep({
   username,
   onBack,
   onSuccess,
+  localPrice,
+  currencySymbol,
+  currencyCode,
+  countryCode,
 }: {
   plan: BuyPlan;
   email: string;
   username: string;
   onBack: () => void;
   onSuccess: () => void;
+  localPrice: number;
+  currencySymbol: string;
+  currencyCode: string;
+  countryCode: string;
 }) {
   const stripe = useStripe();
   const elements = useElements();
-  const country = useGeoLocation();
   const [isProcessing, setIsProcessing] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
@@ -153,9 +161,9 @@ function PaymentStep({
       // Google Ads purchase conversion
       if (typeof window !== "undefined" && window.gtag) {
         window.gtag("event", "conversion", {
-          send_to: "AW-17893452047/E_73CPm3vPobEI_SodRC",
-          value: plan.price,
-          currency: "USD",
+          send_to: "AW-17964092485/QdtbCJ2R4vwbEMWY-fVC",
+          value: localPrice / 100,
+          currency: currencyCode.toUpperCase(),
           transaction_id: paymentIntent.id,
         });
       }
@@ -171,8 +179,8 @@ function PaymentStep({
             platform: plan.platform,
             type: plan.type,
             quantity: plan.quantity,
-            price: plan.price,
-            country,
+            price: localPrice / 100,
+            country: countryCode,
           }),
         });
       } catch {
@@ -212,7 +220,7 @@ function PaymentStep({
               {username ? ` · ${username}` : ""}
             </p>
           </div>
-          <span className="text-base sm:text-lg font-extrabold text-[#111827] ml-2">${plan.price.toFixed(2)}</span>
+          <span className="text-base sm:text-lg font-extrabold text-[#111827] ml-2">{currencySymbol}{(localPrice / 100).toFixed(2)}</span>
         </div>
 
         {/* Email */}
@@ -271,7 +279,7 @@ function PaymentStep({
             </>
           ) : (
             <>
-              Pay ${plan.price.toFixed(2)}
+              Pay {currencySymbol}{(localPrice / 100).toFixed(2)}
               <Lock className="w-3.5 h-3.5 sm:w-4 sm:h-4 opacity-70" />
             </>
           )}
@@ -300,6 +308,7 @@ function PaymentStep({
 
 /* ─── Main BuyPopup ─── */
 export default function BuyPopup({ isOpen, onClose, plan }: BuyPopupProps) {
+  const geo = useGeoLocation();
   // step: "username" | "payment"
   const [step, setStep] = useState<"username" | "payment">("username");
   const [username, setUsername] = useState("");
@@ -312,6 +321,9 @@ export default function BuyPopup({ isOpen, onClose, plan }: BuyPopupProps) {
 
   const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const usernameValid = username.trim().length > 0;
+
+  // Convert USD price to local currency
+  const localPriceCents = convertAmountCents(Math.round(plan.price * 100), geo.currency);
 
   // Lock body scroll
   useEffect(() => {
@@ -345,7 +357,7 @@ export default function BuyPopup({ isOpen, onClose, plan }: BuyPopupProps) {
       const res = await fetch("/api/create-payment-intent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: Math.round(plan.price * 100) }),
+        body: JSON.stringify({ amount: localPriceCents, currency: geo.currency.code }),
       });
       const data = await res.json();
       if (data.clientSecret) {
@@ -359,7 +371,7 @@ export default function BuyPopup({ isOpen, onClose, plan }: BuyPopupProps) {
     } finally {
       setLoadingIntent(false);
     }
-  }, [emailValid, usernameValid, plan.price]);
+  }, [emailValid, usernameValid, localPriceCents, geo.currency.code]);
 
   const handleSuccess = () => {
     setDone(true);
@@ -402,7 +414,7 @@ export default function BuyPopup({ isOpen, onClose, plan }: BuyPopupProps) {
               <div>
                 <p className="text-sm font-bold text-[#111827] leading-tight">{plan.productName}</p>
                 <p className="text-xs text-[#6B7280]">
-                  {plan.quantity.toLocaleString()} {plan.type} · ${plan.price.toFixed(2)}
+                  {plan.quantity.toLocaleString()} {plan.type} · {geo.currency.symbol}{(localPriceCents / 100).toFixed(2)}
                 </p>
               </div>
             </div>
@@ -552,6 +564,10 @@ export default function BuyPopup({ isOpen, onClose, plan }: BuyPopupProps) {
                 username={username}
                 onBack={() => setStep("username")}
                 onSuccess={handleSuccess}
+                localPrice={localPriceCents}
+                currencySymbol={geo.currency.symbol}
+                currencyCode={geo.currency.code}
+                countryCode={geo.country}
               />
             </Elements>
           )}

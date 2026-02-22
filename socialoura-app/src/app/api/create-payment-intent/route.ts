@@ -11,7 +11,7 @@ function getStripeClient() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { amount, metadata = {} } = body;
+    const { amount, currency = "usd", metadata = {} } = body;
 
     // Validation
     if (!amount || typeof amount !== "number" || amount <= 0) {
@@ -20,6 +20,9 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    const allowedCurrencies = ["usd", "gbp", "cad", "aud", "nzd"];
+    const safeCurrency = allowedCurrencies.includes(currency?.toLowerCase()) ? currency.toLowerCase() : "usd";
 
     // Check if Stripe key is configured
     if (!process.env.STRIPE_SECRET_KEY) {
@@ -40,7 +43,7 @@ export async function POST(request: NextRequest) {
 
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(amount),
-      currency: "usd",
+      currency: safeCurrency,
       automatic_payment_methods: {
         enabled: true,
         allow_redirects: 'never',

@@ -30,7 +30,7 @@ export default function OrderSuccessPage() {
   useEffect(() => {
     if (typeof window !== "undefined" && typeof window.gtag === "function") {
       window.gtag("event", "conversion", {
-        send_to: "AW-17893452047/E_73CPm3vPobEI_SodRC",
+        send_to: "AW-17964092485/QdtbCJ2R4vwbEMWY-fVC",
         value: orderDetails?.price ? Number(orderDetails.price) : 1.0,
         currency: "USD",
         transaction_id: orderId,

@@ -4,14 +4,8 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import {
   ArrowRight,
-  Sparkles,
   CheckCircle,
-  Shield,
-  Target,
-  BarChart3,
   Check,
-  Star,
-  ChevronDown,
 } from "lucide-react";
 import CheckoutPopup, { type CheckoutPlan } from "@/components/CheckoutPopup";
 
@@ -36,71 +30,15 @@ const stats = [
   { value: "98%", label: "Retention Rate" },
 ];
 
-const benefits = [
-  {
-    icon: <Target className="w-6 h-6" />,
-    title: "Targeted Audience",
-    description:
-      "Our machine-learning algorithms filter viewers by interest to ensure high retention and meaningful engagement.",
-  },
-  {
-    icon: <Shield className="w-6 h-6" />,
-    title: "100% Safe Method",
-    description:
-      "Fully compliant with YouTube Terms of Service. We use legitimate ad networks to promote your content.",
-  },
-  {
-    icon: <BarChart3 className="w-6 h-6" />,
-    title: "Analytics Tracking",
-    description:
-      "Watch your organic growth in real-time on YouTube Studio. Full transparency, no hidden metrics.",
-  },
-];
-
-const faqItems = [
-  {
-    question: "Is this safe for my channel?",
-    answer:
-      "Yes, we use legitimate advertising networks to promote your content, ensuring full compliance with platform policies. Your channel is never at risk.",
-  },
-  {
-    question: "Are the viewers real people?",
-    answer:
-      "Absolutely. Our AI-powered audience matching places your video in front of genuinely interested viewers on ad networks. Every view comes from a real human.",
-  },
-  {
-    question: "How long does delivery take?",
-    answer:
-      "Campaign delivery is paced organically to mirror natural growth patterns. Most campaigns complete within 1–7 days depending on the package size.",
-  },
-  {
-    question: "Will this help with monetization?",
-    answer:
-      "Yes. High-retention views from real viewers send positive signals to the YouTube algorithm, improving your discoverability and watch-time metrics.",
-  },
-  {
-    question: "Do you need my password?",
-    answer:
-      "Never. We only need your public video URL. Your account credentials are never requested at any stage.",
-  },
-];
 
 export default function YouTubeViewersLanding() {
   const [mounted, setMounted] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   useEffect(() => setMounted(true), []);
 
   const handleBuyNow = () => {
-    if (typeof window !== "undefined" && window.gtag) {
-      window.gtag("event", "conversion", {
-        send_to: "AW-17893452047/Nv9FCLrkvPobEI_SodRC",
-        value: plan.amount / 100,
-        currency: "USD",
-      });
-    }
     setCheckoutOpen(true);
   };
 
